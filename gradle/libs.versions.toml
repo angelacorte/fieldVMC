@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.0.20"
-alchemist = "34.1.8"
+alchemist = "34.1.12"
 collektive = "10.5.3"
 
 [libraries]
