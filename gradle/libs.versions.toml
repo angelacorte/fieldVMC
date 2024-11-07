@@ -24,7 +24,7 @@ collektive = ["collektive", "collektive-incarnation", "collektive-plugin", "coll
 
 [plugins]
 collektive = { id = "it.unibo.collektive.collektive-plugin", version.ref = "collektive" }
-gitSemVer = { id = "org.danilopianini.git-sensitive-semantic-versioning", version = "3.1.4" }
+gitSemVer = { id = "org.danilopianini.git-sensitive-semantic-versioning", version = "3.1.7" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-qa = { id = "org.danilopianini.gradle-kotlin-qa", version = "0.61.0" }
 multiJvmTesting = { id = "org.danilopianini.multi-jvm-test-plugin", version = "0.5.8" }
