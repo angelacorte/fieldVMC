@@ -62,7 +62,7 @@ fun Aggregate<Int>.fixedRootStability(): Double = with(this@DistanceSensor) {
             infix fun and(other: Stability): Boolean = spawnStable && other.spawnStable && destroyStable && other.destroyStable
         }
         share(Stability()) { neighborhoodStability ->
-            val lastChanged = repeat(now to listOf(potential, localSuccess, success, localResource)) { last ->
+            val lastChanged = evolve(now to listOf(potential, localSuccess, success, localResource)) { last ->
                 val current = listOf(potential, localSuccess, success, localResource)
                 if (current == last.second) { last } else { now to current }
             }.first
