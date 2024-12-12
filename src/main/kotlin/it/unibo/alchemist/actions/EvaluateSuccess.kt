@@ -13,11 +13,13 @@ class EvaluateSuccess<T, P : Position<P>>(
     val successSensor: SuccessSensor,
     val constProductionRate: Double,
     val constTransferRate: Double,
+    val sensorProductionRate: Double,
+    val sensorTransferRate: Double,
 ) : AbstractAction<T>(node) {
     override fun cloneAction(
         node: Node<T>,
         reaction: Reaction<T>,
-    ): Action<T> = EvaluateSuccess(environment, node, successSensor, constProductionRate, constTransferRate)
+    ): Action<T> = EvaluateSuccess(environment, node, successSensor, constProductionRate, constTransferRate, sensorProductionRate, sensorTransferRate)
 
     override fun execute() {
         // todo add check on the turn of the node
@@ -41,8 +43,8 @@ class EvaluateSuccess<T, P : Position<P>>(
     override fun getContext(): Context? = Context.NEIGHBORHOOD
 
     private fun production(): Double =
-        constProductionRate + successSensor.sensorProductionRate * successSensor.getLocalSuccess()
+        constProductionRate + sensorProductionRate * successSensor.getLocalSuccess()
 
     private fun transfer(): Double =
-        constTransferRate + successSensor.sensorTransferRate * successSensor.getLocalSuccess()
+        constTransferRate + sensorTransferRate * successSensor.getLocalSuccess()
 }

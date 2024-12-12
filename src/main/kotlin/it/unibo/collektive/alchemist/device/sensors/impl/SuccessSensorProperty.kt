@@ -15,13 +15,9 @@ class SuccessSensorProperty<T, P : Position<P>>(
     private val maxSuccess: Double,
     override val node: Node<T>,
     private val environment: Environment<T, P>,
-    private val random: RandomGenerator,
-    override val sensorProductionRate: Double,
-    override val sensorTransferRate: Double,
-    override val sensorCompetitionRate: Double,
     ) : SuccessSensor, NodeProperty<T> {
     override fun cloneOnNewNode(node: Node<T>): NodeProperty<T> =
-        SuccessSensorProperty(maxSuccess, node, environment, random, sensorProductionRate, sensorTransferRate, sensorCompetitionRate)
+        SuccessSensorProperty(maxSuccess, node, environment)
 
     @Suppress("UNCHECKED_CAST")
     override fun setSuccess(success: Double) =

@@ -85,9 +85,9 @@ _pool: &program
       - type: ExecutionClock
         parameters: [TODO]
       - type: EvaluateSuccess
-        parameters: [ *constProductionRate, *constTransferRate ]
+        parameters: [ *constProductionRate, *constTransferRate, *sensorProductionRate, *sensorTransferRate ]
       - type: UpdateConnectionWeight
-        parameters: [ *constCompetitionRate, *vesselsAdaptationRate ]
+        parameters: [ *constCompetitionRate, *sensorCompetitionRate, *vesselsAdaptationRate ]
       - type: ResourceDistribution
         parameters: [ *constConsumptionRate ]
       - type: Spawn
@@ -119,7 +119,7 @@ deployments:
       - type: it.unibo.collektive.alchemist.device.sensors.impl.RandomNodeProperty
       - type: it.unibo.collektive.alchemist.device.sensors.impl.LocationSensorProperty
       - type: it.unibo.collektive.alchemist.device.sensors.impl.SuccessSensorProperty
-        parameters: [ *maxSuccess, *sensorProductionRate, *sensorTransferRate, *sensorCompetitionRate ]
+        parameters: [ *maxSuccess ]
       - type: it.unibo.collektive.alchemist.device.sensors.impl.ResourceSensorProperty
         parameters: [*resourceLowerBound, *maxResource]
       - type: it.unibo.collektive.alchemist.device.sensors.impl.DeviceSpawner
