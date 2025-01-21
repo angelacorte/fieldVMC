@@ -16,7 +16,7 @@ class ResourceSensorProperty<T, P : Position<P>>(
     override fun cloneOnNewNode(node: Node<T>): NodeProperty<T> = ResourceSensorProperty(environment, node, resourceLowerBound, maxResource)
 
     override fun getResource(): Double =
-        when (val layerValue = environment.getLayer(localResource).get().getValue(environment.getPosition(node))) {
+        when (val layerValue = environment.getLayer(localResource)?.getValue(environment.getPosition(node))) {
             is Number -> layerValue.toDouble()
             else -> error("ResourceSensorProperty: $layerValue is not a number")
         }

@@ -37,7 +37,7 @@ class DrawTree : Effect {
     @Transient
     var maxResource = 0.0
 
-    override fun <T : Any?, P : Position2D<P>?> apply(
+    override fun <T : Any?, P : Position2D<P>> apply(
         g: Graphics2D,
         node: Node<T>,
         environment: Environment<T, P>,
@@ -60,7 +60,7 @@ class DrawTree : Effect {
         }.onSuccess { neighborhood ->
             val localPosition = environment.getPosition(node)
             val viewPoint: Point = wormhole.getViewPoint(localPosition)
-            val shifted: P = environment.makePosition(0.3, 0.3)!! + localPosition.coordinates
+            val shifted: P = environment.makePosition(0.3, 0.3) + localPosition.coordinates
             val shiftedViewPoint = wormhole.getViewPoint(shifted)
             val lineDistance = abs(shiftedViewPoint.x - viewPoint.x)
             for (neighbor in neighborhood) {

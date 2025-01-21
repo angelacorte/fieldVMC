@@ -28,7 +28,7 @@ class SuccessSensorProperty<T, P : Position<P>>(
     override fun getLocalSuccess(): Double = getFromLayer("successSource") // ?: random.nextDouble(0.0, maxSuccess)
 
     private fun <T> getFromLayer(name: String): T =
-        environment.getLayer(SimpleMolecule(name)).getOrNull()?.getValue(environment.getPosition(node)) as T
+        (environment.getLayer(SimpleMolecule(name))?.getValue(environment.getPosition(node)) ?: IllegalStateException("Layer $name not found")) as T
 
     override fun toString(): String = this::class.simpleName!!
 }
