@@ -5,7 +5,7 @@ import it.unibo.collektive.aggregate.api.Aggregate
 import it.unibo.collektive.alchemist.device.sensors.LeaderSensor
 import it.unibo.collektive.alchemist.device.sensors.ResourceSensor
 import it.unibo.collektive.coordination.boundedElection
-import it.unibo.collektive.stdlib.distanceTo
+import it.unibo.collektive.stdlib.spreading.distanceTo
 
 /**
  * Elect the leader of the current node.
