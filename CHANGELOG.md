@@ -1,3 +1,20 @@
+## [1.26.1](https://github.com/angelacorte/fieldVMC/compare/1.26.0...1.26.1) (2025-03-20)
+
+### Dependency updates
+
+* **deps:** add pandas dependency ([b6fb38f](https://github.com/angelacorte/fieldVMC/commit/b6fb38faf164a1d572812ee9f3ebabf2977ba70b))
+
+### Bug Fixes
+
+* change layers position ([9cb3962](https://github.com/angelacorte/fieldVMC/commit/9cb39626b6b5f1d8da4e3acbd65a68b8ff55eb5e))
+* change max resource and success amount ([641ed5c](https://github.com/angelacorte/fieldVMC/commit/641ed5c3f73bee489f7c6b95bd870d48dfe34a02))
+* resource management for classic vmc ([8ed3f2a](https://github.com/angelacorte/fieldVMC/commit/8ed3f2a16b06a02d8c12cbbc71e6cbabe15f0957))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.26.0 [skip ci] ([3a7e590](https://github.com/angelacorte/fieldVMC/commit/3a7e59050c65a9bb81bdc2cd4530428837219f70))
+* remove old data ([82f77c2](https://github.com/angelacorte/fieldVMC/commit/82f77c2e986cc7e39f75d24e3e4af22bf31ac074))
+
 ## [1.26.0](https://github.com/angelacorte/fieldVMC/compare/1.25.2...1.26.0) (2025-03-20)
 
 ### Features
