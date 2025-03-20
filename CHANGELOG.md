@@ -1,3 +1,18 @@
+## [1.26.0](https://github.com/angelacorte/fieldVMC/compare/1.25.2...1.26.0) (2025-03-20)
+
+### Features
+
+* add custom charts generator ([4e617d9](https://github.com/angelacorte/fieldVMC/commit/4e617d94c4ccb965f0425f360544a6eed68e14ba))
+
+### Build and continuous integration
+
+* **deps:** update danysk/build-check-deploy-gradle-action action to v3.7.13 ([8ff9bf3](https://github.com/angelacorte/fieldVMC/commit/8ff9bf3174e246ec5361cd13cafad4eaeac43009))
+
+### General maintenance
+
+* add optimized parameters for classic vmc with fixed resources ([4412917](https://github.com/angelacorte/fieldVMC/commit/441291755974997a78e6402d0c12c68e32e61f22))
+* **release:** update gradle.properties .env versions to 1.25.2 [skip ci] ([d711971](https://github.com/angelacorte/fieldVMC/commit/d711971881c50aaa5cc4984623b2f3139f0e7333))
+
 ## [1.25.2](https://github.com/angelacorte/fieldVMC/compare/1.25.1...1.25.2) (2025-03-19)
 
 ### Bug Fixes
