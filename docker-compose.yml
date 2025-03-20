@@ -1,9 +1,5 @@
 services:
   fixed-leader-optimizer:
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==andromeda.apice.unibo.it
     image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
     build:
       context: .
@@ -15,10 +11,6 @@ services:
       - GRADLE_TASK=runFixedLeaderOptimizer
 
   cutting-classic-vmc-batch:
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==andromeda.apice.unibo.it
     image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
     build:
       context: .
@@ -30,10 +22,6 @@ services:
       - GRADLE_TASK=runCuttingClassicVMCBatch
 
   cutting-field-vmc-batch:
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==andromeda.apice.unibo.it
     image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
     build:
       context: .
@@ -45,10 +33,6 @@ services:
       - GRADLE_TASK=runCuttingFixedLeaderBatch
 
   self-integration-batch:
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==andromeda.apice.unibo.it
     image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
     build:
       context: .
@@ -60,10 +44,6 @@ services:
       - GRADLE_TASK=runSelfIntegrationBatch
 
   self-repair-batch:
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==andromeda.apice.unibo.it
     image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
     build:
       context: .
@@ -75,10 +55,6 @@ services:
       - GRADLE_TASK=runSelfRepairBatch
 
   self-optimization-batch:
-    deploy:
-      placement:
-        constraints:
-          - node.hostname==andromeda.apice.unibo.it
     image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
     build:
       context: .
