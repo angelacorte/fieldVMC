@@ -1,3 +1,13 @@
+## [1.26.2](https://github.com/angelacorte/fieldVMC/compare/1.26.1...1.26.2) (2025-03-20)
+
+### Bug Fixes
+
+* remove deploy constraint in docker compose ([c1e5bfb](https://github.com/angelacorte/fieldVMC/commit/c1e5bfbca62b18a23735c48ac1bad4857964c39b))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.26.1 [skip ci] ([ac21860](https://github.com/angelacorte/fieldVMC/commit/ac2186097b70b45060f87d3f1209405a49bd31e2))
+
 ## [1.26.1](https://github.com/angelacorte/fieldVMC/compare/1.26.0...1.26.1) (2025-03-20)
 
 ### Dependency updates
