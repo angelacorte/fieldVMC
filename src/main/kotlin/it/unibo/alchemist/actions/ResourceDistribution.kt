@@ -64,7 +64,7 @@ class ResourceDistribution<T, P : Position<P>>(
         ) {
             var availableResources = node.getConcentration(SimpleMolecule("resource")) as Double
             if (isRoot) { // root adds resources
-                availableResources = availableResources + resourceSensor.maxResource
+                availableResources = resourceSensor.maxResource
             }
             // consume resources
             val remainingResources = availableResources - (availableResources * constConsumptionRate)
