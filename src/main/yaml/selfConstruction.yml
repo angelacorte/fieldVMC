@@ -7,17 +7,19 @@ variables:
   radius: &leaderRadius
     100.0
   maxResource: &maxResource
-   1000.0
+   300.0
   resourceLowerBound: &resourceLowerBound
-    1.0
+    3.0
   maxChildren: &maxChildren
-    5
+    3
   minSpanWait: &minSpanWait
     20.0
   layerX: &layerX
     10
-  layerY: &layerY
-    -10
+  minY: &minY
+    0
+  maxY: &maxY
+    20
   maxSuccess: &maxSuccess
     formula: *maxResource
   gaussianShape: &gaussianShape
@@ -37,10 +39,10 @@ seeds:
 
 layers:
   - type: BidimensionalGaussianLayer
-    parameters: [*layerX, *layerY, *maxSuccess, *gaussianShape]
+    parameters: [*layerX, *minY, *maxSuccess, *gaussianShape]
     molecule: localResource
   - type: BidimensionalGaussianLayer
-    parameters: [*layerY, *layerX, *maxResource, *gaussianShape]
+    parameters: [*layerX, *maxY, *maxResource, *gaussianShape]
     molecule: successSource
 
 incarnation: collektive
