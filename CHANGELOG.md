@@ -1,3 +1,13 @@
+## [1.26.3](https://github.com/angelacorte/fieldVMC/compare/1.26.2...1.26.3) (2025-03-20)
+
+### Bug Fixes
+
+* change parameters ([e3fa36d](https://github.com/angelacorte/fieldVMC/commit/e3fa36d09c114bdb1334dfa76dccfa75a7fb8a0a))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.26.2 [skip ci] ([e8804ba](https://github.com/angelacorte/fieldVMC/commit/e8804bae28ab36c37b7460d62d886fddd6fd4537))
+
 ## [1.26.2](https://github.com/angelacorte/fieldVMC/compare/1.26.1...1.26.2) (2025-03-20)
 
 ### Bug Fixes
