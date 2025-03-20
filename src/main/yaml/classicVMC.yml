@@ -18,13 +18,13 @@ variables:
   maxChildren: &maxChildren
     3.0
   maxResource: &maxResource
-    3.0
-  maxSuccess: &maxSuccess
     500.0
+  maxSuccess: &maxSuccess
+    300.0
   range: &range
     formula: cloningRange * 1.01
   resourceLowerBound: &resourceLowerBound
-    5.0
+    3.0
   sensorCompetitionRate: &sensorCompetitionRate
     0.1
   sensorProductionRate: &sensorProductionRate
