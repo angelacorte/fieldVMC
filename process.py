@@ -538,7 +538,7 @@ for experiment in experiments:
 import seaborn as sns
 #box plot
 all_time
-sns.boxplot(data=all_time, palette='viridis')
+sns.boxplot(data=all_time, palette='viridis', log_scale=True)
 # save it in svg
 plt.savefig(f'{output_directory}/all_times.pdf')
 plt.savefig(f'charts/time_to_convergence.svg')
