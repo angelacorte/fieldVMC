@@ -1,3 +1,13 @@
+## [1.26.5](https://github.com/angelacorte/fieldVMC/compare/1.26.4...1.26.5) (2025-03-21)
+
+### Bug Fixes
+
+* change parameters ([db7f8b8](https://github.com/angelacorte/fieldVMC/commit/db7f8b8dff870a7ba0db441a33fd4683b3352bf5))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.26.4 [skip ci] ([c0dd06d](https://github.com/angelacorte/fieldVMC/commit/c0dd06d0b327a5b62a8f9439d927c8e6466db290))
+
 ## [1.26.4](https://github.com/angelacorte/fieldVMC/compare/1.26.3...1.26.4) (2025-03-21)
 
 ### Bug Fixes
