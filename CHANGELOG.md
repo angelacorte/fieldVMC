@@ -1,3 +1,13 @@
+## [1.27.0](https://github.com/angelacorte/fieldVMC/compare/1.26.6...1.27.0) (2025-03-21)
+
+### Features
+
+* add boxplot for experiment A1 ([687663d](https://github.com/angelacorte/fieldVMC/commit/687663de63278c250c913778091dad3365bb59c7))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.26.6 [skip ci] ([c238855](https://github.com/angelacorte/fieldVMC/commit/c238855b3b3c03600e442217eb9964c5c4df4540))
+
 ## [1.26.6](https://github.com/angelacorte/fieldVMC/compare/1.26.5...1.26.6) (2025-03-21)
 
 ### Bug Fixes
