@@ -10,6 +10,17 @@ services:
       - MAX_SEED=500
       - GRADLE_TASK=runFixedLeaderOptimizer
 
+  fixed-leader-optimized-batch:
+    image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
+    build:
+      context: .
+      dockerfile: docker/simulationLauncher/Dockerfile
+    volumes:
+      - angela.cortecchia-volume:/experiment/data
+    environment:
+      - MAX_SEED=500
+      - GRADLE_TASK=runFixedLeaderBatch
+
   cutting-classic-vmc-batch:
     image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
     build:
