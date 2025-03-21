@@ -1,3 +1,13 @@
+## [1.27.1](https://github.com/angelacorte/fieldVMC/compare/1.27.0...1.27.1) (2025-03-21)
+
+### Bug Fixes
+
+* add log scale ([5293b99](https://github.com/angelacorte/fieldVMC/commit/5293b9967ca7e899fbc18675284011ad27c28a44))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.27.0 [skip ci] ([5377f06](https://github.com/angelacorte/fieldVMC/commit/5377f064d7e95f07c871c924954103df8fc8aea0))
+
 ## [1.27.0](https://github.com/angelacorte/fieldVMC/compare/1.26.6...1.27.0) (2025-03-21)
 
 ### Features
