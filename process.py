@@ -197,7 +197,8 @@ if __name__ == '__main__':
     # How to name the summary of the processed data
     pickleOutput = 'data_summary'
     # Experiment prefixes: one per experiment (root of the file name)
-    experiments = ['cutting-field-vmc-fixed-leader', 'cutting-classic-vmc'] #'field-vmc-fixed-leader', 'classic-vmc',
+    experiments = ['cutting-field-vmc-fixed-leader', 'cutting-classic-vmc', 'field-vmc-fixed-leader', 'classic-vmc',
+                   'self-integration', 'self-repair', 'self-optimization']
     floatPrecision = '{: 0.3f}'
     # Number of time samples
     timeSamples = 300
@@ -268,9 +269,9 @@ if __name__ == '__main__':
         'msqer@harmonicCentrality[Min]': Measure(r'$\min{(' + mse(centrality_label) + ')}$'),
         'msqer@harmonicCentrality[Mean]': Measure(f'${expected(mse(centrality_label))}$'),
         'msqer@harmonicCentrality[StandardDeviation]': Measure(f'${stdev_of(mse(centrality_label))}$'),
-        'org:protelis:tutorial:distanceTo[max]': Measure(r'$m$', 'max distance'),
-        'org:protelis:tutorial:distanceTo[mean]': Measure(r'$m$', 'mean distance'),
-        'org:protelis:tutorial:distanceTo[min]': Measure(r'$m$', ',min distance'),
+        # 'org:protelis:tutorial:distanceTo[max]': Measure(r'$m$', 'max distance'),
+        # 'org:protelis:tutorial:distanceTo[mean]': Measure(r'$m$', 'mean distance'),
+        # 'org:protelis:tutorial:distanceTo[min]': Measure(r'$m$', ',min distance'),
     }
 
 
@@ -315,9 +316,13 @@ if __name__ == '__main__':
                 # Collect all files for the experiment of interest
                 import fnmatch
 
-                if experiment.startswith('cutting'):
+                if experiment.startswith('cutting') or experiment.startswith('self-'):
                     maxTime = 1000
                     seedVars.append('origin')
+                else:
+                    maxTime = 600
+                    seedVars = 'seed'
+
                 allfiles = filter(lambda file: fnmatch.fnmatch(file, experiment + '_*.csv'), os.listdir(f'{directory}/{experiment}'))
                 allfiles = [directory + f'/{experiment}/' + name for name in allfiles]
                 allfiles.sort()
@@ -498,3 +503,42 @@ if __name__ == '__main__':
             plt.clf()
 
 # Custom charting
+# plot in a single boxplot chart by using seaborn, the data of both experiments "classic-vmc" and "field-vmc-fixed-leader",
+# comparing the stabilization time of the two experiments. The x-axis should represent the experiment name,
+# and the y-axis should represent the stabilization time. The title of the chart should be "Stabilization Time Comparison".
+# the stabilization time is the amount of time elapsed from the start of the experiment to the end of the experiment.
+
+
+all_time = { experiment : []  for experiment in experiments }
+for experiment in experiments:
+    current_experiment_means = means[experiment]
+    times = []
+    for seed in seeds:
+        # take the curren means of the experiments with this seed
+        current_experiment_means.sel(seed=seed)
+        # iterate this using time
+        previous_network_hub_xCoord = -1000
+        previous_network_hub_yCoord = 1000
+        equals_for = 0
+        for time in current_experiment_means.time.values:
+            current_experiment_means.sel(time=time)
+            # exit when network-hub-xCoord network-hub-yCoord are the same (current to this time, to select it(
+            current_network_hub_xCoord = current_experiment_means.sel(time=time, seed=seed)['network-hub-xCoord'].values
+            current_network_hub_yCoord = current_experiment_means.sel(time=time, seed=seed)['network-hub-yCoord'].values
+            if current_network_hub_xCoord == previous_network_hub_xCoord and current_network_hub_yCoord == previous_network_hub_yCoord:
+                equals_for += 1
+            else:
+                equals_for = 0
+            if equals_for > 30:
+                break
+            previous_network_hub_xCoord = current_network_hub_xCoord
+            previous_network_hub_yCoord = current_network_hub_yCoord
+        times.append(time.item())
+    all_time[experiment].extend(times)
+import seaborn as sns
+#box plot
+all_time
+sns.boxplot(data=all_time, palette='viridis')
+# save it in svg
+plt.savefig(f'{output_directory}/all_times.pdf')
+plt.savefig(f'charts/time_to_convergence.svg')
