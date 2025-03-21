@@ -1,3 +1,17 @@
+## [1.26.6](https://github.com/angelacorte/fieldVMC/compare/1.26.5...1.26.6) (2025-03-21)
+
+### Bug Fixes
+
+* change parameters ([21fe279](https://github.com/angelacorte/fieldVMC/commit/21fe2797194aa2a5764daf9c5e87b364ffa77c33))
+
+### General maintenance
+
+* add fixed leader batch service ([c459f54](https://github.com/angelacorte/fieldVMC/commit/c459f54cec5337aa1dc44050c2324b0d2441b1ad))
+* **release:** update gradle.properties .env versions to 1.26.5 [skip ci] ([2aea10d](https://github.com/angelacorte/fieldVMC/commit/2aea10dcc2b664a03a48323cbd22db0ee94df2e4))
+* update classic vmc data ([973df6d](https://github.com/angelacorte/fieldVMC/commit/973df6d8d74d87ca3cd72c16c211721185729743))
+* update classic vmc data ([544813b](https://github.com/angelacorte/fieldVMC/commit/544813bbed6380327c9b03f5d06b733294a9a972))
+* update field vmc data ([535e7e7](https://github.com/angelacorte/fieldVMC/commit/535e7e7a65fb45f4c341430d1f1c559ea8ee9e34))
+
 ## [1.26.5](https://github.com/angelacorte/fieldVMC/compare/1.26.4...1.26.5) (2025-03-21)
 
 ### Bug Fixes
