@@ -1,3 +1,13 @@
+## [1.27.2](https://github.com/angelacorte/fieldVMC/compare/1.27.1...1.27.2) (2025-03-22)
+
+### Bug Fixes
+
+* change intial nodes ([58af942](https://github.com/angelacorte/fieldVMC/commit/58af942ab3e54d7ea1df3923532afbce3fc799f4))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.27.1 [skip ci] ([9d5f3ea](https://github.com/angelacorte/fieldVMC/commit/9d5f3ea6efcd582a5fc0150c01d9edac80352a18))
+
 ## [1.27.1](https://github.com/angelacorte/fieldVMC/compare/1.27.0...1.27.1) (2025-03-21)
 
 ### Bug Fixes
