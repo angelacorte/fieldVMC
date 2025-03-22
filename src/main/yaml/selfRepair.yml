@@ -18,7 +18,7 @@ variables:
     1.0
   initialNodes: &initialNodes
     type: ArbitraryVariable
-    parameters: [ 1000, [ 1.0, 5, 50, 100, 250, 500, 750, 1000] ]
+    parameters: [ 200, [ 1, 2, 10, 100, 300, 500 ] ]
   movingRange: &movingRange
     -5.0
   layerX: &layerX

@@ -48,7 +48,7 @@ variables:
     5
   initialNodes: &initialNodes
     type: ArbitraryVariable
-    parameters: [ 200, [1.0, 10, 100, 200, 500, 1000, 1500, 2000 ] ]
+    parameters: [ 200, [1.0, 10, 100, 300, 500, 1000 ] ]
   cloningRange: &cloningRange
     3
 
