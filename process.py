@@ -197,8 +197,7 @@ if __name__ == '__main__':
     # How to name the summary of the processed data
     pickleOutput = 'data_summary'
     # Experiment prefixes: one per experiment (root of the file name)
-    experiments = ['cutting-field-vmc-fixed-leader', 'cutting-classic-vmc', 'field-vmc-fixed-leader', 'classic-vmc',
-                   'self-integration', 'self-repair', 'self-optimization']
+    experiments = ['field-vmc-fixed-leader', 'classic-vmc']
     floatPrecision = '{: 0.3f}'
     # Number of time samples
     timeSamples = 300
@@ -435,50 +434,50 @@ if __name__ == '__main__':
         return (fig, ax)
 
 
-    def generate_all_charts(means, errors=None, basedir=''):
-        viable_coords = {coord for coord in means.coords if means[coord].size > 1}
-        for comparison_variable in viable_coords - {timeColumnName}:
-            mergeable_variables = viable_coords - {timeColumnName, comparison_variable}
-            for current_coordinate in mergeable_variables:
-                merge_variables = mergeable_variables - {current_coordinate}
-                merge_data_view = means.mean(dim=merge_variables, skipna=True)
-                merge_error_view = errors.mean(dim=merge_variables, skipna=True)
-                for current_coordinate_value in merge_data_view[current_coordinate].values:
-                    beautified_value = beautifyValue(current_coordinate_value)
-                    for current_metric in merge_data_view.data_vars:
-                        title = f'{label_for(current_metric)} for diverse {label_for(comparison_variable)} when {label_for(current_coordinate)}={beautified_value}'
-                        for withErrors in [True, False]:
-                            fig, ax = make_line_chart(
-                                title=title,
-                                xdata=merge_data_view[timeColumnName],
-                                xlabel=unit_for(timeColumnName),
-                                ylabel=unit_for(current_metric),
-                                ydata={
-                                    beautifyValue(label): (
-                                        merge_data_view.sel(selector)[current_metric],
-                                        merge_error_view.sel(selector)[current_metric] if withErrors else 0
-                                    )
-                                    for label in merge_data_view[comparison_variable].values
-                                    for selector in
-                                    [{comparison_variable: label, current_coordinate: current_coordinate_value}]
-                                },
-                            )
-                            ax.set_xlim(minTime, maxTime)
-                            ax.legend()
-                            fig.tight_layout()
-                            by_time_output_directory = f'{output_directory}/{basedir}/{comparison_variable}'
-                            Path(by_time_output_directory).mkdir(parents=True, exist_ok=True)
-                            figname = f'{comparison_variable}_{current_metric}_{current_coordinate}_{beautified_value}{"_err" if withErrors else ""}'
-                            for symbol in r".[]\/@:":
-                                figname = figname.replace(symbol, '_')
-                            fig.savefig(f'{by_time_output_directory}/{figname}.pdf')
-                            plt.close(fig)
+    # def generate_all_charts(means, errors=None, basedir=''):
+    #     viable_coords = {coord for coord in means.coords if means[coord].size > 1}
+    #     for comparison_variable in viable_coords - {timeColumnName}:
+    #         mergeable_variables = viable_coords - {timeColumnName, comparison_variable}
+    #         for current_coordinate in mergeable_variables:
+    #             merge_variables = mergeable_variables - {current_coordinate}
+    #             merge_data_view = means.mean(dim=merge_variables, skipna=True)
+    #             merge_error_view = errors.mean(dim=merge_variables, skipna=True)
+    #             for current_coordinate_value in merge_data_view[current_coordinate].values:
+    #                 beautified_value = beautifyValue(current_coordinate_value)
+    #                 for current_metric in merge_data_view.data_vars:
+    #                     title = f'{label_for(current_metric)} for diverse {label_for(comparison_variable)} when {label_for(current_coordinate)}={beautified_value}'
+    #                     for withErrors in [True, False]:
+    #                         fig, ax = make_line_chart(
+    #                             title=title,
+    #                             xdata=merge_data_view[timeColumnName],
+    #                             xlabel=unit_for(timeColumnName),
+    #                             ylabel=unit_for(current_metric),
+    #                             ydata={
+    #                                 beautifyValue(label): (
+    #                                     merge_data_view.sel(selector)[current_metric],
+    #                                     merge_error_view.sel(selector)[current_metric] if withErrors else 0
+    #                                 )
+    #                                 for label in merge_data_view[comparison_variable].values
+    #                                 for selector in
+    #                                 [{comparison_variable: label, current_coordinate: current_coordinate_value}]
+    #                             },
+    #                         )
+    #                         ax.set_xlim(minTime, maxTime)
+    #                         ax.legend()
+    #                         fig.tight_layout()
+    #                         by_time_output_directory = f'{output_directory}/{basedir}/{comparison_variable}'
+    #                         Path(by_time_output_directory).mkdir(parents=True, exist_ok=True)
+    #                         figname = f'{comparison_variable}_{current_metric}_{current_coordinate}_{beautified_value}{"_err" if withErrors else ""}'
+    #                         for symbol in r".[]\/@:":
+    #                             figname = figname.replace(symbol, '_')
+    #                         fig.savefig(f'{by_time_output_directory}/{figname}.pdf')
+    #                         plt.close(fig)
 
 
     for experiment in experiments:
         current_experiment_means = means[experiment]
         current_experiment_errors = stdevs[experiment]
-        generate_all_charts(current_experiment_means, current_experiment_errors, basedir=f'{experiment}')
+        # generate_all_charts(current_experiment_means, current_experiment_errors, basedir=f'{experiment}')
         to_show = [
             "nodes",
             "network-hub-xCoord",
@@ -492,15 +491,15 @@ if __name__ == '__main__':
             'local-success[mean]',
             'resource[mean]',
         ]
-        for data in to_show:
-            current_experiment_means[data].plot.line()
-            plt.fill_between(current_experiment_means[timeColumnName],
-                             current_experiment_means[data] - current_experiment_errors[data],
-                             current_experiment_means[data] + current_experiment_errors[data],
-                             alpha=0.2)
-
-            plt.savefig(f'{output_directory}/{experiment}_{data}.pdf')
-            plt.clf()
+        # for data in to_show:
+        #     current_experiment_means[data].plot.line()
+        #     plt.fill_between(current_experiment_means[timeColumnName],
+        #                      current_experiment_means[data] - current_experiment_errors[data],
+        #                      current_experiment_means[data] + current_experiment_errors[data],
+        #                      alpha=0.2)
+        #
+        #     plt.savefig(f'{output_directory}/{experiment}_{data}.pdf')
+        #     plt.clf()
 
 # Custom charting
 # plot in a single boxplot chart by using seaborn, the data of both experiments "classic-vmc" and "field-vmc-fixed-leader",
@@ -509,10 +508,13 @@ if __name__ == '__main__':
 # the stabilization time is the amount of time elapsed from the start of the experiment to the end of the experiment.
 
 
+from matplotlib import pyplot as plt
+
 all_time = { experiment : []  for experiment in experiments }
 for experiment in experiments:
     current_experiment_means = means[experiment]
     times = []
+    seeds = current_experiment_means.seed.values
     for seed in seeds:
         # take the curren means of the experiments with this seed
         current_experiment_means.sel(seed=seed)
@@ -538,7 +540,10 @@ for experiment in experiments:
 import seaborn as sns
 #box plot
 all_time
-sns.boxplot(data=all_time, palette='viridis', log_scale=True)
+# sns.boxplot(data=all_time, palette='viridis', log_scale=True)
 # save it in svg
+# plt.savefig(f'{output_directory}/all_times_log.pdf')
+# plt.savefig(f'charts/time_to_convergence_log.svg')
+sns.boxplot(data=all_time, palette='viridis', log_scale=False)
 plt.savefig(f'{output_directory}/all_times.pdf')
 plt.savefig(f'charts/time_to_convergence.svg')
