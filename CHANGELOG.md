@@ -1,3 +1,17 @@
+## [1.28.0](https://github.com/angelacorte/fieldVMC/compare/1.27.2...1.28.0) (2025-03-24)
+
+### Features
+
+* add new plotter ([bcde86d](https://github.com/angelacorte/fieldVMC/commit/bcde86d139d20643ee192d2ba4186ff9aa48ca9e))
+
+### Dependency updates
+
+* **deps:** update dependency xarray to v2025.3.0 ([ac24107](https://github.com/angelacorte/fieldVMC/commit/ac24107967edcd718e12531ada91dd1ac261932f))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.27.2 [skip ci] ([7eb8ee9](https://github.com/angelacorte/fieldVMC/commit/7eb8ee94e0df37516fbc79b6c87270d6c3b9a186))
+
 ## [1.27.2](https://github.com/angelacorte/fieldVMC/compare/1.27.1...1.27.2) (2025-03-22)
 
 ### Bug Fixes
