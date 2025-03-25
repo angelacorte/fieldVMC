@@ -62,7 +62,7 @@ services:
     volumes:
       - angela.cortecchia-volume:/experiment/data
     environment:
-      - MAX_SEED=500
+      - MAX_SEED=30
       - GRADLE_TASK=runSelfRepairBatch
 
   self-optimization-batch:

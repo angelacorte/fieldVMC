@@ -203,9 +203,9 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                         autoStart: true,
                       }
                       
-                    terminate: { type: AfterTime, parameters: [1000] }
+                 
                     """.trimIndent(),
-                )
+                ) //terminate: { type: AfterTime, parameters: [1000] }
             }
         }
         runAllBatch.dependsOn(batch)

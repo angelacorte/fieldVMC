@@ -9,7 +9,7 @@ variables:
       formula: System.getenv("MAX_SEED").toDouble()
       language: kotlin
     step: 1
-    default: 0
+    default: 14
   radius: &leaderRadius
     100.0
   maxResource: &maxResource
@@ -18,7 +18,7 @@ variables:
     1.0
   initialNodes: &initialNodes
     type: ArbitraryVariable
-    parameters: [ 200, [ 1, 2, 10, 100, 300, 500 ] ]
+    parameters: [ 100, [ 1, 2, 10, 100, 300, 500 ] ]
   movingRange: &movingRange
     -5.0
   layerX: &layerX
@@ -103,43 +103,47 @@ deployments:
       - type: it.unibo.collektive.alchemist.device.sensors.impl.ResourceSensorProperty
         parameters: [ *resourceLowerBound, *maxResource ]
 
-export:
-  - type: CSVExporter
-    parameters:
-      fileNameRoot: *fileName
-      interval: 1.0
-      exportPath: *path
-    data:
-      - time
-      - type: NumberOfNodes
-      - type: NetworkHub
-      - type: NumberOfLeaves
-      - type: NetworkDensity
-      - type: SubnetworksDiameter
-        parameters:
-          filter: onlyfinite
-          aggregators: [ min, max, mean, variance, median, StandardDeviation ]
-          precision: 3
-      - type: NodeDegree
-        parameters:
-          filter: onlyfinite
-          aggregators: [ max, mean, variance, median, StandardDeviation ]
-      - molecule: local-success
-        aggregators: [ max, mean, variance, median, StandardDeviation ]
-        value-filter: onlyfinite
-        precision: 3
-      - molecule: resource
-        aggregators: [ max, mean, variance, median, StandardDeviation ]
-        value-filter: onlyfinite
-        precision: 3
-      - molecule: success
-        aggregators: [ max, mean, variance, median, StandardDeviation ]
-        value-filter: onlyfinite
-        precision: 3
-      - molecule: local-resource
-        aggregators: [ max, mean, variance, median, StandardDeviation ]
-        value-filter: onlyfinite
-        precision: 3
-      - molecule: leader
-        aggregators: [ Sum ]
-        property: if(it) 1 else 0
+terminate:
+  type: StableForSteps
+  parameters: [30000, 3]
+
+#export:
+#  - type: CSVExporter
+#    parameters:
+#      fileNameRoot: *fileName
+#      interval: 1.0
+#      exportPath: *path
+#    data:
+#      - time
+#      - type: NumberOfNodes
+#      - type: NetworkHub
+#      - type: NumberOfLeaves
+#      - type: NetworkDensity
+#      - type: SubnetworksDiameter
+#        parameters:
+#          filter: onlyfinite
+#          aggregators: [ min, max, mean, variance, median, StandardDeviation ]
+#          precision: 3
+#      - type: NodeDegree
+#        parameters:
+#          filter: onlyfinite
+#          aggregators: [ max, mean, variance, median, StandardDeviation ]
+#      - molecule: local-success
+#        aggregators: [ max, mean, variance, median, StandardDeviation ]
+#        value-filter: onlyfinite
+#        precision: 3
+#      - molecule: resource
+#        aggregators: [ max, mean, variance, median, StandardDeviation ]
+#        value-filter: onlyfinite
+#        precision: 3
+#      - molecule: success
+#        aggregators: [ max, mean, variance, median, StandardDeviation ]
+#        value-filter: onlyfinite
+#        precision: 3
+#      - molecule: local-resource
+#        aggregators: [ max, mean, variance, median, StandardDeviation ]
+#        value-filter: onlyfinite
+#        precision: 3
+#      - molecule: leader
+#        aggregators: [ Sum ]
+#        property: if(it) 1 else 0
