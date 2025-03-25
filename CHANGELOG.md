@@ -1,3 +1,18 @@
+## [1.28.1](https://github.com/angelacorte/fieldVMC/compare/1.28.0...1.28.1) (2025-03-25)
+
+### Dependency updates
+
+* **deps:** update plugin kotlin-qa to v0.78.1 ([db03b69](https://github.com/angelacorte/fieldVMC/commit/db03b69a21f040ecdbb3c52b9f48d7fc2f0127fd))
+* **deps:** update plugin kotlin-qa to v0.78.3 ([a341909](https://github.com/angelacorte/fieldVMC/commit/a341909bd0a2520c2887ffe0cfcd3622dbbfab41))
+
+### Bug Fixes
+
+* change termination type for self-repair experiment ([0238c78](https://github.com/angelacorte/fieldVMC/commit/0238c784dc98d2349b80af63e027164cdbc51641))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.28.0 [skip ci] ([482ad12](https://github.com/angelacorte/fieldVMC/commit/482ad120c8c418cdd8d57324705303e9727e0288))
+
 ## [1.28.0](https://github.com/angelacorte/fieldVMC/compare/1.27.2...1.28.0) (2025-03-24)
 
 ### Features
