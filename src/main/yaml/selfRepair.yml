@@ -4,7 +4,9 @@ variables:
   path: &path
     "data/self-repair"
   seed: &seed
-    min: 0
+    min:
+      formula: System.getenv("MIN_SEED").toDouble()
+      language: kotlin
     max:
       formula: System.getenv("MAX_SEED").toDouble()
       language: kotlin
@@ -107,43 +109,43 @@ terminate:
   type: StableForSteps
   parameters: [30000, 3]
 
-#export:
-#  - type: CSVExporter
-#    parameters:
-#      fileNameRoot: *fileName
-#      interval: 1.0
-#      exportPath: *path
-#    data:
-#      - time
-#      - type: NumberOfNodes
-#      - type: NetworkHub
-#      - type: NumberOfLeaves
-#      - type: NetworkDensity
-#      - type: SubnetworksDiameter
-#        parameters:
-#          filter: onlyfinite
-#          aggregators: [ min, max, mean, variance, median, StandardDeviation ]
-#          precision: 3
-#      - type: NodeDegree
-#        parameters:
-#          filter: onlyfinite
-#          aggregators: [ max, mean, variance, median, StandardDeviation ]
-#      - molecule: local-success
-#        aggregators: [ max, mean, variance, median, StandardDeviation ]
-#        value-filter: onlyfinite
-#        precision: 3
-#      - molecule: resource
-#        aggregators: [ max, mean, variance, median, StandardDeviation ]
-#        value-filter: onlyfinite
-#        precision: 3
-#      - molecule: success
-#        aggregators: [ max, mean, variance, median, StandardDeviation ]
-#        value-filter: onlyfinite
-#        precision: 3
-#      - molecule: local-resource
-#        aggregators: [ max, mean, variance, median, StandardDeviation ]
-#        value-filter: onlyfinite
-#        precision: 3
-#      - molecule: leader
-#        aggregators: [ Sum ]
-#        property: if(it) 1 else 0
+export:
+  - type: CSVExporter
+    parameters:
+      fileNameRoot: *fileName
+      interval: 1.0
+      exportPath: *path
+    data:
+      - time
+      - type: NumberOfNodes
+      - type: NetworkHub
+      - type: NumberOfLeaves
+      - type: NetworkDensity
+      - type: SubnetworksDiameter
+        parameters:
+          filter: onlyfinite
+          aggregators: [ min, max, mean, variance, median, StandardDeviation ]
+          precision: 3
+      - type: NodeDegree
+        parameters:
+          filter: onlyfinite
+          aggregators: [ max, mean, variance, median, StandardDeviation ]
+      - molecule: local-success
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: resource
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: success
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: local-resource
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: leader
+        aggregators: [ Sum ]
+        property: if(it) 1 else 0
