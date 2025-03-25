@@ -1,3 +1,14 @@
+## [1.28.2](https://github.com/angelacorte/fieldVMC/compare/1.28.1...1.28.2) (2025-03-25)
+
+### Bug Fixes
+
+* add exports ([88c7a02](https://github.com/angelacorte/fieldVMC/commit/88c7a02a695bc0b03ed73aafc91e6ec9710ee2eb))
+* divide self repair simulation into more services ([1145365](https://github.com/angelacorte/fieldVMC/commit/1145365c09483fde697dca7d53173482564df6fe))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.28.1 [skip ci] ([818f6bf](https://github.com/angelacorte/fieldVMC/commit/818f6bfe21370df6186a753224917be6f6834ee8))
+
 ## [1.28.1](https://github.com/angelacorte/fieldVMC/compare/1.28.0...1.28.1) (2025-03-25)
 
 ### Dependency updates
