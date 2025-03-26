@@ -4,7 +4,7 @@ variables:
   path: &path
     "data/self-repair"
   seed: &seed
-    min:
+    min: 
       formula: System.getenv("MIN_SEED").toDouble()
       language: kotlin
     max:
@@ -20,7 +20,7 @@ variables:
     1.0
   initialNodes: &initialNodes
     type: ArbitraryVariable
-    parameters: [ 100, [ 1, 2, 10, 100, 300, 500 ] ]
+    parameters: [ 300, [ 1, 2, 10, 100, 300, 500 ] ]
   movingRange: &movingRange
     -5.0
   layerX: &layerX
@@ -107,7 +107,7 @@ deployments:
 
 terminate:
   type: StableForSteps
-  parameters: [30000, 3]
+  parameters: [30000, 4]
 
 export:
   - type: CSVExporter
