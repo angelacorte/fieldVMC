@@ -1,3 +1,26 @@
+## [1.29.0](https://github.com/angelacorte/fieldVMC/compare/1.28.2...1.29.0) (2025-03-26)
+
+### Features
+
+* add charts ([1950a02](https://github.com/angelacorte/fieldVMC/commit/1950a0296721f9ee278d29e55c5e61608143a2ca))
+* plot self* experiments ([0c23b7c](https://github.com/angelacorte/fieldVMC/commit/0c23b7cc1587976f422615c071f3ce6549dc14af))
+* plot stabilization time ([3f17e0d](https://github.com/angelacorte/fieldVMC/commit/3f17e0d5af7611b48ffc0bec11c8b0fd0eb4837b))
+
+### Bug Fixes
+
+* increase steps for termination ([ea311f8](https://github.com/angelacorte/fieldVMC/commit/ea311f8e103c63940d90ebf7481586a40d0ccb58))
+* stabilization time plotter ([ccd4232](https://github.com/angelacorte/fieldVMC/commit/ccd4232041b856856546e33945045983bb0bb896))
+* termination definition ([e559289](https://github.com/angelacorte/fieldVMC/commit/e559289bc673f341c7d05728c9d441cf4c329e6d))
+
+### Build and continuous integration
+
+* **deps:** update danysk/build-check-deploy-gradle-action action to v3.7.14 ([837671f](https://github.com/angelacorte/fieldVMC/commit/837671f9ecc0aee78115425bb8f69f02b16215a3))
+
+### General maintenance
+
+* fix deprecated functions ([ce361f7](https://github.com/angelacorte/fieldVMC/commit/ce361f7d9da3d109d5a3f21d62801d13a9cc60bf))
+* **release:** update gradle.properties .env versions to 1.28.2 [skip ci] ([a9d59bb](https://github.com/angelacorte/fieldVMC/commit/a9d59bbddee0bf7e049f7a2fe7ab9898d5d0760a))
+
 ## [1.28.2](https://github.com/angelacorte/fieldVMC/compare/1.28.1...1.28.2) (2025-03-25)
 
 ### Bug Fixes
