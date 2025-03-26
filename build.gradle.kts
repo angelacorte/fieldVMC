@@ -144,30 +144,6 @@ File(rootProject.rootDir.path + "/src/main/yaml")
             maxHeapSize = "${minOf(heap.toInt(), Runtime.getRuntime().availableProcessors() * taskSize)}m"
             File("data").mkdirs()
             args(
-                "--override",
-                """
-                variables:
-                  metrics: &metrics
-                    formula: |
-                      it.unibo.common.TerminationMetrics()
-                    language: kotlin
-                    
-                terminate:
-                  type: MetricsStableForTime
-                  parameters: {
-                    stableForTime: 30.0,
-                    timeIntervalToCheck: 2.0,
-                    equalTimes: 3,
-                    metricsToCheck: *metrics,
-                  }
-                
-                launcher:
-                  type: DefaultLauncher
-                  parameters: {
-                    batch: ["seed"],
-                    autoStart: true,
-                  }
-                """.trimIndent(),
                 "--verbosity",
                 "error",
             )
@@ -203,9 +179,36 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                         autoStart: true,
                       }
                       
-                 
+                    terminate: { type: StableForSteps, parameters: [30000, 3] }
                     """.trimIndent(),
                 ) //terminate: { type: AfterTime, parameters: [1000] }
+            } else {
+                args(
+                    "--override",
+                    """
+                    variables:
+                    metrics: &metrics
+                        formula: |
+                        it.unibo.common.TerminationMetrics()
+                        language: kotlin
+                        
+                    terminate:
+                    type: MetricsStableForTime
+                    parameters: {
+                        stableForTime: 30.0,
+                        timeIntervalToCheck: 2.0,
+                        equalTimes: 3,
+                        metricsToCheck: *metrics,
+                    }
+                    
+                    launcher:
+                    type: DefaultLauncher
+                    parameters: {
+                        batch: ["seed"],
+                        autoStart: true,
+                    }
+                    """.trimIndent(),
+                )
             }
         }
         runAllBatch.dependsOn(batch)
