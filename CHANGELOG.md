@@ -1,3 +1,13 @@
+## [1.29.1](https://github.com/angelacorte/fieldVMC/compare/1.29.0...1.29.1) (2025-03-26)
+
+### Bug Fixes
+
+* termination definition ([6ec92c4](https://github.com/angelacorte/fieldVMC/commit/6ec92c45205b74929bbf3dc90f5bd48c4d3c7a7f))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.29.0 [skip ci] ([748c470](https://github.com/angelacorte/fieldVMC/commit/748c470580a30ef073a43f80e5e4a9406849fa0f))
+
 ## [1.29.0](https://github.com/angelacorte/fieldVMC/compare/1.28.2...1.29.0) (2025-03-26)
 
 ### Features
