@@ -33,6 +33,9 @@ variables:
   initialNodes: &initialNodes
     type: ArbitraryVariable
     parameters: [ 200, [ 1, 2, 10, 100, 300, 500 ] ]
+  interval: &interval
+    formula: initialNodes * 100
+    language: kotlin
   movingRange: &movingRange
     3.0
   resourceLowerBound: &resourceLowerBound
@@ -102,6 +105,12 @@ deployments:
         parameters: [ *leaderRadius ]
       - type: it.unibo.collektive.alchemist.device.sensors.impl.ResourceSensorProperty
         parameters: [ *resourceLowerBound, *maxResource ]
+
+terminate:
+  type: StableForSteps
+  parameters:
+    checkInterval: *interval
+    equalIntervals: 3
 
 export:
   - type: CSVExporter

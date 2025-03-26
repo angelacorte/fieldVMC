@@ -49,6 +49,9 @@ variables:
   initialNodes: &initialNodes
     type: ArbitraryVariable
     parameters: [ 200, [1.0, 10, 100, 300, 500, 1000 ] ]
+  interval: &interval
+    formula: initialNodes * 100
+    language: kotlin
   cloningRange: &cloningRange
     3
 
@@ -94,6 +97,12 @@ deployments:
         parameters: [*resourceLowerBound, *maxResource]
       - type: it.unibo.collektive.alchemist.device.sensors.impl.DeviceSpawner
         parameters: [ *cloningRange, *maxChildren, *minSpanWait ]
+
+terminate:
+  type: StableForSteps
+  parameters:
+    checkInterval: *interval
+    equalIntervals: 3
 
 export:
   - type: CSVExporter

@@ -20,7 +20,10 @@ variables:
     1.0
   initialNodes: &initialNodes
     type: ArbitraryVariable
-    parameters: [ 300, [ 1, 2, 10, 100, 300, 500 ] ]
+    parameters: [ 100, [ 1, 2, 10, 100, 300, 500 ] ]
+  interval: &interval
+    formula: initialNodes * 100
+    language: kotlin
   movingRange: &movingRange
     -5.0
   layerX: &layerX
@@ -107,7 +110,12 @@ deployments:
 
 terminate:
   type: StableForSteps
-  parameters: [30000, 4]
+  parameters:
+    # [{checkInterval=1000}, {equalIntervals=3}] NOOOO
+    # [1000, 3] NOOOO
+    # {checkInterval=1000, equalIntervals=3}
+    checkInterval: *interval
+    equalIntervals: 3
 
 export:
   - type: CSVExporter

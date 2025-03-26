@@ -178,10 +178,13 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                         batch: ["seed", "initialNodes"],
                         autoStart: true,
                       }
-                      
-                    terminate: { type: StableForSteps, parameters: [30000, 3] }
                     """.trimIndent(),
                 ) //terminate: { type: AfterTime, parameters: [1000] }
+                // terminate:
+                    //     type: StableForSteps
+                    //     parameters: 
+                    //         - checkInterval: *interval 
+                    //         - equalIntervals: 3
             } else {
                 args(
                     "--override",

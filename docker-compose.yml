@@ -113,7 +113,7 @@ services:
       - MIN_SEED=401
       - MAX_SEED=500
       - GRADLE_TASK=runSelfRepairBatch
-
+    
   self-optimization-batch:
     image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
     build:
