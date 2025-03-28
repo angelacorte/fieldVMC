@@ -6,6 +6,9 @@ import numpy as np
 import matplotlib
 import glob
 import re
+from datetime import datetime
+
+directory = 'charts/good'
 
 def extractVariableNames(filename):
     with open(filename, 'r') as file:
@@ -20,7 +23,6 @@ def extractVariableNames(filename):
             regex = re.compile(r' (?P<varName>\S+)')
             return regex.findall(lastHeaderLine)
         return []
-
 
 def openCsv(path):
     regex = re.compile(r'\d')
@@ -45,7 +47,6 @@ def beautify_experiment_name(name):
         return 'Field VMC Self-Repair'
     else:
         raise Exception(f'Unknown experiment name {name}.')
-
 
 def load_data_from_csv(path, experiment):  
     files = glob.glob(path)
@@ -78,7 +79,8 @@ def check_stability(dataset, metrics, window_size):
 
 
 def plot_cutting(data, origin):
-    colors = sns.color_palette("viridis", n_colors=len(data))
+    i = len(data)+1
+    colors = sns.color_palette("viridis", n_colors=i)
     metric = 'nodes'
     plt.figure(figsize=(10, 6))
     for j, (algorithm, (mean_df, variance_df)) in enumerate(data.items()):
@@ -94,17 +96,18 @@ def plot_cutting(data, origin):
         upper_bound = mean + np.sqrt(variance)
         lower_bound = mean - np.sqrt(variance)
         plt.fill_between(mean.index, lower_bound, upper_bound, color=colors[j], alpha=0.2)
-    plt.axvline(x=500, color='black', linestyle='dotted', linewidth=2)
-    plt.title(f'TODO')
+    plt.axvline(x=500, color=colors[0], linestyle='dotted', linewidth=1, label='Cut event')
+    plt.title(f'Cut event from y={origin}')
     plt.xlabel('Seconds simulated')
     plt.ylabel('Number of nodes')
     plt.legend()
     plt.tight_layout()
-    plt.savefig(f'charts/cut-at-{origin}.pdf', dpi=300)
+    plt.savefig(f'{directory}/cut-at-{origin}.pdf', dpi=300)
     plt.close()
 
 def plot_selfs(data, experiment, metric, y_label='Number of roots', cut = True):
-    colors = sns.color_palette("viridis", n_colors=len(data))
+    i = len(data)+1
+    colors = sns.color_palette("viridis", n_colors=i)
     plt.figure(figsize=(10, 6))
     for j, ((exp, nodes), (mean_df, variance_df)) in enumerate(data.items()):
         sns.lineplot(
@@ -118,19 +121,25 @@ def plot_selfs(data, experiment, metric, y_label='Number of roots', cut = True):
         variance = variance_df[metric]
         upper_bound = mean + np.sqrt(variance)
         lower_bound = mean - np.sqrt(variance)
-        plt.fill_between(mean.index, lower_bound, upper_bound, color=colors[j], alpha=0.2)
+        plt.fill_between(mean.index, lower_bound, upper_bound, color=colors[j+1], alpha=0.2)
     if cut:
-        plt.axvline(x=200, color='black', linestyle='dotted', linewidth=2)
+        plt.ylim(0, 15)
+        if experiment == 'self-integration':
+            plt.xlim(-10, 300)
+        plt.axvline(x=200, color=colors[0], linestyle='dotted', linewidth=1, label='Event')
     plt.title(f'{experiment}')
     plt.xlabel('Seconds simulated')
-    plt.ylabel('Number of roots')
+    plt.ylabel(y_label)
     plt.legend()
     plt.tight_layout()
-    plt.savefig(f'charts/{experiment}.pdf', dpi=300)
+    now = datetime.now()
+    now = now.strftime("%Y-%m-%d-%H-%M-%S")
+    plt.savefig(f'{directory}/{experiment}{now}.pdf', dpi=300)
     plt.close()
 
 def plot_single_selfs(data, experiment, metric, y_label='Number of roots', cut = True):
-    colors = sns.color_palette("viridis", n_colors=len(data))
+    i = len(data)+1
+    colors = sns.color_palette("viridis", n_colors=i)
     plt.figure(figsize=(10, 6))
     for j, ((exp, nodes), (mean_df, variance_df)) in enumerate(data.items()):
         sns.lineplot(
@@ -144,15 +153,20 @@ def plot_single_selfs(data, experiment, metric, y_label='Number of roots', cut =
         variance = variance_df[metric]
         upper_bound = mean + np.sqrt(variance)
         lower_bound = mean - np.sqrt(variance)
-        plt.fill_between(mean.index, lower_bound, upper_bound, color=colors[j], alpha=0.2)
+        plt.fill_between(mean.index, lower_bound, upper_bound, color=colors[j+1], alpha=0.2)
         if cut:
-            plt.axvline(x=200, color='black', linestyle='dotted', linewidth=2)
+            plt.ylim(0, 15)
+            if experiment == 'self-integration':
+                plt.xlim(-10, 300)
+            plt.axvline(x=200, color=colors[0], linestyle='dotted', linewidth=1, label='Event')
         plt.title(f'{experiment}')
         plt.xlabel('Seconds simulated')
         plt.ylabel(y_label)
         plt.legend()
         plt.tight_layout()
-        plt.savefig(f'charts/{experiment}_initialNodes-{nodes}.pdf', dpi=300)
+        now = datetime.now()
+        now = now.strftime("%Y-%m-%d-%H-%M-%S")
+        plt.savefig(f'{directory}/{experiment}_initialNodes-{nodes}-{now}.pdf', dpi=300)
         plt.close()
 
 def box_plot(dataframes):
@@ -168,7 +182,18 @@ def box_plot(dataframes):
         color = ax.patches[i].get_facecolor()  # Get color from boxplot
         handles.append(plt.Line2D([0], [0], color=color, lw=4))
     plt.legend(handles, df_melted["Experiment"].unique(), title="Legend", loc="upper right")
-    plt.savefig(f'charts/stabilization-time.pdf', dpi=300)
+    plt.savefig(f'{directory}/stabilization-time.pdf', dpi=300)
+    plt.close()
+
+def violin_plot(dataframes):
+    df = pd.DataFrame(dataframes)
+    df_melted = df.melt(var_name="Experiment", value_name="Stabilization time")
+    plt.figure(figsize=(10, 6))
+    sns.violinplot(x="Experiment", y="Stabilization time", data=df_melted, palette="viridis", hue="Experiment")
+    plt.xlabel("Experiment Type")
+    plt.ylabel("Simulated seconds")
+    plt.title("Stabilization time")
+    plt.savefig(f'{directory}/stabilization-time-violin.pdf', dpi=300)
     plt.close()
 
 if __name__ == '__main__':
@@ -190,8 +215,10 @@ if __name__ == '__main__':
             times.append(time)
         dataframes[beautify_experiment_name(experiment)].extend(times)
     box_plot(dataframes)
-    
+    violin_plot(dataframes)
+
     origin = [0.1, 3.1, 6.1, 9.1, 12.1, 15.1, 18.1, 21.1, 24.1, 27.1, 30.1, 33.1, 36.1, 39.1, 42.1, 45.1, 48.1]
+    origin = [0.1, 9.1, 18.1, 27.1]
     experiments = ['cutting-classic-vmc', 'cutting-field-vmc-fixed-leader']
     for o in origin:
         dataframes = {}
@@ -201,16 +228,16 @@ if __name__ == '__main__':
             dataframes[beautify_experiment_name(experiment)] = (mean, variance)
         plot_cutting(dataframes, o)
 
-    initialNodes = [1, 2, 10, 100, 300, 500]
-    experiments = ['self-integration', 'self-repair']
-    # experiment = 'self-integration'
+    initialNodes = [100, 300, 500]
+    experiments = [ 'self-integration'] #, 'self-integration'
     for experiment in experiments:
         dataframes = {}
         for n in initialNodes:
             data = load_data_from_csv(f'data/{experiment}/{experiment}_*_initialNodes-{n}.csv', experiment)
             mean, variance = compute_mean_variance(data)
+            # conver time to int
+            mean['time'] = mean['time'].astype(int)
             dataframes[beautify_experiment_name(experiment), n] = (mean, variance)
-            # dataframes[f'{n}'] = (mean, variance)
         plot_selfs(dataframes, experiment, metric = 'ifit1@leader[Sum]', y_label='Number of roots', cut = True)
         plot_single_selfs(dataframes, experiment, metric = 'ifit1@leader[Sum]', cut = True)
 
@@ -221,6 +248,5 @@ if __name__ == '__main__':
         data = load_data_from_csv(f'data/{experiment}/{experiment}_*_initialNodes-{n}.csv', experiment)
         mean, variance = compute_mean_variance(data)
         dataframes[beautify_experiment_name(experiment), n] = (mean, variance)
-        # dataframes[f'{n}'] = (mean, variance)
     plot_selfs(dataframes, experiment, 'nodes', 'Number of nodes', False)
     plot_single_selfs(dataframes, experiment, 'nodes', 'Number of nodes', False)
