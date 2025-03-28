@@ -1,7 +1,14 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 import re
 from pathlib import Path
+import seaborn as sns
+import pandas as pd
+import matplotlib
+import glob
+import re
+from datetime import datetime
 
 def distance(val, ref):
     return abs(ref - val)
@@ -188,27 +195,21 @@ def beautifyValue(v):
         return v
 
 
-if __name__ == '__main__':
-    # CONFIGURE SCRIPT
-    # Where to find Alchemist data files
-    directory = 'data'
-    # Where to save charts
-    output_directory = 'charts'
-    # How to name the summary of the processed data
-    pickleOutput = 'data_summary'
-    # Experiment prefixes: one per experiment (root of the file name)
-    experiments = ['field-vmc-fixed-leader', 'classic-vmc']
-    floatPrecision = '{: 0.3f}'
-    # Number of time samples
-    timeSamples = 300
-    # time management
-    minTime = 0
-    maxTime = 600
-    timeColumnName = 'time'
-    logarithmicTime = False
-    # One or more variables are considered random and "flattened"
-    seedVars = ['seed'] #, 'maxResource', 'maxSuccess', 'resourceLowerBound'
-    # Label mapping
+# =============================================================================
+#     def derivativeOrMeasure(variable_name):
+#         if variable_name.endswith('dt'):
+#             return labels.get(variable_name[:-2], Measure(variable_name)).derivative()
+#         return Measure(variable_name)
+# 
+# 
+#     def label_for(variable_name):
+#         return labels.get(variable_name, derivativeOrMeasure(variable_name)).description()
+# 
+# 
+#     def unit_for(variable_name):
+#         return str(labels.get(variable_name, derivativeOrMeasure(variable_name)))
+# =============================================================================
+
     class Measure:
         def __init__(self, description, unit=None):
             self.__description = description
@@ -259,34 +260,30 @@ if __name__ == '__main__':
         return r'\|' + x + r'\|'
 
 
-    labels = {
-        'nodeCount': Measure(r'$n$', 'nodes'),
-        'harmonicCentrality[Mean]': Measure(f'${expected("H(x)")}$'),
-        'meanNeighbors': Measure(f'${expected(cardinality("N"))}$', 'nodes'),
-        'speed': Measure(r'$\|\vec{v}\|$', r'$m/s$'),
-        'msqer@harmonicCentrality[Max]': Measure(r'$\max{(' + mse(centrality_label) + ')}$'),
-        'msqer@harmonicCentrality[Min]': Measure(r'$\min{(' + mse(centrality_label) + ')}$'),
-        'msqer@harmonicCentrality[Mean]': Measure(f'${expected(mse(centrality_label))}$'),
-        'msqer@harmonicCentrality[StandardDeviation]': Measure(f'${stdev_of(mse(centrality_label))}$'),
-        # 'org:protelis:tutorial:distanceTo[max]': Measure(r'$m$', 'max distance'),
-        # 'org:protelis:tutorial:distanceTo[mean]': Measure(r'$m$', 'mean distance'),
-        # 'org:protelis:tutorial:distanceTo[min]': Measure(r'$m$', ',min distance'),
-    }
 
-
-    def derivativeOrMeasure(variable_name):
-        if variable_name.endswith('dt'):
-            return labels.get(variable_name[:-2], Measure(variable_name)).derivative()
-        return Measure(variable_name)
-
-
-    def label_for(variable_name):
-        return labels.get(variable_name, derivativeOrMeasure(variable_name)).description()
-
-
-    def unit_for(variable_name):
-        return str(labels.get(variable_name, derivativeOrMeasure(variable_name)))
-
+if __name__ == '__main__':
+    # CONFIGURE SCRIPT
+    # Where to find Alchemist data files
+    directory = 'data'
+    # Where to save charts
+    output_directory = 'charts/good'
+    # How to name the summary of the processed data
+    pickleOutput = 'data_summary'
+    # Experiment prefixes: one per experiment (root of the file name)
+    experiments = ['self-repair']
+    # experiments = ['cutting-field-vmc-fixed-leader', 'cutting-classic-vmc',]
+    #'self-integration', 'self-repair', 'self-optimization'
+    floatPrecision = '{: 0.3f}'
+    # Number of time samples
+    timeSamples = 200
+    # time management
+    minTime = 0
+    maxTime = 6000
+    timeColumnName = 'time'
+    logarithmicTime = False
+    # One or more variables are considered random and "flattened"
+    seedVars = ['seed'] #, 'maxResource', 'maxSuccess', 'resourceLowerBound'
+    # Label mapping
 
     # Setup libraries
     np.set_printoptions(formatter={'float': floatPrecision.format})
@@ -300,7 +297,7 @@ if __name__ == '__main__':
             lastTimeProcessed = pickle.load(open('timeprocessed', 'rb'))
         except:
             lastTimeProcessed = -1
-        shouldRecompute = True #not os.path.exists(".skip_data_process") and newestFileTime != lastTimeProcessed
+        shouldRecompute = not os.path.exists(".skip_data_process") and newestFileTime != lastTimeProcessed
         if not shouldRecompute:
             try:
                 means = pickle.load(open(pickleOutput + '_mean', 'rb'))
@@ -314,14 +311,6 @@ if __name__ == '__main__':
             for experiment in experiments:
                 # Collect all files for the experiment of interest
                 import fnmatch
-
-                if experiment.startswith('cutting') or experiment.startswith('self-'):
-                    maxTime = 1000
-                    seedVars.append('origin')
-                else:
-                    maxTime = 600
-                    seedVars = 'seed'
-
                 allfiles = filter(lambda file: fnmatch.fnmatch(file, experiment + '_*.csv'), os.listdir(f'{directory}/{experiment}'))
                 allfiles = [directory + f'/{experiment}/' + name for name in allfiles]
                 allfiles.sort()
@@ -389,117 +378,11 @@ if __name__ == '__main__':
         means = {experiment: xr.Dataset() for experiment in experiments}
         stdevs = {experiment: xr.Dataset() for experiment in experiments}
 
-    # QUICK CHARTING
-
-    import matplotlib
-    import matplotlib.pyplot as plt
-
-    matplotlib.rcParams.update({'axes.titlesize': 12})
-    matplotlib.rcParams.update({'axes.labelsize': 10})
-
-
-    def make_line_chart(
-            xdata,
-            ydata,
-            title=None,
-            ylabel=None,
-            xlabel=None,
-            colors=None,
-            linewidth=1,
-            error_alpha=0.2,
-            figure_size=(6, 4)
-    ):
-        fig = plt.figure(figsize=figure_size)
-        ax = fig.add_subplot(1, 1, 1)
-        ax.set_title(title)
-        ax.set_xlabel(xlabel)
-        ax.set_ylabel(ylabel)
-        #        ax.set_ylim(0)
-        #        ax.set_xlim(min(xdata), max(xdata))
-        index = 0
-        for (label, (data, error)) in ydata.items():
-            print(f'plotting {data}\nagainst {xdata}')
-            lines = ax.plot(xdata, data, label=label, color=colors(index / (len(ydata) - 1)) if colors else None,
-                            linewidth=linewidth)
-            index += 1
-            if error is not None:
-                last_color = lines[-1].get_color()
-                ax.fill_between(
-                    xdata,
-                    data + error,
-                    data - error,
-                    facecolor=last_color,
-                    alpha=error_alpha,
-                    )
-        return (fig, ax)
-
-
-    # def generate_all_charts(means, errors=None, basedir=''):
-    #     viable_coords = {coord for coord in means.coords if means[coord].size > 1}
-    #     for comparison_variable in viable_coords - {timeColumnName}:
-    #         mergeable_variables = viable_coords - {timeColumnName, comparison_variable}
-    #         for current_coordinate in mergeable_variables:
-    #             merge_variables = mergeable_variables - {current_coordinate}
-    #             merge_data_view = means.mean(dim=merge_variables, skipna=True)
-    #             merge_error_view = errors.mean(dim=merge_variables, skipna=True)
-    #             for current_coordinate_value in merge_data_view[current_coordinate].values:
-    #                 beautified_value = beautifyValue(current_coordinate_value)
-    #                 for current_metric in merge_data_view.data_vars:
-    #                     title = f'{label_for(current_metric)} for diverse {label_for(comparison_variable)} when {label_for(current_coordinate)}={beautified_value}'
-    #                     for withErrors in [True, False]:
-    #                         fig, ax = make_line_chart(
-    #                             title=title,
-    #                             xdata=merge_data_view[timeColumnName],
-    #                             xlabel=unit_for(timeColumnName),
-    #                             ylabel=unit_for(current_metric),
-    #                             ydata={
-    #                                 beautifyValue(label): (
-    #                                     merge_data_view.sel(selector)[current_metric],
-    #                                     merge_error_view.sel(selector)[current_metric] if withErrors else 0
-    #                                 )
-    #                                 for label in merge_data_view[comparison_variable].values
-    #                                 for selector in
-    #                                 [{comparison_variable: label, current_coordinate: current_coordinate_value}]
-    #                             },
-    #                         )
-    #                         ax.set_xlim(minTime, maxTime)
-    #                         ax.legend()
-    #                         fig.tight_layout()
-    #                         by_time_output_directory = f'{output_directory}/{basedir}/{comparison_variable}'
-    #                         Path(by_time_output_directory).mkdir(parents=True, exist_ok=True)
-    #                         figname = f'{comparison_variable}_{current_metric}_{current_coordinate}_{beautified_value}{"_err" if withErrors else ""}'
-    #                         for symbol in r".[]\/@:":
-    #                             figname = figname.replace(symbol, '_')
-    #                         fig.savefig(f'{by_time_output_directory}/{figname}.pdf')
-    #                         plt.close(fig)
-
-
     for experiment in experiments:
         current_experiment_means = means[experiment]
         current_experiment_errors = stdevs[experiment]
-        # generate_all_charts(current_experiment_means, current_experiment_errors, basedir=f'{experiment}')
-        to_show = [
-            "nodes",
-            "network-hub-xCoord",
-            "number-of-leaves",
-            "network-hub-yCoord",
-            "network-diameter",
-            "network-density",
-            "nodes-degree[mean]",
-            'children-count[mean]',
-            'success[mean]',
-            'local-success[mean]',
-            'resource[mean]',
-        ]
-        # for data in to_show:
-        #     current_experiment_means[data].plot.line()
-        #     plt.fill_between(current_experiment_means[timeColumnName],
-        #                      current_experiment_means[data] - current_experiment_errors[data],
-        #                      current_experiment_means[data] + current_experiment_errors[data],
-        #                      alpha=0.2)
-        #
-        #     plt.savefig(f'{output_directory}/{experiment}_{data}.pdf')
-        #     plt.clf()
+
+
 
 # Custom charting
 # plot in a single boxplot chart by using seaborn, the data of both experiments "classic-vmc" and "field-vmc-fixed-leader",
@@ -508,42 +391,242 @@ if __name__ == '__main__':
 # the stabilization time is the amount of time elapsed from the start of the experiment to the end of the experiment.
 
 
+def beautify_experiment_name(name):
+    if name == 'classic-vmc':
+        return 'Classic VMC'
+    if name == 'field-vmc-fixed-leader':
+        return 'Field VMC'
+    if name == 'cutting-classic-vmc':
+        return 'Classic VMC'
+    if name == 'cutting-field-vmc-fixed-leader':
+        return 'Field VMC'
+    if name == 'self-integration':
+        return 'Field VMC Self-Integration'
+    if name == 'self-optimization':
+        return 'Field VMC Self-Optimization'
+    if name == 'self-repair':
+        return 'Field VMC Self-Repair'
+    else:
+        raise Exception(f'Unknown experiment name {name}.')
+
+
+def plot_cutting(data, origin):
+    i = len(data)+1
+    colors = sns.color_palette("viridis", n_colors=i)
+    metric = 'nodes'
+    plt.figure(figsize=(10, 6))
+    for j, (algorithm, (mean_df, variance_df)) in enumerate(data.items()):
+        sns.lineplot(
+            data = mean_df,
+            x = 'time',
+            y = metric,
+            label = algorithm,
+            color = colors[j],
+        )
+        mean = mean_df[metric]
+        variance = variance_df[metric]
+        upper_bound = mean + np.sqrt(variance)
+        lower_bound = mean - np.sqrt(variance)
+        plt.fill_between(mean.index, lower_bound, upper_bound, color=colors[j], alpha=0.2)
+    plt.axvline(x=500, color=colors[0], linestyle='dotted', linewidth=1, label='Cut event')
+    plt.title(f'Cut event from y={origin}')
+    plt.xlabel('Seconds simulated')
+    plt.ylabel('Number of nodes')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f'{output_directory}/cut-at-{origin}.pdf', dpi=300)
+    plt.close()
+def plot_selfs(data, experiment, metric, y_label='Number of roots', cut=True):
+    # Create a single figure
+    plt.figure(figsize=(10, 6))
+    
+    # Define color palette with enough colors for all lines
+    colors = sns.color_palette("viridis", n_colors=len(data) + 1)
+    
+    # Loop through the data_dict to plot the mean and std deviation for each initialNode
+    for j, ((exp, nodes), (mean_df, std_df)) in enumerate(data.items()):
+        # Plot the mean of the metric for the current node
+        sns.lineplot(
+            data=mean_df,
+            x='time',
+            y=metric,
+            label=f'initial nodes: {nodes}',
+            color=colors[j],  # Use different color for each node
+        )
+        
+        # Calculate upper and lower bounds using the standard deviation
+        upper_bound = mean_df[metric] + std_df['std']
+        lower_bound = mean_df[metric] - std_df['std']
+        
+        # Fill the area between the bounds to represent the standard deviation
+        plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j], alpha=0.2)
+
+    if cut:
+        plt.axvline(x=200, color=colors[0], linestyle='dotted', linewidth=1, label='Event')
+    
+    # Set the title, labels, and legend for the plot
+    plt.title(beautify_experiment_name(experiment))
+    plt.xlabel('Seconds simulated')
+    plt.ylabel(y_label)
+    plt.legend()
+    plt.tight_layout()
+    
+    # Save the plot with a timestamp
+    now = datetime.now()
+    now = now.strftime("%Y-%m-%d-%H-%M-%S")
+    plt.savefig(f'{output_directory}/{experiment}{now}.pdf', dpi=300)
+    plt.show()  # This ensures the plot is shown after the loop finishes
+    plt.close()  # Close the plot to prevent further modifications
+
+
+def box_plot(dataframes):
+    df = pd.DataFrame(dataframes)
+    df_melted = df.melt(var_name="Experiment", value_name="Stabilization time")
+    plt.figure(figsize=(10, 6))
+    ax = sns.boxplot(x="Experiment", y="Stabilization time", data=df_melted, hue="Experiment", palette="viridis", legend=True)
+    plt.xlabel("Experiment Type")
+    plt.ylabel("Simulated seconds")
+    plt.title("Stabilization time")
+    handles = []
+    for i, category in enumerate(df_melted["Experiment"].unique()):
+        color = ax.patches[i].get_facecolor()  # Get color from boxplot
+        handles.append(plt.Line2D([0], [0], color=color, lw=4))
+    plt.legend(handles, df_melted["Experiment"].unique(), title="Legend", loc="upper right")
+    plt.savefig(f'{output_directory}/stabilization-time.pdf', dpi=300)
+    plt.close()
+
+def violin_plot(dataframes):
+    df = pd.DataFrame(dataframes)
+    df_melted = df.melt(var_name="Experiment", value_name="Stabilization time")
+    plt.figure(figsize=(10, 6))
+    sns.violinplot(x="Experiment", y="Stabilization time", data=df_melted, palette="viridis", hue="Experiment")
+    plt.xlabel("Experiment Type")
+    plt.ylabel("Simulated seconds")
+    plt.title("Stabilization time")
+    plt.savefig(f'{output_directory}/stabilization-time-violin.pdf', dpi=300)
+    plt.close()
+
+
+def check_stability(dataset, metrics, window_size):
+    # Iterate through the DataFrame with a sliding window
+    for i in range(len(dataset) - window_size + 1):
+        window = dataset.iloc[i : i + window_size]  # Extract window
+
+        # Check if all values in the window are equal for all selected metrics
+        if all((window[col] == window[col].iloc[0]).all() for col in metrics):
+            first_index = i  # Store the first valid index
+            break  # Stop at the first occurrence
+    return first_index
+
+
+def beautify_experiment_name(name):
+    if name == 'classic-vmc':
+        return 'Classic VMC'
+    if name == 'field-vmc-fixed-leader':
+        return 'Field VMC'
+    if name == 'cutting-classic-vmc':
+        return 'Classic VMC'
+    if name == 'cutting-field-vmc-fixed-leader':
+        return 'Field VMC'
+    if name == 'self-integration':
+        return 'Field VMC Self-Integration'
+    if name == 'self-optimization':
+        return 'Field VMC Self-Optimization'
+    if name == 'self-repair':
+        return 'Field VMC Self-Repair'
+    else:
+        raise Exception(f'Unknown experiment name {name}.')
+
 from matplotlib import pyplot as plt
 
-all_time = { experiment : []  for experiment in experiments }
-for experiment in experiments:
-    current_experiment_means = means[experiment]
-    times = []
-    seeds = current_experiment_means.seed.values
-    for seed in seeds:
-        # take the curren means of the experiments with this seed
-        current_experiment_means.sel(seed=seed)
-        # iterate this using time
-        previous_network_hub_xCoord = -1000
-        previous_network_hub_yCoord = 1000
-        equals_for = 0
-        for time in current_experiment_means.time.values:
-            current_experiment_means.sel(time=time)
-            # exit when network-hub-xCoord network-hub-yCoord are the same (current to this time, to select it(
-            current_network_hub_xCoord = current_experiment_means.sel(time=time, seed=seed)['network-hub-xCoord'].values
-            current_network_hub_yCoord = current_experiment_means.sel(time=time, seed=seed)['network-hub-yCoord'].values
-            if current_network_hub_xCoord == previous_network_hub_xCoord and current_network_hub_yCoord == previous_network_hub_yCoord:
-                equals_for += 1
-            else:
-                equals_for = 0
-            if equals_for > 30:
-                break
-            previous_network_hub_xCoord = current_network_hub_xCoord
-            previous_network_hub_yCoord = current_network_hub_yCoord
-        times.append(time.item())
-    all_time[experiment].extend(times)
-import seaborn as sns
-#box plot
-all_time
+
+# Ensure you extract data for each initialNode (100, 300, 500)
+metric_name = 'ifit1@leader[Sum]'
+
+# Access the data variable correctly (based on your inspection)
+# =============================================================================
+# metric_mean = dataset[metric_name].mean(dim='seed')
+# metric_std = dataset[metric_name].std(dim='seed')
+# =============================================================================
+
+# Prepare data for each initialNode and ensure we have separate values for each node
+data_dict = {}
+initialNodes = [100, 300, 500]
+experiment = 'self-repair'
+metric_to_plot = 'ifit1@leader[Sum]'
+
+for nodes in initialNodes:
+    # Extract the mean and std for this specific initialNode
+# =============================================================================
+#     metric_series_mean = metric_mean.sel(initialNodes=nodes).values
+# =============================================================================
+# =============================================================================
+#     metric_series_std = metric_std.sel(initialNodes=nodes).values
+# =============================================================================
+# =============================================================================
+#     means[experiment][metric_to_plot].sel(dict(initialNodes=nodes))
+#     stdevs[experiment][metric_to_plot].sel(dict(initialNodes=nodes))
+# =============================================================================
+    metric_series_mean = means[experiment][metric_to_plot].sel(dict(initialNodes=nodes))
+    metric_series_std = stdevs[experiment][metric_to_plot].sel(dict(initialNodes=nodes))
+    
+    # Extract the corresponding time series (assumed to be shared across all nodes)
+    time_series = metric_series_mean['time'].values
+    
+    # Construct DataFrames for mean and standard deviation
+    df_mean = pd.DataFrame({
+        'time': time_series,
+        metric_name: metric_series_mean
+    })
+    
+    df_std = pd.DataFrame({
+        'time': time_series,
+        'std': metric_series_std
+    })
+    
+    # Store the data (mean and std) for this initialNode in the dictionary
+    data_dict[(f"{nodes}", nodes)] = (df_mean, df_std)
+plot_selfs(data_dict, experiment='self-repair', metric=metric_name)
+
+# experiments = ['classic-vmc', 'field-vmc-fixed-leader']
+# metrics = ['network-hub-xCoord', 'network-hub-yCoord', 'nodes', 'network-diameter', 'network-density', 'nodes-degree[mean]']
+# dataframes = {beautify_experiment_name(experiment): [] for experiment in experiments}
+
+# # all_time = { experiment : []  for experiment in experiments }
+# for experiment in experiments:
+#     current_experiment_means = means[experiment]
+#     times = []
+#     seeds = current_experiment_means.seed.values
+#     for seed in seeds:
+#         metrics_to_check = {metric: [-1000] for metric in metrics}
+#         current_metrics_to_check = {metric: [-1000] for metric in metrics}
+#         equals_for = 0
+#         current_experiment_data = data[seed]
+#         index = check_stability(current_experiment_data, metrics, 30)
+#         time = current_experiment_data.loc[index, 'time']
+#         times.append(time)
+#     dataframes[beautify_experiment_name(experiment)].extend(times)
+# box_plot(dataframes)
+# violin_plot(dataframes)
+
+# # origin = [0.1, 3.1, 6.1, 9.1, 12.1, 15.1, 18.1, 21.1, 24.1, 27.1, 30.1, 33.1, 36.1, 39.1, 42.1, 45.1, 48.1]
+# origin = [0.1, 9.1, 18.1, 27.1]
+# experiments = ['cutting-classic-vmc', 'cutting-field-vmc-fixed-leader']
+# for o in origin:
+#     dataframes = {}
+#     for experiment in experiments:
+#         data = load_data_from_csv(f'data/{experiment}/{experiment}_origin-{o}_*', experiment)
+#         mean, variance = compute_mean_variance(data)
+#         dataframes[beautify_experiment_name(experiment)] = (mean, variance)
+#     plot_cutting(dataframes, o)
+
+# import seaborn as sns
+# #box plot
+# all_time
 # sns.boxplot(data=all_time, palette='viridis', log_scale=True)
-# save it in svg
-# plt.savefig(f'{output_directory}/all_times_log.pdf')
-# plt.savefig(f'charts/time_to_convergence_log.svg')
-sns.boxplot(data=all_time, palette='viridis', log_scale=False)
-plt.savefig(f'{output_directory}/all_times.pdf')
-plt.savefig(f'charts/time_to_convergence.svg')
+# # save it in svg
+# plt.savefig(f'{output_directory}/all-time-log.pdf', dpi=300)
+# plt.close()
+# sns.boxplot(data=all_time, palette='viridis', log_scale=False)
+# plt.savefig(f'{output_directory}/all-time.pdf', dpi=300)
+# plt.close()
