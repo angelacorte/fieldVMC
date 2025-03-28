@@ -1,3 +1,20 @@
+## [1.30.0](https://github.com/angelacorte/fieldVMC/compare/1.29.1...1.30.0) (2025-03-28)
+
+### Features
+
+* add self repair plotter ([730b459](https://github.com/angelacorte/fieldVMC/commit/730b459438730795b07ba4c5584e475538d63a3e))
+
+### Bug Fixes
+
+* update plotter ([19d446c](https://github.com/angelacorte/fieldVMC/commit/19d446cb236e2b3d701b8cd3bf04d5fcf1ea265f))
+
+### General maintenance
+
+* add self repair chart ([ae033d5](https://github.com/angelacorte/fieldVMC/commit/ae033d5fcf235fc079f80c388b14641d07aa59a9))
+* move comments ([49d385b](https://github.com/angelacorte/fieldVMC/commit/49d385bc4307892ab6d44f6b38b9b923848c9df8))
+* **release:** update gradle.properties .env versions to 1.29.1 [skip ci] ([aabb874](https://github.com/angelacorte/fieldVMC/commit/aabb874ff02388c95f4607d0df968c24e7b241c1))
+* update charts ([3a4c185](https://github.com/angelacorte/fieldVMC/commit/3a4c18518bc92564bba70ca9903ce81eea9db0b8))
+
 ## [1.29.1](https://github.com/angelacorte/fieldVMC/compare/1.29.0...1.29.1) (2025-03-26)
 
 ### Bug Fixes
