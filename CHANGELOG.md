@@ -1,3 +1,14 @@
+## [1.30.1](https://github.com/angelacorte/fieldVMC/compare/1.30.0...1.30.1) (2025-03-31)
+
+### Bug Fixes
+
+* change charts font size ([1d8db99](https://github.com/angelacorte/fieldVMC/commit/1d8db99f8db98d8c624d771102e3834786a142ff))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.30.0 [skip ci] ([9cab1a0](https://github.com/angelacorte/fieldVMC/commit/9cab1a01381b4623a8f2daebbb974b816ff15a2a))
+* update charts ([921881c](https://github.com/angelacorte/fieldVMC/commit/921881c4cef94e447a30b85c1228a5125cafc1a9))
+
 ## [1.30.0](https://github.com/angelacorte/fieldVMC/compare/1.29.1...1.30.0) (2025-03-28)
 
 ### Features
