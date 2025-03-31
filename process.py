@@ -436,47 +436,37 @@ def plot_cutting(data, origin):
     plt.tight_layout()
     plt.savefig(f'{output_directory}/cut-at-{origin}.pdf', dpi=300)
     plt.close()
+
 def plot_selfs(data, experiment, metric, y_label='Number of roots', cut=True):
-    # Create a single figure
     plt.figure(figsize=(10, 6))
-    
-    # Define color palette with enough colors for all lines
-    colors = sns.color_palette("viridis", n_colors=len(data) + 1)
-    
-    # Loop through the data_dict to plot the mean and std deviation for each initialNode
+    plt.rcParams.update({'font.size': 15})
+    colors = sns.color_palette("viridis", n_colors=len(data) + 2)
     for j, ((exp, nodes), (mean_df, std_df)) in enumerate(data.items()):
-        # Plot the mean of the metric for the current node
         sns.lineplot(
             data=mean_df,
             x='time',
             y=metric,
             label=f'initial nodes: {nodes}',
-            color=colors[j],  # Use different color for each node
+            color=colors[j+2],
         )
-        
-        # Calculate upper and lower bounds using the standard deviation
         upper_bound = mean_df[metric] + std_df['std']
         lower_bound = mean_df[metric] - std_df['std']
-        
-        # Fill the area between the bounds to represent the standard deviation
-        plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j], alpha=0.2)
+        plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
 
     if cut:
         plt.axvline(x=200, color=colors[0], linestyle='dotted', linewidth=1, label='Event')
+        plt.axhline(y=2, color=colors[1], linestyle='--', linewidth=1, label='Target')
     
-    # Set the title, labels, and legend for the plot
     plt.title(beautify_experiment_name(experiment))
     plt.xlabel('Seconds simulated')
     plt.ylabel(y_label)
     plt.legend()
     plt.tight_layout()
-    
-    # Save the plot with a timestamp
     now = datetime.now()
     now = now.strftime("%Y-%m-%d-%H-%M-%S")
     plt.savefig(f'{output_directory}/{experiment}{now}.pdf', dpi=300)
-    plt.show()  # This ensures the plot is shown after the loop finishes
-    plt.close()  # Close the plot to prevent further modifications
+    plt.show()  
+    plt.close() 
 
 
 def box_plot(dataframes):
@@ -508,14 +498,11 @@ def violin_plot(dataframes):
 
 
 def check_stability(dataset, metrics, window_size):
-    # Iterate through the DataFrame with a sliding window
     for i in range(len(dataset) - window_size + 1):
-        window = dataset.iloc[i : i + window_size]  # Extract window
-
-        # Check if all values in the window are equal for all selected metrics
+        window = dataset.iloc[i : i + window_size]  
         if all((window[col] == window[col].iloc[0]).all() for col in metrics):
-            first_index = i  # Store the first valid index
-            break  # Stop at the first occurrence
+            first_index = i
+            break  
     return first_index
 
 
@@ -539,52 +526,25 @@ def beautify_experiment_name(name):
 
 from matplotlib import pyplot as plt
 
-
-# Ensure you extract data for each initialNode (100, 300, 500)
 metric_name = 'ifit1@leader[Sum]'
-
-# Access the data variable correctly (based on your inspection)
-# =============================================================================
-# metric_mean = dataset[metric_name].mean(dim='seed')
-# metric_std = dataset[metric_name].std(dim='seed')
-# =============================================================================
-
-# Prepare data for each initialNode and ensure we have separate values for each node
 data_dict = {}
 initialNodes = [100, 300, 500]
 experiment = 'self-repair'
 metric_to_plot = 'ifit1@leader[Sum]'
 
 for nodes in initialNodes:
-    # Extract the mean and std for this specific initialNode
-# =============================================================================
-#     metric_series_mean = metric_mean.sel(initialNodes=nodes).values
-# =============================================================================
-# =============================================================================
-#     metric_series_std = metric_std.sel(initialNodes=nodes).values
-# =============================================================================
-# =============================================================================
-#     means[experiment][metric_to_plot].sel(dict(initialNodes=nodes))
-#     stdevs[experiment][metric_to_plot].sel(dict(initialNodes=nodes))
-# =============================================================================
     metric_series_mean = means[experiment][metric_to_plot].sel(dict(initialNodes=nodes))
     metric_series_std = stdevs[experiment][metric_to_plot].sel(dict(initialNodes=nodes))
-    
-    # Extract the corresponding time series (assumed to be shared across all nodes)
     time_series = metric_series_mean['time'].values
-    
-    # Construct DataFrames for mean and standard deviation
     df_mean = pd.DataFrame({
         'time': time_series,
         metric_name: metric_series_mean
     })
-    
     df_std = pd.DataFrame({
         'time': time_series,
         'std': metric_series_std
     })
     
-    # Store the data (mean and std) for this initialNode in the dictionary
     data_dict[(f"{nodes}", nodes)] = (df_mean, df_std)
 plot_selfs(data_dict, experiment='self-repair', metric=metric_name)
 
@@ -619,14 +579,3 @@ plot_selfs(data_dict, experiment='self-repair', metric=metric_name)
 #         mean, variance = compute_mean_variance(data)
 #         dataframes[beautify_experiment_name(experiment)] = (mean, variance)
 #     plot_cutting(dataframes, o)
-
-# import seaborn as sns
-# #box plot
-# all_time
-# sns.boxplot(data=all_time, palette='viridis', log_scale=True)
-# # save it in svg
-# plt.savefig(f'{output_directory}/all-time-log.pdf', dpi=300)
-# plt.close()
-# sns.boxplot(data=all_time, palette='viridis', log_scale=False)
-# plt.savefig(f'{output_directory}/all-time.pdf', dpi=300)
-# plt.close()
