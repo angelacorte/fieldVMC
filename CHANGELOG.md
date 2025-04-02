@@ -1,3 +1,19 @@
+## [1.31.0](https://github.com/angelacorte/fieldVMC/compare/1.30.1...1.31.0) (2025-04-02)
+
+### Features
+
+* add script to launch all plotters ([179dbf9](https://github.com/angelacorte/fieldVMC/commit/179dbf924e0e896c7f3b2bd42f93a12d3f179412))
+
+### Dependency updates
+
+* **deps:** update dependency org.danilopianini:rrmxmx-kt to v2.0.4 ([3d7590f](https://github.com/angelacorte/fieldVMC/commit/3d7590fd1ea1f2ea2332c4978e0638ca773d5ea9))
+
+### General maintenance
+
+* change charts generation ([188b261](https://github.com/angelacorte/fieldVMC/commit/188b261596d45e9eca982fccd9f74c1eb3d4e7c0))
+* **release:** update gradle.properties .env versions to 1.30.1 [skip ci] ([cb8711f](https://github.com/angelacorte/fieldVMC/commit/cb8711f6b998a9dcbff228cf4aa48ddf9ecbded6))
+* update charts ([de24fc5](https://github.com/angelacorte/fieldVMC/commit/de24fc5761d4b4e8818d3f199377e97fd9456ddf))
+
 ## [1.30.1](https://github.com/angelacorte/fieldVMC/compare/1.30.0...1.30.1) (2025-03-31)
 
 ### Bug Fixes
