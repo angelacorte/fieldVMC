@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Apr  2 19:27:30 2025
+
+@author: gienna
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
@@ -272,15 +280,15 @@ if __name__ == '__main__':
     # Experiment prefixes: one per experiment (root of the file name)
 # =============================================================================
     #experiments = ['self-repair', 'cutting-field-vmc-fixed-leader', 'cutting-classic-vmc', 'field-vmc-fixed-leader', 'classic-vmc','self-integration', 'self-optimization']
-# ============================================================================= 
-    experiments = ['self-integration']
+# =============================================================================
+    experiments = ['self-repair']
     #'self-integration', 'self-repair', 'self-optimization'
     floatPrecision = '{: 0.3f}'
     # Number of time samples
-    timeSamples = 1000
+    timeSamples = 200
     # time management
     minTime = 0
-    maxTime = 1000
+    maxTime = 6000
     timeColumnName = 'time'
     logarithmicTime = False
     # One or more variables are considered random and "flattened"
@@ -391,6 +399,25 @@ if __name__ == '__main__':
 # comparing the stabilization time of the two experiments. The x-axis should represent the experiment name,
 # and the y-axis should represent the stabilization time. The title of the chart should be "Stabilization Time Comparison".
 # the stabilization time is the amount of time elapsed from the start of the experiment to the end of the experiment.
+
+
+def beautify_experiment_name(name):
+    if name == 'classic-vmc':
+        return 'Classic VMC'
+    if name == 'field-vmc-fixed-leader':
+        return 'Field VMC'
+    if name == 'cutting-classic-vmc':
+        return 'Classic VMC'
+    if name == 'cutting-field-vmc-fixed-leader':
+        return 'Field VMC'
+    if name == 'self-integration':
+        return 'Field VMC Self-Integration'
+    if name == 'self-optimization':
+        return 'Field VMC Self-Optimization'
+    if name == 'self-repair':
+        return 'Field VMC Self-Repair'
+    else:
+        raise Exception(f'Unknown experiment name {name}.')
     
 def plot_selfs(data, experiment, metric, y_label='Number of roots', cut=True):
     i = len(data)+2
@@ -429,30 +456,12 @@ def plot_selfs(data, experiment, metric, y_label='Number of roots', cut=True):
     plt.show()  
     plt.close() 
     
-def beautify_experiment_name(name):
-    if name == 'classic-vmc':
-        return 'Classic VMC'
-    if name == 'field-vmc-fixed-leader':
-        return 'Field VMC'
-    if name == 'cutting-classic-vmc':
-        return 'Classic VMC'
-    if name == 'cutting-field-vmc-fixed-leader':
-        return 'Field VMC'
-    if name == 'self-integration':
-        return 'Field VMC Self-Integration'
-    if name == 'self-optimization':
-        return 'Field VMC Self-Optimization'
-    if name == 'self-repair':
-        return 'Field VMC Self-Repair'
-    else:
-        raise Exception(f'Unknown experiment name {name}.')
-
 from matplotlib import pyplot as plt
 
 metric_name = 'ifit1@leader[Sum]'
 data_dict = {}
 initialNodes = [100, 300, 500]
-experiments = ['self-integration'] #'self-repair', 
+experiments = ['self-repair'] #'self-repair', 
 metric_to_plot = 'ifit1@leader[Sum]'
 
 for experiment in experiments:
