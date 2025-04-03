@@ -1,12 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Apr  2 19:40:36 2025
-
-@author: gienna
-"""
-
-import subprocess
+import subproces
 
 if __name__ == '__main__':
     
