@@ -1,3 +1,22 @@
+## [1.31.1](https://github.com/angelacorte/fieldVMC/compare/1.31.0...1.31.1) (2025-04-03)
+
+### Dependency updates
+
+* **deps:** update dependency xarray to v2025.3.1 ([6c932fa](https://github.com/angelacorte/fieldVMC/commit/6c932fa9693165b971e8fc2aaceb1f09c9e34780))
+
+### Bug Fixes
+
+* chart generator script ([92da70b](https://github.com/angelacorte/fieldVMC/commit/92da70bc87e959023f41d2e00c69080582836202))
+* typo in import ([8c7afcb](https://github.com/angelacorte/fieldVMC/commit/8c7afcbe16eab049c65a6a5fb115ec66e4a04ca5))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.31.0 [skip ci] ([0155b2a](https://github.com/angelacorte/fieldVMC/commit/0155b2a92b2e2de34a7f104ad69b77214c371492))
+
+### Refactoring
+
+* rename self integration plotter ([4fc95a5](https://github.com/angelacorte/fieldVMC/commit/4fc95a5b97fa7ee6d4d6dcd0879e8f40efe6ea19))
+
 ## [1.31.0](https://github.com/angelacorte/fieldVMC/compare/1.30.1...1.31.0) (2025-04-02)
 
 ### Features
