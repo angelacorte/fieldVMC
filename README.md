@@ -9,12 +9,6 @@
 (*) *Department of Computer Science and Engineering \
     Alma Mater Studiorum --- Università di Bologna - Cesena, Italy*
 
-[//]: # (- **Angela Cortecchia** &#40;*&#41; -- angela.cortecchia@unibo.it)
-[//]: # (- **Danilo Pianini** &#40;*&#41; -- danilo.pianini@unibo.it)
-[//]: # (- **Giovanni Ciatto** &#40;*&#41; -- giovanni.ciatto@unibo.it)
-[//]: # (- **Roberto Casadei** &#40;*&#41; -- roby.casadei@unibo.it )
-
-
 ### Table of Contents
 - [About](#about)
     * [Experiments](#experiments)
@@ -80,7 +74,7 @@ To this end, we designed a set of five experiments:
 
 ### Requirements
 
-In order to successfully download and execute the experiments are needed: 
+In order to successfully download and execute the graphical experiments are needed: 
 - Internet connection;
 - [Git](https://git-scm.com);
 - Linux, macOS and Windows systems capable of running [Java](https://www.oracle.com/java/technologies/javase/jdk19-archive-downloads.html) 17 (or higher);
@@ -120,9 +114,8 @@ The experiments are:
 - _selfSegmentation_: self-segmentation of a larger structure (budding).
   Two distinct structures are created with possibly more than leader each; after 500 simulated seconds, they are merged into a single structure;
 - _selfOptimisation_: self-optimisation of multiple large structures into a more efficient one (abscission and regrowth).
-  Two distinct structures are created, and after 500 simulated seconds, they are merged into a single structure.
-  During the simulation, nodes are able to spawn new nodes and destroy the ones that are not useful anymore,
-  resulting in an optimized structure.
+  Sparse nodes are created far from success and resource sources, with spawning and destruction of nodes enabled,
+    the structure is allowed to grow and optimize itself.
 - _classicVMC_: implementation of the classic VMC model, starting from a single node, with spawning of new nodes but no destruction of them;
 - _cuttingClassicVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds;
 - _fixedLeader_: implementation of our FieldVMC model, with optimized parameters to be as close as possible to the classic VMC model;
@@ -249,7 +242,7 @@ For further information about the YAML structure,
 please refer to the [Alchemist documentation](https://alchemistsimulator.github.io/reference/yaml/index.html).
 
 #### Simulation entrypoint
-The simulations in which nodes are able to spawn new nodes are the _selfConstruction_ and _selfOptimization_ experiments.
+The simulations in which nodes are able to spawn new nodes and destroy them are the _selfConstruction_ and _selfOptimization_ experiments.
 Their entrypoint can be found at `src/main/kotlin/it/unibo/collektive/vmc/VMCSpawning.kt`. 
 The program takes as input the aggregate function `withSpawning()`, which uses a function that implements the spawning (and killing) logic.\
 Shortly, a node can spawn if:
@@ -263,10 +256,13 @@ Similarly, a node can die if:
 - it has no children;
 - it has been stable for at least the minimum time required.
 
-The simulations that do not involve the spawning of new nodes are the _cutting_, _graft_, and _graftWithMoreLeaders_ experiments.
+The simulations that do not involve the spawning of new nodes are the _selfRepair_, _selfIntegration_, and _selfSegmentation_ experiments.
 Their entrypoint can be found at `src/main/kotlin/it/unibo/collektive/vmc/VMCWithoutSpawning.kt`.
 It simply uses aggregate functions to elect leaders and manage the resource and success distribution.
 
+The simulations that involve only the spawning of new nodes are the _classicVMC_, _cuttingClassicVMC_, _fixedLeader_, and _cuttingFixedLeader_ experiments.
+The entrypoint for the *FieldVMC* approach can be found at `src/main/kotlin/it/unibo/collektive/vmc/FieldVMCFixedLeader.kt`,
+in which the leader is fixed (there is no leader election) and all nodes are able to spawn new ones.
 
 ### Experiments features recap
 | **Experiment** | **YAML file** | **Spawning** | **Destruction** | **Forced cutting** | **Forced union** | 
