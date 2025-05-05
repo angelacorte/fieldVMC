@@ -113,9 +113,6 @@ terminate:
   parameters:
     checkInterval: *interval
     equalIntervals: 3
-    # [{checkInterval=1000}, {equalIntervals=3}] NOOOO
-    # [1000, 3] NOOOO
-    # {checkInterval=1000, equalIntervals=3}
 
 export:
   - type: CSVExporter
