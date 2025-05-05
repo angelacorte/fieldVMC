@@ -37,7 +37,6 @@ object NetworkMetrics {
     /**
      * The degree of the nodes in the network.
      * The degree of a node is the number of neighbors it has.
-     * The result is the average of the degrees of all the nodes in the network.
      */
     fun <T> Environment<T, *>.nodesDegree(): List<Double> =
         nodes
