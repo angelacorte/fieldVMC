@@ -1,3 +1,20 @@
+## [1.31.3](https://github.com/angelacorte/fieldVMC/compare/1.31.2...1.31.3) (2025-05-05)
+
+### Bug Fixes
+
+* remove wrong parameter ([545952d](https://github.com/angelacorte/fieldVMC/commit/545952df582ab4cd48141b08813282b5d5308f79))
+* update script for quick start ([d8eceba](https://github.com/angelacorte/fieldVMC/commit/d8eceba75b57e57d13b1f994f05cc0bcda02350d))
+* upper case in repo name ([8fc062e](https://github.com/angelacorte/fieldVMC/commit/8fc062e05c8f54a50178c0a9eead709761597c8e))
+
+### General maintenance
+
+* add recap table in readme ([f5bfc8a](https://github.com/angelacorte/fieldVMC/commit/f5bfc8a83ea53f2c8073c63eea7445198de45843))
+* change initial nodes for graphic purposes ([7932869](https://github.com/angelacorte/fieldVMC/commit/793286980300c6390a8e423effcd29d9c4e97095))
+* minor in README ([451982c](https://github.com/angelacorte/fieldVMC/commit/451982cd2cd46d6af65c2e68500bd67888d3d297))
+* **release:** update gradle.properties .env versions to 1.31.2 [skip ci] ([3475de8](https://github.com/angelacorte/fieldVMC/commit/3475de88f1168a33e0a933466e71eb3fa4820e44))
+* remove useless comments ([b6d7a4f](https://github.com/angelacorte/fieldVMC/commit/b6d7a4f2012a6076b5ed854c02113faa3ca07530))
+* update readme ([b2b9e2f](https://github.com/angelacorte/fieldVMC/commit/b2b9e2f90d67b408d7a87fff6f9e42e61aa1ac26))
+
 ## [1.31.2](https://github.com/angelacorte/fieldVMC/compare/1.31.1...1.31.2) (2025-05-05)
 
 ### Dependency updates
