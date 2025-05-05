@@ -1,3 +1,35 @@
+## [1.31.2](https://github.com/angelacorte/fieldVMC/compare/1.31.1...1.31.2) (2025-05-05)
+
+### Dependency updates
+
+* **deps:** update dependency gradle to v8.14 ([fb39dfc](https://github.com/angelacorte/fieldVMC/commit/fb39dfc2230a60dbeeecfb4aca68b44ecca831d7))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.126 ([c442f10](https://github.com/angelacorte/fieldVMC/commit/c442f107df06d4dab968ad06431f2b9282670c76))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.127 ([530271d](https://github.com/angelacorte/fieldVMC/commit/530271d2b57282a852a2d2f049e08680c8f3cfe2))
+* **deps:** update dependency xarray to v2025.4.0 ([72ff5df](https://github.com/angelacorte/fieldVMC/commit/72ff5dfd237da1afc79ea681b892f505c5e44278))
+* **deps:** update node.js to 22.15 ([8aedf8f](https://github.com/angelacorte/fieldVMC/commit/8aedf8fb7f21e5435d7334ba706b036d4c407722))
+* **deps:** update plugin gitsemver to v5 ([ea3ee02](https://github.com/angelacorte/fieldVMC/commit/ea3ee02af0c400c19e3a9dfba42be76416080fc0))
+* **deps:** update plugin gitsemver to v5.1.2 ([f67a583](https://github.com/angelacorte/fieldVMC/commit/f67a583dfb9dddf48e5565988e76ba747408577b))
+* **deps:** update plugin org.gradle.toolchains.foojay-resolver-convention to v0.10.0 ([b7c6412](https://github.com/angelacorte/fieldVMC/commit/b7c64122e5f7d77d0232cc9b81aa6be0adcb9f0a))
+* **deps:** update python docker tag to v3.13.3 ([282b5b2](https://github.com/angelacorte/fieldVMC/commit/282b5b26c6eeaf4f476e700ed4d23629174ebf20))
+
+### Documentation
+
+* fix function doc ([cd7accd](https://github.com/angelacorte/fieldVMC/commit/cd7accd92ae461faa7ab7d663ee00a1a273c7ee1))
+
+### Build and continuous integration
+
+* **deps:** update actions/setup-node action to v4.4.0 ([7fbbb90](https://github.com/angelacorte/fieldVMC/commit/7fbbb90079e01b236e2c21e17687b791928783de))
+* **deps:** update danysk/build-check-deploy-gradle-action action to v3.7.15 ([14c80c4](https://github.com/angelacorte/fieldVMC/commit/14c80c48a9e60f0001e97c2ccb0a3ee33e2f881d))
+* **deps:** update danysk/build-check-deploy-gradle-action action to v3.7.16 ([fabe830](https://github.com/angelacorte/fieldVMC/commit/fabe8302b9a4cd779f1a61dfe193152bc6cd955f))
+* **deps:** update danysk/build-check-deploy-gradle-action action to v3.7.17 ([6ec9ea8](https://github.com/angelacorte/fieldVMC/commit/6ec9ea89ecf65534f12e17dc04cac439c53593fb))
+* **deps:** update danysk/build-check-deploy-gradle-action action to v3.7.18 ([abe6bf3](https://github.com/angelacorte/fieldVMC/commit/abe6bf388552f5c140b789a0596f69064386cce2))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.31.1 [skip ci] ([4fd2a29](https://github.com/angelacorte/fieldVMC/commit/4fd2a29a142233920a8c95f64713f7cbba731e6d))
+* update charts and data ([4a91d94](https://github.com/angelacorte/fieldVMC/commit/4a91d94183306924bd77161bb264197e1619cbb8))
+* update gitingore ([2889d83](https://github.com/angelacorte/fieldVMC/commit/2889d83a119b202f97edd78b17fde2ed4388a658))
+
 ## [1.31.1](https://github.com/angelacorte/fieldVMC/compare/1.31.0...1.31.1) (2025-04-03)
 
 ### Dependency updates
