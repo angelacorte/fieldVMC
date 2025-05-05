@@ -50,7 +50,8 @@ computation, in the spirit of the Aggregate Programming (AP) paradigm.
 ### Experiments
 
 This repository contains the source code for the experiments presented in the paper
-"_An Aggregate Vascular Morphogenesis Controller for Engineered Self-Organising Spatial Structures_".
+"_An Aggregate Vascular Morphogenesis Controller for Engineered Sel
+f-Organising Spatial Structures_".
 
 The experiments want to show the capabilities of the proposed model in generating self-organising spatial structures.
 
@@ -88,7 +89,9 @@ In order to successfully download and execute the experiments are needed:
 
 ### Limitations
 
-- The experiments do not generate any form of data to be evaluated on, the evaluation is purely visible at the moment;
+- The experiments run in "batch mode" generate a lot of data, 
+  and the simulation may take a long time to finish (up to several hours) even with high performance computers. 
+    We suggest to run the experiments in "graphic mode" to have a better understanding of the simulation;
 - On different monitor types with different resolutions, the graphical interface could appear a bit different;
 - For GUI interpretation, please refer to the [Simulation Graphical Interface](#simulation-graphical-interface) section.
 
@@ -108,26 +111,31 @@ Dashed lines are communication channels, solid black lines represent the tree st
 the resource (resp. success) distribution flows, the thicker they are, the more resource (resp. success) is being transferred.
 
 The experiments are:
-- _oneRoot_: self-construction from a single node (growth from seed),
-- _cutting_: self-repair after disruption (network segmentation) with no regeneration (cutting). 
+- _selfConstruction_: self-construction from a single node (growth from seed),
+- _selfRepair_: self-repair after disruption (network segmentation) with no regeneration (cutting). 
    The segmentation is performed by removing a part of the structure after 500 simulated seconds, and the nodes are not able to regenerate the missing part;
-- _graft_: self-integration of multiple FieldVMC systems (grafting).
+- _selfIntegration_: self-integration of multiple FieldVMC systems (grafting).
    Two distinct structures are created, and after 500 simulated seconds, they are merged into a single structure;
-- _graftWithMoreLeaders_: self-segmentation of a larger structure (budding).
+- _selfSegmentation_: self-segmentation of a larger structure (budding).
   Two distinct structures are created with possibly more than leader each; after 500 simulated seconds, they are merged into a single structure;
-- _graftWithSpawning_: self-optimisation of multiple large structures into a more efficient one (abscission and regrowth).
+- _selfOptimisation_: self-optimisation of multiple large structures into a more efficient one (abscission and regrowth).
   Two distinct structures are created, and after 500 simulated seconds, they are merged into a single structure.
   During the simulation, nodes are able to spawn new nodes and destroy the ones that are not useful anymore,
   resulting in an optimized structure.
+- _classicVMC_: implementation of the classic VMC model, starting from a single node, with spawning of new nodes but no destruction of them;
+- _cuttingClassicVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds;
+- _fixedLeader_: implementation of our FieldVMC model, with optimized parameters to be as close as possible to the classic VMC model;
+- _cuttingFixedLeader_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds;
+- _fixedLeaderOptimizer_: implementation of our FieldVMC model in order to evaluate the optimized parameters used in the comparison with the classic VMC model.
 
 ### Walk-through the experiments
 
-This section provides a brief overview of the _oneRoot_ experiment,
+This section provides a brief overview of the _selfConstruction_ experiment,
 to give an idea of how the experiments work.
-The _oneRoot_ experiment simulates the self-construction of a structure from a single node.
+The _selfConstruction_ experiment simulates the self-construction of a structure from a single node.
 The detailed instructions to reproduce the experiment are in the section "[Reproduce the entire experiment](#reproduce-the-entire-experiment)".
 
-The simulation can be launched with the command `./gradlew runOneRootGraphic`,
+The simulation can be launched with the command `./gradlew runSelfConstructionGraphic`,
 or the one in the section "[Extremely quick-start](#extremely-quick-start-of-a-basic-experiment----bazfish-users-only)".
 Once the simulation has started, the Alchemist GUI will open.
 After the time needed for Alchemist to load the simulation,
@@ -157,8 +165,8 @@ The structure then stabilizes in what appears to be the optimal configuration,
 and the structure stops evolving.
 
 <figure>
-  <img src="images/oneroot.gif" alt="One root sequence">
-  <figcaption>Sequence of images showing the evolution in time of the structure in the <i>oneRoot</i> experiment.</figcaption>
+  <img src="images/oneroot.gif" alt="Self construction sequence">
+  <figcaption>Sequence of images showing the evolution in time of the structure in the <i>selfConstruction</i> experiment.</figcaption>
 </figure>
 
 
@@ -178,7 +186,7 @@ please refer to the [Alchemist documentation](https://alchemistsimulator.github.
 - `curl` must be installed
 - run:
 ```bash
-curl https://raw.githubusercontent.com/angelacorte/vmc-experiments/master/vmc-basic-example.sh | bash 
+curl https://raw.githubusercontent.com/angelacorte/fieldVMC/master/field-vmc-basic-example.sh | bash 
 ``` 
 - the repository is in your `Downloads` folder for further inspection.
 
@@ -190,9 +198,9 @@ The Version of Gradle used in this experiment can be found in the gradle-wrapper
 
 2. Open a terminal
 
-3. Clone this repository on your pc with `git clone https://github.com/angelacorte/vmc-experiments.git`.
+3. Clone this repository on your pc with `git clone https://github.com/angelacorte/fieldVMC.git`.
 
-4. Move into the root folder with `cd vmc-experiments` 
+4. Move into the root folder with `cd fieldVMC` 
 5. Depending on the platform, run the following command: 
    - Bash compatible (Linux, Mac OS X, Git Bash, Cygwin): ``` ./gradlew run<ExperimentName>Graphic ```
    - Windows native (cmd.exe, Powershell): ``` gradlew.bat run<ExperimentName>Graphic ```
@@ -200,14 +208,18 @@ The Version of Gradle used in this experiment can be found in the gradle-wrapper
    Or execute ```./gradlew tasks``` to view the list of available tasks.
 
 The corresponding YAML simulation files to the experiments cited above are the following:
-- _oneRoot_: self-construction from a single node (growth from seed) ```./gradlew runOneRootGraphic```,
-- _cutting_: self-repair after disruption (network segmentation) with no regeneration (cutting) ```./gradlew runCuttingGraphic```, 
-- _graft_: self-integration of multiple FieldVMC systems (grafting) ```./gradlew runGraftGraphic```,
-- _graftWithMoreLeaders_: self-segmentation of a larger structure (budding) ```./gradlew runGraftWithMoreLeadersGraphic```, and
-- _graftWithSpawning_: self-optimisation of multiple large structures into a more efficient one (abscission and regrowth) ```./gradlew runGraftWithSpawningGraphic```.
+- _selfConstruction_: self-construction from a single node (growth from seed) ```./gradlew runSelfConstructionGraphic```,
+- _selfRepair_: self-repair after disruption (network segmentation) with no regeneration (cutting) ```./gradlew runSelfRepairGraphic```, 
+- _selfIntegration_: self-integration of multiple FieldVMC systems (grafting) ```./gradlew runSelfIntegrationGraphic```,
+- _selfSegmentation_: self-segmentation of a larger structure (budding) ```./gradlew runSelfSegmentationGraphic```, and
+- _selfOptimization_: self-optimization of multiple large structures into a more efficient one (abscission and regrowth) ```./gradlew runSelfOptimizationGraphic```;
+- _classicVMC_: implementation of the classic VMC model, starting from a single node, with spawning of new nodes but no destruction of them ```./gradlew runClassicVMCGraphic```;
+- _cuttingClassicVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```./gradlew runCuttingClassicVMCGraphic```;
+- _fixedLeader_: implementation of our FieldVMC model, with optimized parameters to be as close as possible to the classic VMC model ```./gradlew runFixedLeaderGraphic```;
+- _cuttingFixedLeader_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```./gradlew runCuttingFixedLeaderGraphic```.
 
 **NOTE:**
-The tasks above will run the experiments with the default parameters, that are the one on which the evaluation has been performed.
+The tasks above *in graphic mode* will run the experiments with the default parameters.
 
 #### Changing experiment's parameters
 To change the parameters of the experiments, you can modify the **YAML** files located in the `src/main/yaml` folder.
@@ -217,7 +229,7 @@ The parameters that can be changed are:
 - `maxResource`: the maximum resource available inside the environment;
 - `maxSuccess`: the maximum success available inside the environment (usually set to the same value of `maxResource`);
 - `initialNodes`: the number of nodes to be created at the beginning of the simulation 
-  (except for the _oneRoot_ experiment, which starts with a single node);
+  (except for _selfConstruction_, _classicVMC_, _cuttingClassicVMC_, _fixedLeader_, _cuttingFixedLeader_ experiments, which start with a single node);
 - `resourceLowerBound`: the minimum amount of resource that a node can have in order not to die (for the _oneRoot_ and _graftWithSpawning_ experiments);
 - `maxChildren`: the maximum number of children a node can have (for the _oneRoot_ and _graftWithSpawning_ experiments);
 - `minSpanWait`: the minimum time a node has to wait before spawning a new node (for the _oneRoot_ and _graftWithSpawning_ experiments);
@@ -236,7 +248,7 @@ For further information about the YAML structure,
 please refer to the [Alchemist documentation](https://alchemistsimulator.github.io/reference/yaml/index.html).
 
 #### Simulation entrypoint
-The simulations in which nodes are able to spawn new nodes are the _oneRoot_ and _graftWithSpawning_ experiments.
+The simulations in which nodes are able to spawn new nodes are the _selfConstruction_ and _selfOptimization_ experiments.
 Their entrypoint can be found at `src/main/kotlin/it/unibo/collektive/vmc/VMCSpawning.kt`. 
 The program takes as input the aggregate function `withSpawning()`, which uses a function that implements the spawning (and killing) logic.\
 Shortly, a node can spawn if:
@@ -253,3 +265,5 @@ Similarly, a node can die if:
 The simulations that do not involve the spawning of new nodes are the _cutting_, _graft_, and _graftWithMoreLeaders_ experiments.
 Their entrypoint can be found at `src/main/kotlin/it/unibo/collektive/vmc/VMCWithoutSpawning.kt`.
 It simply uses aggregate functions to elect leaders and manage the resource and success distribution.
+
+The simulations 
