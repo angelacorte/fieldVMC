@@ -29,6 +29,7 @@
     * [Reproduce the experiments through Gradle](#reproduce-the-experiments-through-gradle)
     * [Changing experiment's parameters](#changing-experiments-parameters)
     * [Simulation entrypoint](#simulation-entrypoint)
+    * [Experiments features recap](#experiments-features-recap)
     
 
 ## About
@@ -266,4 +267,16 @@ The simulations that do not involve the spawning of new nodes are the _cutting_,
 Their entrypoint can be found at `src/main/kotlin/it/unibo/collektive/vmc/VMCWithoutSpawning.kt`.
 It simply uses aggregate functions to elect leaders and manage the resource and success distribution.
 
-The simulations 
+
+### Experiments features recap
+| **Experiment** | **YAML file** | **Spawning** | **Destruction** | **Forced cutting** | **Forced union** | 
+|:------------------:|:------------------:|:------------:|:---------------:|:------------------:|:----------------:| 
+| _selfConstruction_ | `selfConstruction.yaml` |     Yes      | Yes |         No         |        No        |
+| _selfRepair_ | `selfRepair.yaml` |      No      | No |        Yes         |        No        |
+| _selfIntegration_ | `selfIntegration.yaml` |      No      | No |         No         |       Yes        |
+| _selfSegmentation_ | `selfSegmentation.yaml` |      No      |       No        |         No         |       Yes        |
+| _selfOptimization_ | `selfOptimization.yaml` |     Yes      |       Yes       |         No         |        No        |
+| _classicVMC_ | `classicVMC.yaml` |     Yes      |       No        |         No         |        No        |
+| _cuttingClassicVMC_ | `cuttingClassicVMC.yaml` |     Yes      |       No        |        Yes         |        No        |
+| _fixedLeader_ | `fixedLeader.yaml` |     Yes      |       No        |         No         |        No        |
+| _cuttingFixedLeader_ | `cuttingFixedLeader.yaml` |     Yes      |       No        |        Yes         |        No        |
