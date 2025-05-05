@@ -124,7 +124,6 @@ export:
         parameters:
           filter: onlyfinite
           aggregators: [ max, mean, variance, median, StandardDeviation ]
-        precision: 3
       - molecule: local-success
         aggregators: [ max, mean, variance, median, StandardDeviation ]
         value-filter: onlyfinite
