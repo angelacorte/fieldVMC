@@ -4,9 +4,7 @@ variables:
   path: &path
     "data/self-division"
   seed: &seed
-    min: 
-      formula: System.getenv("MIN_SEED").toDouble()
-      language: kotlin
+    min: 0
     max:
       formula: System.getenv("MAX_SEED").toDouble()
       language: kotlin

@@ -73,7 +73,6 @@ services:
     volumes:
       - angela.cortecchia-volume:/experiment/data
     environment:
-      - MIN_SEED=0
       - MAX_SEED=500
       - GRADLE_TASK=runSelfDivisionBatch
     
