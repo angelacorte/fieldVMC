@@ -8,7 +8,7 @@ import glob
 import re
 from datetime import datetime
 
-directory = 'charts/good'
+directory = 'charts'
 
 def extractVariableNames(filename):
     with open(filename, 'r') as file:
@@ -31,20 +31,20 @@ def openCsv(path):
         return [[float(x) for x in line.split()] for line in lines]
 
 def beautify_experiment_name(name):
-    if name == 'classic-vmc':
-        return 'Classic VMC'
-    if name == 'field-vmc-fixed-leader':
-        return 'Field VMC'
-    if name == 'cutting-classic-vmc':
-        return 'Classic VMC'
-    if name == 'cutting-field-vmc-fixed-leader':
-        return 'Field VMC'
+    if name == 'self-construction-classic-vmc':
+        return 'Self-construction Classic VMC'
+    if name == 'self-construction-field-vmc':
+        return 'Field VMC Self-construction'
+    if name == 'self-healing-classic-vmc':
+        return 'Self-healing Classic VMC'
+    if name == 'self-healing-field-vmc':
+        return 'Field VMC Self-healing'
     if name == 'self-integration':
         return 'Field VMC Self-Integration'
     if name == 'self-optimization':
         return 'Field VMC Self-Optimisation'
-    if name == 'self-repair':
-        return 'Field VMC Self-Repair'
+    if name == 'self-division':
+        return 'Field VMC Self-Division'
     else:
         raise Exception(f'Unknown experiment name {name}.')
 
@@ -158,9 +158,7 @@ def plot_selfs(data, experiment, metric, y_label='Number of roots', cut = True):
     plt.legend()
     plt.rcParams.update({'legend.loc': 4})
     plt.tight_layout()
-    now = datetime.now()
-    now = now.strftime("%Y-%m-%d-%H-%M-%S")
-    plt.savefig(f'{directory}/{experiment}{now}.pdf', dpi=300)
+    plt.savefig(f'{directory}/{experiment}.pdf', dpi=300)
     plt.close()
 
 
@@ -195,7 +193,7 @@ def violin_plot(dataframes):
 if __name__ == '__main__':
 
 #=============================================================================
-    experiments = ['classic-vmc', 'field-vmc-fixed-leader']
+    experiments = ['self-construction-classic-vmc', 'self-construction-field-vmc']
     metrics = ['network-hub-xCoord', 'network-hub-yCoord', 'nodes', 'network-diameter', 'network-density', 'nodes-degree[mean]']
     dataframes = {beautify_experiment_name(experiment): [] for experiment in experiments}
 
@@ -216,7 +214,7 @@ if __name__ == '__main__':
 #=============================================================================
 
     origin = [0.1, 9.1, 18.1, 24.1, 27.1]
-    experiments = ['cutting-classic-vmc', 'cutting-field-vmc-fixed-leader']
+    experiments = ['self-healing-classic-vmc', 'self-healing-field-vmc']
     for o in origin:
         dataframes = {}
         for experiment in experiments:
@@ -224,19 +222,6 @@ if __name__ == '__main__':
             mean, variance = compute_mean_variance(data)
             dataframes[beautify_experiment_name(experiment)] = (mean, variance)
         plot_cutting(dataframes, o)
-#=============================================================================
-
-    initialNodes = [100, 300, 500]
-    experiments = [ 'self-integration'] #, 'self-integration'
-    for experiment in experiments:
-        dataframes = {}
-        for n in initialNodes:
-            data = load_data_from_csv(f'data/{experiment}/{experiment}_*_initialNodes-{n}.csv', experiment)
-            mean, variance = compute_mean_variance(data)
-            mean['time'] = mean['time'].astype(int)
-            exp_name = beautify_experiment_name(experiment)
-            dataframes[exp_name, n * 2] = (mean, variance)
-        plot_selfs(dataframes, exp_name, metric = 'ifit1@leader[Sum]', y_label='Number of roots', cut = True)
 #=============================================================================
 
     initialNodes = [1.0, 10, 100, 300, 500, 1000]

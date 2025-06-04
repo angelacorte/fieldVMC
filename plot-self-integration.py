@@ -271,7 +271,7 @@ if __name__ == '__main__':
     pickleOutput = 'data_summary'
     # Experiment prefixes: one per experiment (root of the file name)
 # =============================================================================
-    #experiments = ['self-repair', 'cutting-field-vmc-fixed-leader', 'cutting-classic-vmc', 'field-vmc-fixed-leader', 'classic-vmc','self-integration', 'self-optimization']
+    #experiments = ['self-repair', 'self-healing-field-vmc-fixed-leader', 'self-healing-classic-vmc', 'field-vmc-fixed-leader', 'classic-vmc','self-integration', 'self-optimization']
 # ============================================================================= 
     experiments = ['self-integration']
     #'self-integration', 'self-repair', 'self-optimization'
@@ -409,8 +409,6 @@ def plot_selfs(data, experiment, metric, y_label='Number of roots', cut=True):
         upper_bound = mean_df[metric] + std_df['std']
         lower_bound = mean_df[metric] - std_df['std']
         plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
-    if experiment == beautify_experiment_name('self-repair'):
-        plt.xlim(0, 6000)
     if cut:
         y_target = 2
         if experiment == beautify_experiment_name('self-integration'):
@@ -430,20 +428,20 @@ def plot_selfs(data, experiment, metric, y_label='Number of roots', cut=True):
     plt.close() 
     
 def beautify_experiment_name(name):
-    if name == 'classic-vmc':
+    if name == 'self-construction-classic-vmc':
+        return 'Self-Construction Classic VMC'
+    if name == 'self-construction-field-vmc':
+        return 'Field VMC Self-Construction'
+    if name == 'self-healing-classic-vmc':
         return 'Classic VMC'
-    if name == 'field-vmc-fixed-leader':
-        return 'Field VMC'
-    if name == 'cutting-classic-vmc':
-        return 'Classic VMC'
-    if name == 'cutting-field-vmc-fixed-leader':
-        return 'Field VMC'
+    if name == 'self-healing-field-vmc':
+        return 'Field VMC Self-Healing'
     if name == 'self-integration':
         return 'Field VMC Self-Integration'
     if name == 'self-optimization':
         return 'Field VMC Self-Optimization'
-    if name == 'self-repair':
-        return 'Field VMC Self-Repair'
+    if name == 'self-division':
+        return 'Field VMC Self-Division'
     else:
         raise Exception(f'Unknown experiment name {name}.')
 
@@ -452,7 +450,7 @@ from matplotlib import pyplot as plt
 metric_name = 'ifit1@leader[Sum]'
 data_dict = {}
 initialNodes = [100, 300, 500]
-experiments = ['self-integration'] #'self-repair', 
+experiments = ['self-integration'] #'self-division',
 metric_to_plot = 'ifit1@leader[Sum]'
 
 for experiment in experiments:
