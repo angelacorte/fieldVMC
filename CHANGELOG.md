@@ -1,3 +1,33 @@
+## [1.31.4](https://github.com/angelacorte/fieldVMC/compare/1.31.3...1.31.4) (2025-06-04)
+
+### Dependency updates
+
+* **core-deps:** update collektive to v15 ([#153](https://github.com/angelacorte/fieldVMC/issues/153)) ([60d35ef](https://github.com/angelacorte/fieldVMC/commit/60d35ef4e47e70ec84f05e5e54cc1cf4e300f14a))
+* **deps:** rollback to correct collektive version ([29aa9f3](https://github.com/angelacorte/fieldVMC/commit/29aa9f3e6e9b71a8a522454a40125dc2b0ec33e0))
+
+### Bug Fixes
+
+* **ci:** simulations check ([e832daa](https://github.com/angelacorte/fieldVMC/commit/e832daaa19ab52fa9ad791462d9a3d7a37057076))
+* fast-run script ([5ceba96](https://github.com/angelacorte/fieldVMC/commit/5ceba96ca7c67c44a8ca10788a3b7a95cda15fce))
+* minor xarray data summary conflict ([5024415](https://github.com/angelacorte/fieldVMC/commit/5024415ec68f19bb162e558e7c8032452cf83389))
+* remove min seed ([9a9ad70](https://github.com/angelacorte/fieldVMC/commit/9a9ad70dc2308c9c9f761c878a2faa924f6c0ff6))
+
+### General maintenance
+
+* **build:** do not create graphic and batch tasks for optimizer ([324c1e2](https://github.com/angelacorte/fieldVMC/commit/324c1e24f3b0ef114fbb774562fe853055639cdf))
+* **release:** update gradle.properties .env versions to 1.31.3 [skip ci] ([b3ffdf7](https://github.com/angelacorte/fieldVMC/commit/b3ffdf72ed7d549e2a730815be40dfb042e97f92))
+* update charts ([1ca839c](https://github.com/angelacorte/fieldVMC/commit/1ca839c9878b44438bcd6283f10927bdd7c041de))
+* update gitignore ([d9c10a6](https://github.com/angelacorte/fieldVMC/commit/d9c10a69faf060c982d28c0f2390b01398f948c9))
+* update readme ([23bb10a](https://github.com/angelacorte/fieldVMC/commit/23bb10a11bee4c2cb1b3e9a008d51e84bf19522e))
+
+### Refactoring
+
+* rename plotter as experiment ([c336766](https://github.com/angelacorte/fieldVMC/commit/c336766210a9ba2c7a04c1b3d94c4f70fdd3121b))
+* rename simulation files ([b0fea28](https://github.com/angelacorte/fieldVMC/commit/b0fea28ef933c920a1228c55d184f66e6d93ba71))
+* update build gradle with new experiments names ([07baede](https://github.com/angelacorte/fieldVMC/commit/07baedeb641d70666545c7bcd1fd05b12e7ca150))
+* update experimetns launchers as new names ([9391cb3](https://github.com/angelacorte/fieldVMC/commit/9391cb3f73ec2f34f351f86c44a1044808ecfe9f))
+* update target name as new experiment name ([5f52648](https://github.com/angelacorte/fieldVMC/commit/5f5264804d2b574de8304d09ca1aa395101414c6))
+
 ## [1.31.3](https://github.com/angelacorte/fieldVMC/compare/1.31.2...1.31.3) (2025-05-05)
 
 ### Bug Fixes
