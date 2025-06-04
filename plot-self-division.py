@@ -276,13 +276,9 @@ if __name__ == '__main__':
     # Where to save charts
     output_directory = 'charts'
     # How to name the summary of the processed data
-    pickleOutput = 'data_summary'
+    pickleOutput = 'data_summary_self_division'
     # Experiment prefixes: one per experiment (root of the file name)
-# =============================================================================
-    #experiments = ['self-division', 'self-healing-field-vmc-fixed-leader', 'self-healing-classic-vmc', 'field-vmc-fixed-leader', 'classic-vmc','self-integration', 'self-optimization']
-# =============================================================================
     experiments = ['self-division']
-    #'self-integration', 'self-division', 'self-optimization'
     floatPrecision = '{: 0.3f}'
     # Number of time samples
     timeSamples = 200
@@ -403,9 +399,9 @@ if __name__ == '__main__':
 
 def beautify_experiment_name(name):
     if name == 'self-construction-classic-vmc':
-        return 'Self-Construction Classic VMC'
+        return 'Classic VMC'
     if name == 'self-construction-field-vmc':
-        return 'Field VMC Self-Construction'
+        return 'Field VMC'
     if name == 'self-healing-classic-vmc':
         return 'Self-healing Classic VMC'
     if name == 'self-healing-field-vmc':

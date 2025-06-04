@@ -268,7 +268,7 @@ if __name__ == '__main__':
     # Where to save charts
     output_directory = 'charts'
     # How to name the summary of the processed data
-    pickleOutput = 'data_summary'
+    pickleOutput = 'data_summary_self_integration'
     # Experiment prefixes: one per experiment (root of the file name)
 # =============================================================================
     #experiments = ['self-repair', 'self-healing-field-vmc-fixed-leader', 'self-healing-classic-vmc', 'field-vmc-fixed-leader', 'classic-vmc','self-integration', 'self-optimization']
@@ -429,9 +429,9 @@ def plot_selfs(data, experiment, metric, y_label='Number of roots', cut=True):
     
 def beautify_experiment_name(name):
     if name == 'self-construction-classic-vmc':
-        return 'Self-Construction Classic VMC'
+        return 'Classic VMC'
     if name == 'self-construction-field-vmc':
-        return 'Field VMC Self-Construction'
+        return 'Field VMC'
     if name == 'self-healing-classic-vmc':
         return 'Classic VMC'
     if name == 'self-healing-field-vmc':

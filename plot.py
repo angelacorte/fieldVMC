@@ -32,13 +32,13 @@ def openCsv(path):
 
 def beautify_experiment_name(name):
     if name == 'self-construction-classic-vmc':
-        return 'Self-construction Classic VMC'
+        return 'Classic VMC'
     if name == 'self-construction-field-vmc':
-        return 'Field VMC Self-construction'
+        return 'Field VMC'
     if name == 'self-healing-classic-vmc':
-        return 'Self-healing Classic VMC'
+        return 'Classic VMC'
     if name == 'self-healing-field-vmc':
-        return 'Field VMC Self-healing'
+        return 'Field VMC'
     if name == 'self-integration':
         return 'Field VMC Self-Integration'
     if name == 'self-optimization':
