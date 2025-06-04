@@ -1,0 +1,137 @@
+variables:
+  fileName: &fileName
+    "self-construction-field-vmc"
+  path: &path
+    "data/self-construction-field-vmc"
+  cloningRange: &cloningRange
+    formula: 5
+  gaussianShape: &gaussianShape
+    5
+  leaderRadius: &leaderRadius
+    100.0
+  maxChildren: &maxChildren
+    3.0
+  #OPTIMIZED PARAMETERS
+  maxResource: &maxResource
+    269.268977333149
+  #   301.4681878330597
+  #   262.0612312825236
+  #   270.3008703178914
+  #   272.4515051831913
+  #   267.8281934253056
+  maxSuccess: &maxSuccess
+    344.1067281260815
+  #   364.982328606231
+  #   358.2929409407814
+  #   340.35865515556816
+  #   323.396898398807
+  #   401.3085404073488
+  resourceLowerBound: &resourceLowerBound
+    4.362890520000837
+  #   4.239466590881137
+  #   4.3851768440706
+  #   4.458599742599371
+  #   4.181794181383088
+  range: &range
+    formula: cloningRange * 1.01
+  seed: &seed
+    min: 0
+    max:
+      formula: System.getenv("MAX_SEED").toDouble()
+      language: kotlin
+    step: 1
+    default: 0
+  metrics: &metrics
+    formula: |
+      it.unibo.common.TerminationMetrics()
+    language: kotlin
+
+network-model:
+  type: ConnectWithinDistance
+  parameters: *range
+
+seeds:
+  scenario: *seed
+  simulation: *seed
+
+layers:
+  - type: BidimensionalGaussianLayer
+    parameters: [0, 25, *maxSuccess, *gaussianShape]
+    molecule: successSource
+
+incarnation: collektive
+
+_pool: &program
+  - time-distribution: 1
+    type: Event
+    actions:
+      - type: RunCollektiveProgram
+        parameters: [it.unibo.collektive.vmc.FieldVMCFixedLeaderKt.fixedRootStability]
+
+deployments:
+  - type: Point
+    parameters: [0, 0]
+    programs:
+      - *program
+    contents:
+      - molecule: leader
+        concentration: true
+    properties:
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LayerProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.RandomNodeProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LocationSensorProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.SuccessSensorProperty
+        parameters: [ *maxSuccess ]
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LeaderSensorProperty
+        parameters: [ *leaderRadius ]
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.ResourceSensorProperty
+        parameters: [*resourceLowerBound, *maxResource]
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.DeviceSpawner
+        parameters: [ *cloningRange, *maxChildren ]
+
+terminate:
+  type: MetricsStableForTime
+  parameters: {
+    stableForTime: 30.0,
+    timeIntervalToCheck: 2.0,
+    equalTimes: 3,
+    metricsToCheck: *metrics,
+  }
+
+export:
+  - type: CSVExporter
+    parameters:
+      fileNameRoot: *fileName
+      interval: 1.0
+      exportPath: *path
+    data:
+      - time
+      - type: NumberOfNodes
+      - type: NetworkHub
+      - type: NumberOfLeaves
+      - type: NetworkDensity
+      - type: NetworkDiameter
+      - type: NodeDegree
+        parameters:
+          filter: onlyfinite
+          aggregators: [ max, mean, variance, median, StandardDeviation ]
+      - molecule: children-count
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: local-success
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: resource
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: success
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: local-resource
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3

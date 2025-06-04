@@ -1,0 +1,156 @@
+variables:
+  fileName: &fileName
+    "self-division"
+  path: &path
+    "data/self-division"
+  seed: &seed
+    min: 
+      formula: System.getenv("MIN_SEED").toDouble()
+      language: kotlin
+    max:
+      formula: System.getenv("MAX_SEED").toDouble()
+      language: kotlin
+    step: 1
+    default: 14
+  radius: &leaderRadius
+    100.0
+  maxResource: &maxResource
+    1000.0
+  resourceLowerBound: &resourceLowerBound
+    1.0
+  initialNodes: &initialNodes
+    type: ArbitraryVariable
+    parameters: [ 100, [ 1, 2, 10, 100, 300, 500 ] ]
+  interval: &interval
+    formula: initialNodes * 100
+    language: kotlin
+  movingRange: &movingRange
+    -5.0
+  layerX: &layerX
+    10
+  width: &width
+    10
+  leftStart: &leftStart
+    0
+  height: &height
+    20
+  maxY: &maxY
+    20
+  minY: &minY
+    0
+  maxSuccess: &maxSuccess
+    formula: *maxResource
+  gaussianShape: &gaussianShape
+    5
+
+network-model:
+  type: ConnectWithinDistance
+  parameters: [3.50]
+
+seeds:
+  scenario: *seed
+  simulation: *seed
+
+layers:
+  - type: BidimensionalGaussianLayer
+    parameters: [*layerX, *minY, *maxSuccess, *gaussianShape]
+    molecule: localResource
+  - type: BidimensionalGaussianLayer
+    parameters: [*layerX, *maxY, *maxResource, *gaussianShape]
+    molecule: successSource
+
+incarnation: collektive
+
+_pool: &program
+  - time-distribution: 1
+    type: Event
+    actions:
+      - type: RunCollektiveProgram
+        parameters: [ it.unibo.collektive.vmc.VMCWithoutSpawningKt.withoutSpawning]
+
+_divide: &divide
+  - time-distribution:
+      type: Trigger
+      parameters: [ 200 ]
+    type: Event
+    actions:
+      - type: MoveCluster
+        parameters: [ *movingRange ]
+
+deployments:
+  - type: Rectangle
+    parameters: [*initialNodes, *leftStart, 0, *width, *height]
+    programs:
+      - *program
+      - *divide
+    properties:
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LayerProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.RandomNodeProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LocationSensorProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.SuccessSensorProperty
+        parameters: [ *maxSuccess ]
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LeaderSensorProperty
+        parameters: [ *leaderRadius ]
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.ResourceSensorProperty
+        parameters: [*resourceLowerBound, *maxResource]
+  - type: Rectangle
+    parameters: [*initialNodes, *width, 0, *width, *height]
+    programs:
+      - *program
+    properties:
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LayerProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.RandomNodeProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LocationSensorProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.SuccessSensorProperty
+        parameters: [ *maxSuccess ]
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LeaderSensorProperty
+        parameters: [ *leaderRadius ]
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.ResourceSensorProperty
+        parameters: [ *resourceLowerBound, *maxResource ]
+
+terminate:
+  type: StableForSteps
+  parameters:
+    checkInterval: *interval
+    equalIntervals: 3
+
+export:
+  - type: CSVExporter
+    parameters:
+      fileNameRoot: *fileName
+      interval: 1.0
+      exportPath: *path
+    data:
+      - time
+      - type: NumberOfNodes
+      - type: NetworkHub
+      - type: NumberOfLeaves
+      - type: NetworkDensity
+      - type: SubnetworksDiameter
+        parameters:
+          filter: onlyfinite
+          aggregators: [ min, max, mean, variance, median, StandardDeviation ]
+          precision: 3
+      - type: NodeDegree
+        parameters:
+          filter: onlyfinite
+          aggregators: [ max, mean, variance, median, StandardDeviation ]
+      - molecule: local-success
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: resource
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: success
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: local-resource
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
+      - molecule: leader
+        aggregators: [ Sum ]
+        property: if(it) 1 else 0
