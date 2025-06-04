@@ -18,7 +18,7 @@ jobs:
       - uses: DanySK/build-check-deploy-gradle-action@3.7.18
         with:
           build-command: true
-          check-command: MAX_SEED=2 ./gradlew runFixedLeaderBatch
+          check-command: MAX_SEED=0 ./gradlew runAllGraphic
           deploy-command: true
           should-run-codecov: false
           should-validate-wrapper: ${{ contains('Linux', runner.os) }}
