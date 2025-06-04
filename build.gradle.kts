@@ -117,15 +117,16 @@ File(rootProject.rootDir.path + "/src/main/yaml")
             }
         }
         val capitalizedName = it.nameWithoutExtension.capitalizeString()
-        val graphic by basetask("run${capitalizedName}Graphic") {
-            group = alchemistGroupGraphic
-            args(
-                "--override",
-                "monitors: { type: SwingGUI, parameters: { graphics: effects/${it.nameWithoutExtension}.json } }",
-                "--override",
-                "launcher: { parameters: { batch: [], autoStart: false } }",
-                "--override",
-                """
+        if (!capitalizedName.endsWith("Optimizer")) {
+            val graphic by basetask("run${capitalizedName}Graphic") {
+                group = alchemistGroupGraphic
+                args(
+                    "--override",
+                    "monitors: { type: SwingGUI, parameters: { graphics: effects/${it.nameWithoutExtension}.json } }",
+                    "--override",
+                    "launcher: { parameters: { batch: [], autoStart: false } }",
+                    "--override",
+                    """
                 variables:
                   seed: &seed
                     min: 0
@@ -133,24 +134,24 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                     step: 1
                     default: 0
                 """.trimIndent(),
-                "--verbosity",
-                "error",
-            )
-        }
-        runAllGraphic.dependsOn(graphic)
-        val batch by basetask("run${capitalizedName}Batch") {
-            group = alchemistGroupBatch
-            description = "Launches batch experiments for $capitalizedName"
-            maxHeapSize = "${minOf(heap.toInt(), Runtime.getRuntime().availableProcessors() * taskSize)}m"
-            File("data").mkdirs()
-            args(
-                "--verbosity",
-                "error",
-            )
-            if (capitalizedName.startsWith("SelfHealing")) {
+                    "--verbosity",
+                    "error",
+                )
+            }
+            runAllGraphic.dependsOn(graphic)
+            val batch by basetask("run${capitalizedName}Batch") {
+                group = alchemistGroupBatch
+                description = "Launches batch experiments for $capitalizedName"
+                maxHeapSize = "${minOf(heap.toInt(), Runtime.getRuntime().availableProcessors() * taskSize)}m"
+                File("data").mkdirs()
                 args(
-                    "--override",
-                    """
+                    "--verbosity",
+                    "error",
+                )
+                if (capitalizedName.startsWith("SelfHealing")) {
+                    args(
+                        "--override",
+                        """
                     variables:
                       metrics: &metrics
                         formula: |
@@ -166,11 +167,11 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                       
                     terminate: { type: AfterTime, parameters: [1000] }
                     """.trimIndent(),
-                )
-            } else if (capitalizedName.endsWith("VMC") && !capitalizedName.startsWith("SelfHealing")) {
-                args(
-                    "--override",
-                    """
+                    )
+                } else if (capitalizedName.endsWith("VMC") && !capitalizedName.startsWith("SelfHealing")) {
+                    args(
+                        "--override",
+                        """
                     variables:
                     metrics: &metrics
                         formula: |
@@ -193,11 +194,11 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                         autoStart: true,
                     }
                     """.trimIndent(),
-                )
-            } else {
-                args(
-                    "--override",
-                    """
+                    )
+                } else {
+                    args(
+                        "--override",
+                        """
                     launcher:
                       type: DefaultLauncher
                       parameters: {
@@ -205,10 +206,11 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                         autoStart: true,
                       }
                     """.trimIndent(),
-                )
+                    )
+                }
             }
+            runAllBatch.dependsOn(batch)
         }
-        runAllBatch.dependsOn(batch)
         if (capitalizedName.endsWith("Optimizer")) {
             val optimizer by basetask("run${capitalizedName}") {
                 setDependsOn(listOf("runSelfConstructionClassicVMCBatch"))
