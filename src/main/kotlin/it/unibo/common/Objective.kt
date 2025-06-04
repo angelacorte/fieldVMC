@@ -23,7 +23,7 @@ class Goal : (Environment<*, *>) -> Double {
             "nodes-degree[mean]",
         )
 
-    val target = target("classic-vmc", metrics)
+    val target = target("self-construction-classic-vmc", metrics)
 
     override fun invoke(env: Environment<*, *>): Double = env.minimize(target)
 }
