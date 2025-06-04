@@ -65,7 +65,7 @@ The goal of this evaluation is to show that the proposed FieldVMC supports the c
 predecessor, and, in addition, that it can work in scenarios not previously investigated. 
 To this end, we designed a set of five experiments:
 - self-construction from a single node (growth from seed),
-- self-repair after disruption (network segmentation) with no regeneration (cutting),
+- self-division after disruption (network segmentation) with no regeneration (cutting),
 - self-integration of multiple FieldVMC systems (grafting)
 - self-segmentation of a larger structure (budding), and
 - self-optimisation of multiple large structures into a more efficient one (abscission and regrowth).
@@ -106,8 +106,8 @@ Dashed lines are communication channels, solid black lines represent the tree st
 the resource (resp. success) distribution flows, the thicker they are, the more resource (resp. success) is being transferred.
 
 The experiments are:
-- _selfConstruction_: self-construction from a single node (growth from seed),
-- _selfRepair_: self-repair after disruption (network segmentation) with no regeneration (cutting). 
+- _legacySelfConstruction_: self-construction from a single node (growth from seed),
+- _selfDivision_: self-division after disruption (network segmentation) with no regeneration (cutting). 
    The segmentation is performed by removing a part of the structure after 500 simulated seconds, and the nodes are not able to regenerate the missing part;
 - _selfIntegration_: self-integration of multiple FieldVMC systems (grafting).
    Two distinct structures are created, and after 500 simulated seconds, they are merged into a single structure;
@@ -116,17 +116,17 @@ The experiments are:
 - _selfOptimisation_: self-optimisation of multiple large structures into a more efficient one (abscission and regrowth).
   Sparse nodes are created far from success and resource sources, with spawning and destruction of nodes enabled,
     the structure is allowed to grow and optimize itself.
-- _classicVMC_: implementation of the classic VMC model, starting from a single node, with spawning of new nodes but no destruction of them;
-- _cuttingClassicVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds;
-- _fixedLeader_: implementation of our FieldVMC model, with optimized parameters to be as close as possible to the classic VMC model;
-- _cuttingFixedLeader_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds;
-- _fixedLeaderOptimizer_: implementation of our FieldVMC model in order to evaluate the optimized parameters used in the comparison with the classic VMC model.
+- _selfConstructionClassicVMC_: implementation of the classic VMC model, starting from a single node, with spawning of new nodes but no destruction of them;
+- _selfHealingClassicVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds;
+- _selfConstructionFieldVMC_: implementation of our FieldVMC model, with optimized parameters to be as close as possible to the classic VMC model;
+- _selfHealingFieldVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds;
+- _selfConstructionFieldVMCOptimizer_: launcher of our FieldVMC model in order to evaluate the optimized parameters used in the comparison with the classic VMC model.
 
 ### Walk-through the experiments
 
-This section provides a brief overview of the _selfConstruction_ experiment,
+This section provides a brief overview of the _legacySelfConstruction_ experiment,
 to give an idea of how the experiments work.
-The _selfConstruction_ experiment simulates the self-construction of a structure from a single node.
+The _legacySelfConstruction_ experiment simulates the self-construction of a structure from a single node.
 The detailed instructions to reproduce the experiment are in the section "[Reproduce the entire experiment](#reproduce-the-entire-experiment)".
 
 The simulation can be launched with the command `./gradlew runSelfConstructionGraphic`,
@@ -202,15 +202,15 @@ The Version of Gradle used in this experiment can be found in the gradle-wrapper
    Or execute ```./gradlew tasks``` to view the list of available tasks.
 
 The corresponding YAML simulation files to the experiments cited above are the following:
-- _selfConstruction_: self-construction from a single node (growth from seed) ```./gradlew runSelfConstructionGraphic```,
-- _selfRepair_: self-repair after disruption (network segmentation) with no regeneration (cutting) ```./gradlew runSelfRepairGraphic```, 
+- _legacySelfConstruction_: self-construction from a single node (growth from seed) ```./gradlew runLegacySelfConstructionGraphic```,
+- _selfDivision_: self-division after disruption (network segmentation) with no regeneration (cutting) ```./gradlew runselfDivisionGraphic```, 
 - _selfIntegration_: self-integration of multiple FieldVMC systems (grafting) ```./gradlew runSelfIntegrationGraphic```,
 - _selfSegmentation_: self-segmentation of a larger structure (budding) ```./gradlew runSelfSegmentationGraphic```, and
 - _selfOptimization_: self-optimization of multiple large structures into a more efficient one (abscission and regrowth) ```./gradlew runSelfOptimizationGraphic```;
-- _classicVMC_: implementation of the classic VMC model, starting from a single node, with spawning of new nodes but no destruction of them ```./gradlew runClassicVMCGraphic```;
-- _cuttingClassicVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```./gradlew runCuttingClassicVMCGraphic```;
-- _fixedLeader_: implementation of our FieldVMC model, with optimized parameters to be as close as possible to the classic VMC model ```./gradlew runFixedLeaderGraphic```;
-- _cuttingFixedLeader_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```./gradlew runCuttingFixedLeaderGraphic```.
+- _selfConstructionClassicVMC_: implementation of the classic VMC model, starting from a single node, with spawning of new nodes but no destruction of them ```./gradlew runSelfConstructionClassicVMCGraphic```;
+- _selfHealingClassicVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```./gradlew runSelfHealingClassicVMCGraphic```;
+- _selfConstructionFieldVMC_: implementation of our FieldVMC model, with optimized parameters to be as close as possible to the classic VMC model ```./gradlew runSelfConstructionFieldVMCGraphic```;
+- _selfHealingFieldVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```./gradlew runSelfHealingFieldVMCGraphic```.
 
 **NOTE:**
 The tasks above *in graphic mode* will run the experiments with the default parameters.
@@ -223,11 +223,11 @@ The parameters that can be changed are:
 - `maxResource`: the maximum resource available inside the environment;
 - `maxSuccess`: the maximum success available inside the environment (usually set to the same value of `maxResource`);
 - `initialNodes`: the number of nodes to be created at the beginning of the simulation 
-  (except for _selfConstruction_, _classicVMC_, _cuttingClassicVMC_, _fixedLeader_, _cuttingFixedLeader_ experiments, which start with a single node);
+  (except for _legacySelfConstruction_, _selfConstructionClassicVMC_, _selfHeaingClassicVMC_, _selfConstructionFieldVMC_, _selfHealingFieldVMC_ experiments, which start with a single node);
 - `resourceLowerBound`: the minimum amount of resource that a node can have in order not to die (for the _oneRoot_ and _graftWithSpawning_ experiments);
 - `maxChildren`: the maximum number of children a node can have (for the _oneRoot_ and _graftWithSpawning_ experiments);
 - `minSpanWait`: the minimum time a node has to wait before spawning a new node (for the _oneRoot_ and _graftWithSpawning_ experiments);
-- `killingRange`: the range within the nodes are removed (for the _cutting_ experiment);
+- `killingRange`: the range within the nodes are removed (for the _healings_ experiment);
 - `layerX`: the position of the resource and success layer on the x-axis;
 - `layerY`: the position of the resource and success layer on the Y-axis (for the _oneRoot_ experiments);
 - `maxY` & `minY`: position of the layer on the y-axis (for every experiment except _oneRoot_);
@@ -242,7 +242,7 @@ For further information about the YAML structure,
 please refer to the [Alchemist documentation](https://alchemistsimulator.github.io/reference/yaml/index.html).
 
 #### Simulation entrypoint
-The simulations in which nodes are able to spawn new nodes and destroy them are the _selfConstruction_ and _selfOptimization_ experiments.
+The simulations in which nodes are able to spawn new nodes and destroy them are the _legacySelfConstruction_ and _selfOptimization_ experiments.
 Their entrypoint can be found at `src/main/kotlin/it/unibo/collektive/vmc/VMCSpawning.kt`. 
 The program takes as input the aggregate function `withSpawning()`, which uses a function that implements the spawning (and killing) logic.\
 Shortly, a node can spawn if:
@@ -256,23 +256,24 @@ Similarly, a node can die if:
 - it has no children;
 - it has been stable for at least the minimum time required.
 
-The simulations that do not involve the spawning of new nodes are the _selfRepair_, _selfIntegration_, and _selfSegmentation_ experiments.
+The simulations that do not involve the spawning of new nodes are the _selfDivision_, _selfIntegration_, and _selfSegmentation_ experiments.
 Their entrypoint can be found at `src/main/kotlin/it/unibo/collektive/vmc/VMCWithoutSpawning.kt`.
 It simply uses aggregate functions to elect leaders and manage the resource and success distribution.
 
-The simulations that involve only the spawning of new nodes are the _classicVMC_, _cuttingClassicVMC_, _fixedLeader_, and _cuttingFixedLeader_ experiments.
+The simulations that involve only the spawning of new nodes are the _selfConstructionClassicVMC_, _selfHealingClassicVMC_, _selfConstructionFieldVMC_, and _selfHealingFieldVMC_ experiments.
 The entrypoint for the *FieldVMC* approach can be found at `src/main/kotlin/it/unibo/collektive/vmc/FieldVMCFixedLeader.kt`,
 in which the leader is fixed (there is no leader election) and all nodes are able to spawn new ones.
 
 ### Experiments features recap
-| **Experiment** | **YAML file** | **Spawning** | **Destruction** | **Forced cutting** | **Forced union** | 
-|:------------------:|:------------------:|:------------:|:---------------:|:------------------:|:----------------:| 
-| _selfConstruction_ | `selfConstruction.yaml` |     Yes      | Yes |         No         |        No        |
-| _selfRepair_ | `selfRepair.yaml` |      No      | No |        Yes         |        No        |
-| _selfIntegration_ | `selfIntegration.yaml` |      No      | No |         No         |       Yes        |
-| _selfSegmentation_ | `selfSegmentation.yaml` |      No      |       No        |         No         |       Yes        |
-| _selfOptimization_ | `selfOptimization.yaml` |     Yes      |       Yes       |         No         |        No        |
-| _classicVMC_ | `classicVMC.yaml` |     Yes      |       No        |         No         |        No        |
-| _cuttingClassicVMC_ | `cuttingClassicVMC.yaml` |     Yes      |       No        |        Yes         |        No        |
-| _fixedLeader_ | `fixedLeader.yaml` |     Yes      |       No        |         No         |        No        |
-| _cuttingFixedLeader_ | `cuttingFixedLeader.yaml` |     Yes      |       No        |        Yes         |        No        |
+|         **Experiment**          |           **YAML file**           | **Spawning** | **Destruction** | **Forced cutting** | **Forced union** | 
+|:-------------------------------:|:---------------------------------:|:------------:|:---------------:|:------------------:|:----------------:| 
+|   _legacy Self-construction_    |   `legacySelfConstruction.yaml`   |     Yes      | Yes |         No         |        No        |
+|         _Self-division_         |        `selfDivision.yaml`        |      No      | No |        Yes         |        No        |
+|       _Self-integration_        |      `selfIntegration.yaml`       |      No      | No |         No         |       Yes        |
+|       _Self-segmentation_       |      `selfSegmentation.yaml`      |      No      |       No        |         No         |       Yes        |
+|       _Self-optimization_       |      `selfOptimization.yaml`      |     Yes      |       Yes       |         No         |        No        |
+| _Self-construction Classic VMC_ | `selfConstructionClassicVMC.yaml` |     Yes      |       No        |         No         |        No        |
+|   _Self-healing Classic VMC_    |   `selfHealingClassicVMC.yaml`    |     Yes      |       No        |        Yes         |        No        |
+|  _Self-construction Field VMC_  |  `selfConstructionFieldVMC.yaml`  |     Yes      |       No        |         No         |        No        |
+|    _Self-healing Field VMC_     |    `selfHealingFieldVMC.yaml`     |     Yes      |       No        |        Yes         |        No        |
+| _Self-construction Field VMC Optimizer_ | `selfConstructionFieldVMCOptimizer.yaml` | Yes | No | No | No |
