@@ -147,7 +147,7 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                 "--verbosity",
                 "error",
             )
-            if (capitalizedName.startsWith("Cutting")) {
+            if (capitalizedName.startsWith("SelfHealing")) {
                 args(
                     "--override",
                     """
@@ -167,25 +167,7 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                     terminate: { type: AfterTime, parameters: [1000] }
                     """.trimIndent(),
                 )
-            }
-            if (capitalizedName.startsWith("Self")) {
-                args(
-                    "--override",
-                    """
-                    launcher:
-                      type: DefaultLauncher
-                      parameters: {
-                        batch: ["seed", "initialNodes"],
-                        autoStart: true,
-                      }
-                    """.trimIndent(),
-                ) //terminate: { type: AfterTime, parameters: [1000] }
-                // terminate:
-                    //     type: StableForSteps
-                    //     parameters: 
-                    //         - checkInterval: *interval 
-                    //         - equalIntervals: 3
-            } else {
+            } else if (capitalizedName.endsWith("VMC") && !capitalizedName.startsWith("SelfHealing")) {
                 args(
                     "--override",
                     """
@@ -212,12 +194,24 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                     }
                     """.trimIndent(),
                 )
+            } else {
+                args(
+                    "--override",
+                    """
+                    launcher:
+                      type: DefaultLauncher
+                      parameters: {
+                        batch: ["seed", "initialNodes"],
+                        autoStart: true,
+                      }
+                    """.trimIndent(),
+                )
             }
         }
         runAllBatch.dependsOn(batch)
-        if (capitalizedName == "FixedLeaderOptimizer") {
+        if (capitalizedName.endsWith("Optimizer")) {
             val optimizer by basetask("run${capitalizedName}") {
-                setDependsOn(listOf("runClassicVMCBatch"))
+                setDependsOn(listOf("runSelfConstructionClassicVMCBatch"))
                 group = alchemistGroupOptimizer
                 description = "Launches Nelder Mead parameters optimizer for $capitalizedName"
                 maxHeapSize = "${minOf(heap.toInt(), Runtime.getRuntime().availableProcessors() * taskSize)}m"
