@@ -1,3 +1,10 @@
+## [1.31.5](https://github.com/angelacorte/fieldVMC/compare/1.31.4...1.31.5) (2025-06-05)
+
+### Bug Fixes
+
+* title in readme ([dc2a5e1](https://github.com/angelacorte/fieldVMC/commit/dc2a5e1ffefa60ad32ce603d6ecdd9e6bb3a2ef2))
+* typo in readme ([5659d24](https://github.com/angelacorte/fieldVMC/commit/5659d240222b8c78bcce0dcaedfcb21504af6ff9))
+
 ## [1.31.4](https://github.com/angelacorte/fieldVMC/compare/1.31.3...1.31.4) (2025-06-04)
 
 ### Dependency updates
