@@ -1,13 +1,17 @@
-# _An Aggregate Vascular Morphogenesis Controller for Engineered Self-Organising Spatial Structures_
+# _FieldVMC: An Asynchronous Model and Platform for Self-organising Morphogenesis of Artificial Structures_
 
 ### Authors 
 
-| **Angela Cortecchia** (*) | **Danilo Pianini** (*) | **Giovanni Ciatto** (*) | **Roberto Casadei** (*) |
-|:-------------------------:|:----------------------:|:-----------------------:|:-----------------------:|
-| angela.cortecchia@unibo.it | danilo.pianini@unibo.it | giovanni.ciatto@unibo.it | roby.casadei@unibo.it   |
+Anonymized for double blind review
 
-(*) *Department of Computer Science and Engineering \
-    Alma Mater Studiorum --- Università di Bologna - Cesena, Italy*
+[//]: # (| **Angela Cortecchia** &#40;*&#41; | **Danilo Pianini** &#40;*&#41; | **Giovanni Ciatto** &#40;*&#41; | **Roberto Casadei** &#40;*&#41; |)
+[//]: # (|:-------------------------:|:----------------------:|:-----------------------:|:-----------------------:|)
+[//]: # (| angela.cortecchia@unibo.it | danilo.pianini@unibo.it | giovanni.ciatto@unibo.it | roby.casadei@unibo.it   |)
+
+[//]: # (&#40;*&#41;)
+
+[//]: # (*Department of Computer Science and Engineering \)
+[//]: # (    Alma Mater Studiorum --- Università di Bologna - Cesena, Italy*)
 
 ### Table of Contents
 - [About](#about)
@@ -45,8 +49,7 @@ computation, in the spirit of the Aggregate Programming (AP) paradigm.
 ### Experiments
 
 This repository contains the source code for the experiments presented in the paper
-"_An Aggregate Vascular Morphogenesis Controller for Engineered Sel
-f-Organising Spatial Structures_".
+"FieldVMC: An Asynchronous Model and Platform for Self-organising Morphogenesis of Artificial Structures_".
 
 The experiments want to show the capabilities of the proposed model in generating self-organising spatial structures.
 
