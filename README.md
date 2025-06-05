@@ -49,7 +49,7 @@ computation, in the spirit of the Aggregate Programming (AP) paradigm.
 ### Experiments
 
 This repository contains the source code for the experiments presented in the paper
-"FieldVMC: An Asynchronous Model and Platform for Self-organising Morphogenesis of Artificial Structures_".
+"_FieldVMC: An Asynchronous Model and Platform for Self-organising Morphogenesis of Artificial Structures_".
 
 The experiments want to show the capabilities of the proposed model in generating self-organising spatial structures.
 
