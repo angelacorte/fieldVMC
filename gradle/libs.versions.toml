@@ -8,7 +8,7 @@ alchemist = { module = "it.unibo.alchemist:alchemist", version.ref = "alchemist"
 alchemist-swingui = { module = "it.unibo.alchemist:alchemist-swingui", version.ref = "alchemist" }
 alchemist-ui-tooling = { module = "it.unibo.alchemist:alchemist-ui-tooling", version.ref = "alchemist" }
 alchemist-euclidean-geometry = { module = "it.unibo.alchemist:alchemist-euclidean-geometry", version.ref = "alchemist" }
-caffeine = "com.github.ben-manes.caffeine:caffeine:3.2.0"
+caffeine = "com.github.ben-manes.caffeine:caffeine:3.2.1"
 collektive = { module = "it.unibo.collektive:dsl", version.ref = "collektive" }
 collektive-incarnation = { module = "it.unibo.collektive:alchemist-incarnation-collektive", version.ref = "collektive" }
 collektive-plugin = { module = "it.unibo.collektive:compiler-plugin", version.ref = "collektive" }
