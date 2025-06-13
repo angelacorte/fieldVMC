@@ -1,4 +1,4 @@
 matplotlib ==3.10.1
-xarray ==2025.4.0
+xarray ==2025.6.0
 seaborn ==0.13.2
 pandas ==2.3.0
