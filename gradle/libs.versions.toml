@@ -14,7 +14,7 @@ collektive-incarnation = { module = "it.unibo.collektive:alchemist-incarnation-c
 collektive-plugin = { module = "it.unibo.collektive:compiler-plugin", version.ref = "collektive" }
 collektive-stdlib = { module = "it.unibo.collektive:stdlib", version.ref = "collektive" }
 rrmxmx = { module = "org.danilopianini:rrmxmx-kt", version = "2.0.8" }
-symmetric-matrix = "org.danilopianini:kotlin-symmetric-matrix:1.1.5"
+symmetric-matrix = "org.danilopianini:kotlin-symmetric-matrix:1.1.6"
 
 [bundles]
 alchemist = [
