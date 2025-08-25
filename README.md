@@ -2,7 +2,7 @@
 
 ### Authors 
 
-Anonymized for double blind review
+Anonymized for double-blind review
 
 [//]: # (| **Angela Cortecchia** &#40;*&#41; | **Danilo Pianini** &#40;*&#41; | **Giovanni Ciatto** &#40;*&#41; | **Roberto Casadei** &#40;*&#41; |)
 [//]: # (|:-------------------------:|:----------------------:|:-----------------------:|:-----------------------:|)
