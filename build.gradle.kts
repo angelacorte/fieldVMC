@@ -26,6 +26,7 @@ sourceSets {
             implementation(libs.caffeine)
             implementation(libs.rrmxmx)
             implementation(libs.symmetric.matrix)
+            implementation("com.esotericsoftware:kryo:5.6.2")
         }
     }
 }
