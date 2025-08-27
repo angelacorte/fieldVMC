@@ -7,15 +7,17 @@ import it.unibo.alchemist.model.Node
 import it.unibo.alchemist.model.NodeProperty
 import it.unibo.alchemist.model.Position
 import it.unibo.alchemist.model.Time
-import it.unibo.alchemist.model.Time.Companion
 import it.unibo.alchemist.model.molecules.SimpleMolecule
+import it.unibo.alchemist.model.positions.Euclidean2DPosition
 import it.unibo.collektive.aggregate.api.Aggregate
 import it.unibo.collektive.aggregate.api.operators.neighboringViaExchange
 import it.unibo.collektive.alchemist.device.sensors.EnvironmentVariables
+import it.unibo.collektive.coordination.Candidacy
 import it.unibo.collektive.field.Field
 import it.unibo.collektive.networking.InboundMessage
 import it.unibo.collektive.networking.Network
 import it.unibo.collektive.networking.OutboundMessage
+import it.unibo.collektive.utils.Stability
 import java.io.ByteArrayOutputStream
 
 /**
@@ -76,6 +78,13 @@ class CollektiveDevice<P>(
         }
 
     override fun write(message: OutboundMessage<Int>) {
+        val kryo = Kryo()
+        kryo.register(Euclidean2DPosition::class.java)
+        kryo.register(Euclidean2DPosition.javaClass)
+        kryo.register(DoubleArray::class.java)
+        kryo.register(Pair::class.java)
+        kryo.register(Candidacy::class.java)
+        kryo.register(Stability::class.java)
         if (message.isNotEmpty()) {
             val neighboringNodes = environment.getNeighborhood(node)
             if (!neighboringNodes.isEmpty) {
@@ -84,16 +93,17 @@ class CollektiveDevice<P>(
                         @Suppress("UNCHECKED_CAST")
                         node.properties.firstOrNull { it is CollektiveDevice<*> } as? CollektiveDevice<P>
                     }
+                var acc = 0.0
                 neighborhood.forEach { neighbor ->
                     val messageValues = message.messagesFor(neighbor.id)
-                    output.writeByte(5 * messageValues.size)
-                    messageValues.forEach { (path, value) ->
-                        // Ensure the value can be serialized
-                        println("local ${node.id} value $value at path ${path.hashCode()}")
-                        kryo.writeClassAndObject(output, value)
-                        node.setConcentration(SimpleMolecule("messageSize"), destination.size().toDouble())
-                        output.flush()
+                    val buff = ByteArrayOutputStream()
+                    val out = Output(buff)
+                    messageValues.forEach { (_, value) ->
+                        kryo.writeClassAndObject(out, value)
+                        acc += buff.size() + 5.0
+                        out.flush()
                     }
+                    node.setConcentration(SimpleMolecule("MessageSize"), acc)
                     neighbor.receiveMessage(
                         currentTime,
                         InboundMessage(message.senderId, messageValues),
@@ -126,11 +136,15 @@ class CollektiveDevice<P>(
     ): T = value.also { node.setConcentration(SimpleMolecule(name), it) }
 
     companion object {
-        val kryo = Kryo()
-        val destination = ByteArrayOutputStream()
-        val output = Output(destination)
-        init {
-            kryo.isRegistrationRequired = false
-        }
+//        val kryo = Kryo()
+//        init {
+////            kryo.isRegistrationRequired = false
+//            kryo.register(Euclidean2DPosition::class.java)
+//            kryo.register(Euclidean2DPosition.javaClass)
+//            kryo.register(DoubleArray::class.java)
+//            kryo.register(Pair::class.java)
+//            kryo.register(Candidacy::class.java)
+//            kryo.register(Stability::class.java)
+//        }
     }
 }
