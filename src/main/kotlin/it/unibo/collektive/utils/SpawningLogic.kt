@@ -9,6 +9,7 @@ import it.unibo.collektive.alchemist.device.sensors.ResourceSensor
 import it.unibo.common.calculateAngle
 import it.unibo.common.minus
 import it.unibo.common.plus
+import java.io.Serializable
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -34,7 +35,7 @@ typealias Spawner = Aggregate<Int>.(
 data class Stability(
     val spawnStable: Boolean = false,
     val destroyStable: Boolean = false,
-) {
+): Serializable {
     infix fun and(other: Stability): Boolean = spawnStable && other.spawnStable && destroyStable && other.destroyStable
 }
 
