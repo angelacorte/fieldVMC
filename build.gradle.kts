@@ -169,7 +169,10 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                     terminate: { type: AfterTime, parameters: [1000] }
                     """.trimIndent(),
                     )
-                } else if (capitalizedName.endsWith("VMC") && !capitalizedName.startsWith("SelfHealing")) {
+                } else if (capitalizedName.endsWith("VMC") && !capitalizedName.startsWith("SelfHealing") && !capitalizedName.startsWith(
+                        "Messages"
+                    )
+                ) {
                     args(
                         "--override",
                         """
@@ -187,13 +190,27 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                         equalTimes: 3,
                         metricsToCheck: *metrics,
                     }
-                    
+                  
                     launcher:
                     type: DefaultLauncher
                     parameters: {
                         batch: ["seed"],
                         autoStart: true,
                     }
+                    """.trimIndent(),
+                    )
+                } else if(capitalizedName.startsWith("Messages")) {
+                    args(
+                        "--override",
+                        """
+                    launcher:
+                      type: DefaultLauncher
+                      parameters: {
+                        batch: ["seed", "maxResource", "maxChildren"],
+                        autoStart: true,
+                      }
+                      
+                      terminate: { type: AfterTime, parameters: [600] }
                     """.trimIndent(),
                     )
                 } else {
