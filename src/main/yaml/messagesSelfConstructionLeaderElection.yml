@@ -1,0 +1,101 @@
+variables:
+  fileName: &fileName
+              "messages-self-construction-leader-election"
+  path: &path
+          "data/messages-self-construction-leader-election"
+  radius: &leaderRadius
+    100.0
+  maxResource: &maxResource
+    type: ArbitraryVariable
+    parameters: [ 100, [ 50, 100, 250, 500, 1000, 2000 ]]
+#    1000.0
+  resourceLowerBound: &resourceLowerBound
+    5.0
+  maxChildren: &maxChildren
+    type: ArbitraryVariable
+    parameters: [ 5, [ 2, 3, 5 ]]
+#    3
+  minSpanWait: &minSpanWait
+    40.0
+  layerX: &layerX
+    0
+  minY: &minY
+    0
+  maxY: &maxY
+    30
+  maxSuccess: &maxSuccess
+    1000
+#    formula: *maxResource
+  gaussianShape: &gaussianShape
+    5
+  range: &range
+    formula: cloningRange * 1.01
+  cloningRange: &cloningRange
+    formula: 5
+  seed: &seed
+    min: 0
+    max:
+      formula: System.getenv("MAX_SEED").toDouble()
+      language: kotlin
+    step: 1
+    default: 0
+
+network-model:
+  type: ConnectWithinDistance
+  parameters: *range
+
+seeds:
+  scenario: *seed
+  simulation: *seed
+
+layers:
+  - type: BidimensionalGaussianLayer
+    parameters: [*layerX, *minY, *maxSuccess, *gaussianShape]
+    molecule: localResource
+  - type: BidimensionalGaussianLayer
+    parameters: [*layerX, *maxY, *maxResource, *gaussianShape]
+    molecule: successSource
+
+incarnation: collektive
+
+_pool: &program
+  - time-distribution: 1
+    type: Event
+    actions:
+      - type: RunCollektiveProgram
+        parameters: [it.unibo.collektive.vmc.VMCSpawningKt.withSpawning]
+
+deployments:
+  - type: Point
+    parameters: [0, 10]
+    programs:
+      - *program
+    properties:
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LayerProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.RandomNodeProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LocationSensorProperty
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.SuccessSensorProperty
+        parameters: [ *maxSuccess ]
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.LeaderSensorProperty
+        parameters: [ *leaderRadius ]
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.ResourceSensorProperty
+        parameters: [ *resourceLowerBound, *maxResource ]
+      - type: it.unibo.collektive.alchemist.device.sensors.impl.DeviceSpawner
+        parameters: [ *cloningRange, *maxChildren, *minSpanWait ]
+
+terminate: { type: AfterTime, parameters: [600] }
+
+export:
+  - type: CSVExporter
+    parameters:
+      fileNameRoot: *fileName
+      interval: 1.0
+      exportPath: *path
+    data:
+      - time
+      - type: NumberOfNodes
+      - type: NetworkDensity
+      - molecule: MessageSize
+        aggregators: [ max, mean, variance, median, StandardDeviation ]
+        value-filter: onlyfinite
+        precision: 3
