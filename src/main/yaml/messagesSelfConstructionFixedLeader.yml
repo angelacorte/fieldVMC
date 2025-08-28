@@ -53,7 +53,7 @@ _pool: &program
       - type: RunCollektiveProgram
         parameters: [it.unibo.collektive.vmc.FieldVMCFixedLeaderKt.fixedRootStability]
 
-terminate: { type: AfterTime, parameters: [600] }
+terminate: { type: AfterTime, parameters: [200] }
 
 deployments:
   - type: Point

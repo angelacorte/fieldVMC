@@ -13,7 +13,7 @@ variables:
     5.0
   maxChildren: &maxChildren
     type: ArbitraryVariable
-    parameters: [ 3, [ 2, 3, 4, 5 ]]
+    parameters: [ 4, [ 2, 3, 4, 5 ]]
 #    3
   minSpanWait: &minSpanWait
     40.0
@@ -83,7 +83,7 @@ deployments:
       - type: it.unibo.collektive.alchemist.device.sensors.impl.DeviceSpawner
         parameters: [ *cloningRange, *maxChildren, *minSpanWait ]
 
-terminate: { type: AfterTime, parameters: [10000] }
+terminate: { type: AfterTime, parameters: [50000] }
 
 export:
   - type: CSVExporter
