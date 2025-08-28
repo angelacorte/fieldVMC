@@ -270,18 +270,18 @@ if __name__ == '__main__':
     # Where to find Alchemist data files
     directory = 'data'
     # Where to save charts
-    output_directory = 'charts/leader-election'
+    output_directory = 'charts/fixed-leader'
     os.makedirs(output_directory, exist_ok=True)
     # How to name the summary of the processed data
     pickleOutput = 'messages-self-construction'
     # Experiment prefixes: one per experiment (root of the file name)
-    experiments = ['messages-self-construction-leader-election'] #'messages-self-construction-fixed-leader',
+    experiments = ['messages-self-construction-fixed-leader']
     floatPrecision = '{: 0.3f}'
     # Number of time samples
-    timeSamples = 200
+    timeSamples = 100
     # time management
     minTime = 0
-    maxTime = 10000
+    maxTime = 200
     timeColumnName = 'time'
     logarithmicTime = False
     # One or more variables are considered random and "flattened"
@@ -443,10 +443,11 @@ def plot_selfs_dual_axis(data, experiment, metric):
     # Legenda unica: solo maxResources; stile spiegato nel titolo
     handles, labels = ax1.get_legend_handles_labels()
     if handles:
-        ax1.legend(handles, labels, title='maxResources (solid=KB, dashed=nodes)', loc='best')
+        ax1.legend(handles, labels, title='maxResources (solid=KB, dashed=nodes)', loc=4)
 
     plt.title(f'{experiment} max Children = {children}')
     plt.tight_layout()
+
     plt.savefig(f'{output_directory}/{experiment}-dualaxis_{metric}-children{children}.pdf', dpi=300)
     plt.close()
 
@@ -483,15 +484,11 @@ def plot_selfs(data, experiment, metric):
 
 from matplotlib import pyplot as plt
 
+metric_name = 'MessageSize[mean]'
 data_dict = {}
-maxResource = [100, 1000, 1500]
-# maxResource = [250]
-# maxResource = [50, 500]
-# maxResource = [1000]
-# maxResource = [50, 100, 250, 500, 1000, 1500]
-maxChildren = [2, 3, 5] #4
-# maxChildren = [4]
-experiments = [ 'messages-self-construction-leader-election'] #'messages-self-construction-fixed-leader',
+maxResource = [50, 100, 250, 500, 1000, 1500]
+maxChildren = [2, 3, 4, 5]
+experiments = ['messages-self-construction-fixed-leader'] #'messages-self-construction-fixed-leader',
 metric_to_plot = ['MessageSize[mean]', 'nodes', 'MessageSize[Sum]']
 
 for metric in metric_to_plot:
