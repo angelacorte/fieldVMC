@@ -278,13 +278,13 @@ if __name__ == '__main__':
     # How to name the summary of the processed data
     pickleOutput = 'messages-self-construction'
     # Experiment prefixes: one per experiment (root of the file name)
-    experiments = ['messages-self-construction-fixed-leader', 'messages-self-construction-leader-election']
+    experiments = ['messages-self-construction-leader-election'] #'messages-self-construction-fixed-leader',
     floatPrecision = '{: 0.3f}'
     # Number of time samples
     timeSamples = 200
     # time management
     minTime = 0
-    maxTime = 600
+    maxTime = 10000
     timeColumnName = 'time'
     logarithmicTime = False
     # One or more variables are considered random and "flattened"
@@ -405,61 +405,65 @@ def beautify_experiment_name(name):
     else:
         raise Exception(f'Unknown experiment name {name}.')
     
-def plot_selfs(data, experiment, metric, y_label='Number of roots', cut=True):
+def plot_selfs(data, experiment, metric):
     i = len(data)+2
     plt.rcParams.update({'font.size': 15})
     plt.rcParams.update({'legend.loc': 0})
     colors = sns.color_palette("viridis", n_colors=i)
     plt.figure(figsize=(9, 5))
-    for j, ((exp, nodes), (mean_df, std_df)) in enumerate(data.items()):
+    children = list(data.keys())[0][1][1]
+    for j, ((exp, resources), (mean_df, std_df)) in enumerate(data.items()):
         sns.lineplot(
             data=mean_df,
             x='time',
             y=metric,
-            label=f'$N_0 = {nodes}$',
+            label=f'$maxResources = {exp[1]}$',
             color=colors[j+2],
         )
-        upper_bound = mean_df[metric] + std_df['std']
-        lower_bound = mean_df[metric] - std_df['std']
-        plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
-    if experiment == beautify_experiment_name('self-division'):
-        plt.xlim(0, 6000)
-    if cut:
-        y_target = 2
-        plt.axhline(y=y_target, color=colors[1], linestyle='--', linewidth=2, label='Target')
-    plt.axvline(x=200, color=colors[0], linestyle='dotted', linewidth=2, label='Event')
-    
-    plt.title(experiment)
+        # upper_bound = mean_df[metric] + std_df[f'{metric}-std']
+        # lower_bound = mean_df[metric] - std_df[f'{metric}-std']
+        # plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
+        plt.title(f'{experiment} max Children = {children}')
+    plt.xlim(0, 10000)
+    if experiment == 'Fixed Leader':
+        plt.xlim(0, 125)
     plt.xlabel('Simulated seconds')
-    plt.ylabel(y_label)
+    plt.ylabel(f'{metric} KB')
+    if metric == 'nodes':
+        plt.ylabel('Number of nodes')
     plt.legend()
     plt.tight_layout()
-    plt.savefig(f'{output_directory}/{experiment}.pdf', dpi=300)
-    plt.show()  
-    plt.close() 
+    plt.savefig(f'{output_directory}/{experiment}-{metric}-children{children}.pdf', dpi=300)
+    plt.close()
     
 from matplotlib import pyplot as plt
 
 metric_name = 'MessageSize[mean]'
 data_dict = {}
-maxResource = [50, 100, 250, 500, 1000, 2000]
-experiments = ['messages-self-construction-fixed-leader', 'messages-self-construction-leader-election']
-metric_to_plot = 'MessageSize[mean]'
+maxResource = [50, 100, 250, 500, 1000, 1500]
+maxChildren = [2, 3, 4, 5]
+experiments = [ 'messages-self-construction-leader-election'] #'messages-self-construction-fixed-leader',
+metric_to_plot = ['MessageSize[mean]', 'nodes', 'MessageSize[Sum]']
 
-for experiment in experiments:
-    for nodes in maxResource:
-        metric_series_mean = means[experiment][metric_to_plot].sel(dict(maxResource=nodes))
-        metric_series_std = stdevs[experiment][metric_to_plot].sel(dict(maxResource=nodes))
-        time_series = metric_series_mean['time'].values
-        df_mean = pd.DataFrame({
-            'time': time_series,
-            metric_name: metric_series_mean
-        })
-        df_std = pd.DataFrame({
-            'time': time_series,
-            'std': metric_series_std
-        })
-        
-        data_dict[(f"{nodes}", nodes * 2)] = (df_mean, df_std)
-        exp_name = beautify_experiment_name(experiment)
-    plot_selfs(data_dict, experiment=exp_name, metric=metric_name, cut=True)
+for metric in metric_to_plot:
+    for experiment in experiments:
+        for children in maxChildren:
+            data_dict = {}
+            for resources in maxResource:
+                metric_series_mean = means[experiment][metric].sel(dict(maxResource=resources, maxChildren=children))
+                metric_series_std = stdevs[experiment][metric].sel(dict(maxResource=resources, maxChildren=children))
+                time_series = metric_series_mean['time'].values
+                if metric == 'MessageSize[mean]' or metric == 'MessageSize[Sum]':
+                    metric_series_mean = metric_series_mean.values / 1024 # convert to KB
+                df_mean = pd.DataFrame({
+                    'time': time_series,
+                    metric: metric_series_mean,
+                })
+                df_std = pd.DataFrame({
+                    'time': time_series,
+                    f'{metric}-std': metric_series_std,
+                })
+
+                data_dict[(f"res-{resources}", resources),(f"ch-{children}",children)] = (df_mean, df_std)
+            exp_name = beautify_experiment_name(experiment)
+            plot_selfs(data_dict, experiment=exp_name, metric=metric)

@@ -11,7 +11,7 @@ variables:
     100.0
   maxResource: &maxResource
     type: ArbitraryVariable
-    parameters: [ 100, [ 50, 100, 250, 500, 1000, 2000 ]]
+    parameters: [ 100, [ 50, 100, 250, 500, 1000, 1500 ]]
     #    1000.0
   maxSuccess: &maxSuccess
     1000
@@ -19,7 +19,7 @@ variables:
     5.0
   maxChildren: &maxChildren
     type: ArbitraryVariable
-    parameters: [ 3, [ 2, 3, 5 ] ]
+    parameters: [ 3, [ 2, 3, 4, 5 ] ]
   #    3
   range: &range
     formula: cloningRange * 1.01
@@ -41,7 +41,7 @@ seeds:
 
 layers:
   - type: BidimensionalGaussianLayer
-    parameters: [0, 45, *maxSuccess, *gaussianShape]
+    parameters: [0, 20, *maxSuccess, *gaussianShape]
     molecule: successSource
 
 incarnation: collektive
@@ -90,3 +90,5 @@ export:
         aggregators: [ max, mean, variance, median, StandardDeviation ]
         value-filter: onlyfinite
         precision: 3
+      - molecule: MessageSize
+        aggregators: [ Sum ]

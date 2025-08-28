@@ -7,13 +7,13 @@ variables:
     100.0
   maxResource: &maxResource
     type: ArbitraryVariable
-    parameters: [ 100, [ 50, 100, 250, 500, 1000, 2000 ]]
+    parameters: [ 1000, [ 50, 100, 250, 500, 1000, 1500 ]]
 #    1000.0
   resourceLowerBound: &resourceLowerBound
     5.0
   maxChildren: &maxChildren
     type: ArbitraryVariable
-    parameters: [ 5, [ 2, 3, 5 ]]
+    parameters: [ 3, [ 2, 3, 4, 5 ]]
 #    3
   minSpanWait: &minSpanWait
     40.0
@@ -22,7 +22,7 @@ variables:
   minY: &minY
     0
   maxY: &maxY
-    30
+    20
   maxSuccess: &maxSuccess
     1000
 #    formula: *maxResource
@@ -83,7 +83,7 @@ deployments:
       - type: it.unibo.collektive.alchemist.device.sensors.impl.DeviceSpawner
         parameters: [ *cloningRange, *maxChildren, *minSpanWait ]
 
-terminate: { type: AfterTime, parameters: [600] }
+terminate: { type: AfterTime, parameters: [10000] }
 
 export:
   - type: CSVExporter
@@ -99,3 +99,5 @@ export:
         aggregators: [ max, mean, variance, median, StandardDeviation ]
         value-filter: onlyfinite
         precision: 3
+      - molecule: MessageSize
+        aggregators: [ Sum ]
