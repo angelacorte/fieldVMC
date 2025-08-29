@@ -6,6 +6,7 @@ Created on Wed Apr  2 19:27:30 2025
 @author: gienna
 """
 
+from matplotlib import pyplot as plt
 import numpy as np
 import xarray as xr
 import seaborn as sns
@@ -13,13 +14,12 @@ import pandas as pd
 import matplotlib
 import re
 import os
+import argparse
 
 def distance(val, ref):
     return abs(ref - val)
 
-
 vectDistance = np.vectorize(distance)
-
 
 def cmap_xmap(function, cmap):
     """ Applies function, on the indices of colormap cmap. Beware, function
@@ -37,7 +37,6 @@ def cmap_xmap(function, cmap):
     #        assert (cdict[key][0]<0 or cdict[key][-1]>1), "Resulting indices extend out of the [0, 1] segment."
     return matplotlib.colors.LinearSegmentedColormap('colormap', cdict, 1024)
 
-
 def getClosest(sortedMatrix, column, val):
     while len(sortedMatrix) > 3:
         half = int(len(sortedMatrix) / 2)
@@ -54,14 +53,11 @@ def getClosest(sortedMatrix, column, val):
         safecopy[column] = val
         return safecopy
 
-
 def convert(column, samples, matrix):
     return np.matrix([getClosest(matrix, column, t) for t in samples])
 
-
 def valueOrEmptySet(k, d):
     return (d[k] if isinstance(d[k], set) else {d[k]}) if k in d else set()
-
 
 def mergeDicts(d1, d2):
     """
@@ -86,7 +82,6 @@ def mergeDicts(d1, d2):
     for k in d1.keys() | d2.keys():
         res[k] = valueOrEmptySet(k, d1) | valueOrEmptySet(k, d2)
     return res
-
 
 def extractCoordinates(filename):
     """
@@ -122,7 +117,6 @@ def extractCoordinates(filename):
                 }
             elif re.match(dataBegin, line[0]):
                 return {}
-
 
 def extractVariableNames(filename):
     """
@@ -173,7 +167,6 @@ def openCsv(path):
         lines = filter(lambda x: regex.match(x[0]), file.readlines())
         return [[float(x) for x in line.split()] for line in lines]
 
-
 def beautifyValue(v):
     """
     Converts an object to a better version for printing, in particular:
@@ -197,22 +190,6 @@ def beautifyValue(v):
         return v
     except:
         return v
-
-
-# =============================================================================
-#     def derivativeOrMeasure(variable_name):
-#         if variable_name.endswith('dt'):
-#             return labels.get(variable_name[:-2], Measure(variable_name)).derivative()
-#         return Measure(variable_name)
-# 
-# 
-#     def label_for(variable_name):
-#         return labels.get(variable_name, derivativeOrMeasure(variable_name)).description()
-# 
-# 
-#     def unit_for(variable_name):
-#         return str(labels.get(variable_name, derivativeOrMeasure(variable_name)))
-# =============================================================================
 
     class Measure:
         def __init__(self, description, unit=None):
@@ -244,44 +221,45 @@ def beautifyValue(v):
         def __str__(self):
             return f'{self.description()} {self.unit()}'
 
-
     centrality_label = 'H_a(x)'
-
 
     def expected(x):
         return r'\mathbf{E}[' + x + ']'
 
-
     def stdev_of(x):
         return r'\sigma{}[' + x + ']'
-
 
     def mse(x):
         return 'MSE[' + x + ']'
 
-
     def cardinality(x):
         return r'\|' + x + r'\|'
 
-
-
 if __name__ == '__main__':
-    # CONFIGURE SCRIPT
-    # Where to find Alchemist data files
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--experiment', type=str, default="leader-election", help='Type of experiment to plot (leader-election or fixed-leader)')
+    args = parser.parse_args()
+    print(args.experiment)
+
+    current_experiment = args.experiment
+
     directory = 'data'
     # Where to save charts
-    output_directory = 'charts/leader-election'
+    current_datetime = pd.Timestamp.now().strftime('%Y-%m-%d_%H-%M-%S')
+    output_directory = f'charts/{current_experiment}_{current_datetime}'
     os.makedirs(output_directory, exist_ok=True)
     # How to name the summary of the processed data
-    pickleOutput = 'messages-self-construction'
+    pickleOutput = f'messages-self-construction-{current_experiment}'
     # Experiment prefixes: one per experiment (root of the file name)
-    experiments = ['messages-self-construction-leader-election'] #'messages-self-construction-fixed-leader',
+    experiments = [f'messages-self-construction-{current_experiment}'] #'messages-self-construction-fixed-leader',
     floatPrecision = '{: 0.3f}'
     # Number of time samples
     timeSamples = 200
     # time management
     minTime = 0
-    maxTime = 10000
+    maxTime = 50000
+    if current_experiment == 'fixed-leader':
+        maxTime = 200
     timeColumnName = 'time'
     logarithmicTime = False
     # One or more variables are considered random and "flattened"
@@ -386,138 +364,122 @@ if __name__ == '__main__':
         current_experiment_errors = stdevs[experiment]
 
 
+    def beautify_experiment_name(name):
+        if name == 'messages-self-construction-leader-election':
+            return 'Leader Election'
+        if name == 'messages-self-construction-fixed-leader':
+            return 'Fixed Leader'
+        else:
+            raise Exception(f'Unknown experiment name {name}.')
 
-# Custom charting
-# plot in a single boxplot chart by using seaborn, the data of both experiments "classic-vmc" and "field-vmc-fixed-leader",
-# comparing the stabilization time of the two experiments. The x-axis should represent the experiment name,
-# and the y-axis should represent the stabilization time. The title of the chart should be "Stabilization Time Comparison".
-# the stabilization time is the amount of time elapsed from the start of the experiment to the end of the experiment.
+    def plot_selfs_dual_axis(data, experiment, metric):
+        plt.rcParams.update({'font.size': 15})
+        plt.rcParams.update({'legend.loc': 0})
+        colors = sns.color_palette("viridis", n_colors=len(data) + 2)
 
+        fig, ax1 = plt.subplots(figsize=(9, 5))
+        ax2 = ax1.twinx()  # secondo asse Y
+        children = list(data.keys())[0][1][1]
 
-def beautify_experiment_name(name):
-    if name == 'messages-self-construction-leader-election':
-        return 'Leader Election'
-    if name == 'messages-self-construction-fixed-leader':
-        return 'Fixed Leader'
-    else:
-        raise Exception(f'Unknown experiment name {name}.')
+        for j, (((_, resources), (_, children)), (mean_df, std_df)) in enumerate(data.items()):
+            sns.lineplot(
+                data=mean_df,
+                x='time',
+                y=metric,
+                label=f'{resources}',
+                ax=ax1,
+                color=colors[j+2],
+            )
+            sns.lineplot(
+                data=mean_df,
+                x='time',
+                y='nodes',
+                label='_nolegend_',
+                ax=ax2,
+                linestyle="--",
+                color=colors[j+2],
+            )
 
-def plot_selfs_dual_axis(data, experiment, metric):
-    plt.rcParams.update({'font.size': 15})
-    plt.rcParams.update({'legend.loc': 0})
-    colors = sns.color_palette("viridis", n_colors=len(data) + 2)
+        ax1.set_xlim(0, 50000)
+        if experiment == 'Fixed Leader':
+            ax1.set_xlim(0, 100)
 
-    fig, ax1 = plt.subplots(figsize=(9, 5))
-    ax2 = ax1.twinx()  # secondo asse Y
+        ax1.set_xlabel('Simulated seconds')
+        ax1.set_ylabel('Message Size (KB)')
+        ax2.set_ylabel('Number of nodes')
 
-    children = list(data.keys())[0][1][1]
+        # Legenda unica: solo maxResources; stile spiegato nel titolo
+        handles, labels = ax1.get_legend_handles_labels()
+        if handles:
+            ax1.legend(handles, labels, title='env resources (solid=KB, dashed=nodes)', loc='best')
 
-    for j, (((_, resources), (_, children)), (mean_df, std_df)) in enumerate(data.items()):
-        # asse sinistro: metric in KB (linea piena) -> etichettata con SOLO il numero di risorse (maxResources)
-        sns.lineplot(
-            data=mean_df,
-            x='time',
-            y=metric,
-            label=f'{resources}',
-            ax=ax1,
-            color=colors[j+2],
-        )
-        sns.lineplot(
-            data=mean_df,
-            x='time',
-            y='nodes',
-            label='_nolegend_',
-            ax=ax2,
-            linestyle="--",
-            color=colors[j+2],
-        )
+        plt.title(f'{experiment} Spawnable Children = {children}')
+        plt.tight_layout()
+        plt.savefig(f'{output_directory}/{experiment}-dualaxis_{metric}-children{children}.pdf', dpi=300)
+        plt.close()
 
-    ax1.set_xlim(0, 10000)
-    if experiment == 'Fixed Leader':
-        ax1.set_xlim(0, 80)
+    def plot_selfs(data, experiment, metric):
+        i = len(data)+2
+        plt.rcParams.update({'font.size': 15})
+        plt.rcParams.update({'legend.loc': 0})
+        colors = sns.color_palette("viridis", n_colors=i)
+        plt.figure(figsize=(9, 5))
+        children = list(data.keys())[0][1][1]
+        for j, ((exp, resources), (mean_df, std_df)) in enumerate(data.items()):
+            sns.lineplot(
+                data=mean_df,
+                x='time',
+                y=metric,
+                label=f'env resources = {exp[1]}$',
+                color=colors[j+2],
+            )
+            # upper_bound = mean_df[metric] + std_df[f'{metric}-std']
+            # lower_bound = mean_df[metric] - std_df[f'{metric}-std']
+            # plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
+            plt.title(f'{experiment} Spawnable Children = {children}')
+        plt.xlim(0, 50000)
+        if experiment == 'Fixed Leader':
+            plt.xlim(0, 100)
+        plt.xlabel('Simulated seconds')
+        plt.ylabel(f'{metric} KB')
+        if metric == 'nodes':
+            plt.ylabel('Number of nodes')
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig(f'{output_directory}/{experiment}-{metric}-children{children}.pdf', dpi=300)
+        plt.close()
 
-    ax1.set_xlabel('Simulated seconds')
-    ax1.set_ylabel('Message Size (KB)')
-    ax2.set_ylabel('Number of nodes')
+    data_dict = {}
+    # maxResource = [ 30, 60, 120, 240, 300 ]
+    maxResource = [50, 100, 250, 500, 1000, 1500]
+    maxChildren = [2, 3, 4, 5]
+    metric_to_plot = ['MessageSize[mean]', 'nodes', 'MessageSize[Sum]']
 
-    # Legenda unica: solo maxResources; stile spiegato nel titolo
-    handles, labels = ax1.get_legend_handles_labels()
-    if handles:
-        ax1.legend(handles, labels, title='maxResources (solid=KB, dashed=nodes)', loc='best')
+    for metric in metric_to_plot:
+        for experiment in experiments:
+            for children in maxChildren:
+                data_dict = {}
+                for resources in maxResource:
+                    metric_series_mean = means[experiment][metric].sel(dict(maxResource=resources, maxChildren=children))
+                    metric_series_std = stdevs[experiment][metric].sel(dict(maxResource=resources, maxChildren=children))
+                    time_series = metric_series_mean['time'].values
+                    if metric == 'MessageSize[mean]' or metric == 'MessageSize[Sum]':
+                        metric_series_mean = metric_series_mean.values / 1024 # convert to KB
+                    nodes_series = means[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values
 
-    plt.title(f'{experiment} max Children = {children}')
-    plt.tight_layout()
-    plt.savefig(f'{output_directory}/{experiment}-dualaxis_{metric}-children{children}.pdf', dpi=300)
-    plt.close()
+                    df_mean = pd.DataFrame({
+                        'time': time_series,
+                        metric: metric_series_mean,
+                        'nodes': nodes_series,
+                    })
+                    df_std = pd.DataFrame({
+                        'time': time_series,
+                        f'{metric}-std': metric_series_std,
+                    })
 
-def plot_selfs(data, experiment, metric):
-    i = len(data)+2
-    plt.rcParams.update({'font.size': 15})
-    plt.rcParams.update({'legend.loc': 0})
-    colors = sns.color_palette("viridis", n_colors=i)
-    plt.figure(figsize=(9, 5))
-    children = list(data.keys())[0][1][1]
-    for j, ((exp, resources), (mean_df, std_df)) in enumerate(data.items()):
-        sns.lineplot(
-            data=mean_df,
-            x='time',
-            y=metric,
-            label=f'$maxResources = {exp[1]}$',
-            color=colors[j+2],
-        )
-        # upper_bound = mean_df[metric] + std_df[f'{metric}-std']
-        # lower_bound = mean_df[metric] - std_df[f'{metric}-std']
-        # plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
-        plt.title(f'{experiment} max Children = {children}')
-    plt.xlim(0, 10000)
-    if experiment == 'Fixed Leader':
-        plt.xlim(0, 125)
-    plt.xlabel('Simulated seconds')
-    plt.ylabel(f'{metric} KB')
-    if metric == 'nodes':
-        plt.ylabel('Number of nodes')
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(f'{output_directory}/{experiment}-{metric}-children{children}.pdf', dpi=300)
-    plt.close()
-
-from matplotlib import pyplot as plt
-
-data_dict = {}
-maxResource = [100, 1000, 1500]
-# maxResource = [250]
-# maxResource = [50, 500]
-# maxResource = [1000]
-# maxResource = [50, 100, 250, 500, 1000, 1500]
-maxChildren = [2, 3, 5] #4
-# maxChildren = [4]
-experiments = [ 'messages-self-construction-leader-election'] #'messages-self-construction-fixed-leader',
-metric_to_plot = ['MessageSize[mean]', 'nodes', 'MessageSize[Sum]']
-
-for metric in metric_to_plot:
-    for experiment in experiments:
-        for children in maxChildren:
-            data_dict = {}
-            for resources in maxResource:
-                metric_series_mean = means[experiment][metric].sel(dict(maxResource=resources, maxChildren=children))
-                metric_series_std = stdevs[experiment][metric].sel(dict(maxResource=resources, maxChildren=children))
-                time_series = metric_series_mean['time'].values
-                if metric == 'MessageSize[mean]' or metric == 'MessageSize[Sum]':
-                    metric_series_mean = metric_series_mean.values / 1024 # convert to KB
-                nodes_series = means[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values
-
-                df_mean = pd.DataFrame({
-                    'time': time_series,
-                    metric: metric_series_mean,
-                    'nodes': nodes_series,
-                })
-                df_std = pd.DataFrame({
-                    'time': time_series,
-                    f'{metric}-std': metric_series_std,
-                })
-
-                data_dict[(f"res-{resources}", resources),(f"ch-{children}",children)] = (df_mean, df_std)
-            exp_name = beautify_experiment_name(experiment)
-            plot_selfs(data_dict, experiment=exp_name, metric=metric)
-            if metric in ['MessageSize[mean]', 'MessageSize[Sum]']:
-                plot_selfs_dual_axis(data_dict, experiment=exp_name, metric=metric)
+                    data_dict[(f"res-{resources}", resources),(f"ch-{children}",children)] = (df_mean, df_std)
+                exp_name = beautify_experiment_name(experiment)
+                if metric in ['MessageSize[mean]', 'MessageSize[Sum]']:
+                    plot_selfs_dual_axis(data_dict, experiment=exp_name, metric=metric)
+                else:
+                    plot_selfs(data_dict, experiment=exp_name, metric=metric)
