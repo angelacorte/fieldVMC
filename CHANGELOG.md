@@ -1,3 +1,13 @@
+## [1.33.0](https://github.com/angelacorte/fieldVMC/compare/1.32.0...1.33.0) (2025-08-29)
+
+### Features
+
+* add message size evaluation service in docker compose ([02520f2](https://github.com/angelacorte/fieldVMC/commit/02520f2bc3794eb7d39ba9bb0eab5706790700c4))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.32.0 [skip ci] ([0d8ec1c](https://github.com/angelacorte/fieldVMC/commit/0d8ec1c8d44c1866c28e9509cc32a8bcf71e41c6))
+
 ## [1.32.0](https://github.com/angelacorte/fieldVMC/compare/1.31.5...1.32.0) (2025-08-29)
 
 ### Features
