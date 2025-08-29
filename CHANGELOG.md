@@ -1,3 +1,87 @@
+## [1.32.0](https://github.com/angelacorte/fieldVMC/compare/1.31.5...1.32.0) (2025-08-29)
+
+### Features
+
+* add effects for new experiments ([0d9822a](https://github.com/angelacorte/fieldVMC/commit/0d9822ad2512a94256ce60f2cef89623504c7486))
+* add first draft for plotting ([4eb9b7e](https://github.com/angelacorte/fieldVMC/commit/4eb9b7e94e31d6b5e14bbe798049088ea518a6e8))
+* add message size evaluation experiments ([b5eadec](https://github.com/angelacorte/fieldVMC/commit/b5eadec3d59035332566f0304b5f26a4d39e41dd))
+* add message size evaluation in device's network ([ad2aebb](https://github.com/angelacorte/fieldVMC/commit/ad2aebb3513b90afc0e4f9def4959c8864b4b358))
+* add serialization to evaluate messages size ([6784794](https://github.com/angelacorte/fieldVMC/commit/67847946d5b4c1503efcfeecd40f8309e26e21cc))
+* add task for new experiments execution ([877276b](https://github.com/angelacorte/fieldVMC/commit/877276ba76f492c344ea79c677aac60eb386a65c))
+* longer termination time ([1950c61](https://github.com/angelacorte/fieldVMC/commit/1950c612395f2b39fa9dd33da7319d52136f8bb8))
+* update plotters ([43a7a9c](https://github.com/angelacorte/fieldVMC/commit/43a7a9c9314c79543ad329baf79925c0e77d2002))
+
+### Dependency updates
+
+* **deps:** update dependency com.github.ben-manes.caffeine:caffeine to v3.2.1 ([a0c305d](https://github.com/angelacorte/fieldVMC/commit/a0c305dc136455b6a4795255c453e6ba915855de))
+* **deps:** update dependency com.github.ben-manes.caffeine:caffeine to v3.2.2 ([4f91956](https://github.com/angelacorte/fieldVMC/commit/4f91956cda3f01697cd78c71c5a4528f831de91f))
+* **deps:** update dependency gradle to v8.14.2 ([3e5faf3](https://github.com/angelacorte/fieldVMC/commit/3e5faf33226bffa00530b1ecc835eaf39f7f56a4))
+* **deps:** update dependency gradle to v8.14.3 ([7177657](https://github.com/angelacorte/fieldVMC/commit/7177657fee5ac5c57a46c00d946393f0eb4470df))
+* **deps:** update dependency matplotlib to v3.10.5 ([1653232](https://github.com/angelacorte/fieldVMC/commit/1653232a10c30fe422e6fbe0fb79d22d627d94fa))
+* **deps:** update dependency org.danilopianini:kotlin-symmetric-matrix to v1.1.4 ([d7bea2a](https://github.com/angelacorte/fieldVMC/commit/d7bea2a9af4b3903db625b80826ebe51dfcc7c6c))
+* **deps:** update dependency org.danilopianini:kotlin-symmetric-matrix to v1.1.5 ([6d92123](https://github.com/angelacorte/fieldVMC/commit/6d921236deb569a1f064560e1dceb2c699224730))
+* **deps:** update dependency org.danilopianini:kotlin-symmetric-matrix to v1.1.6 ([edc8338](https://github.com/angelacorte/fieldVMC/commit/edc8338fc5897913626cb31d82f11d2700521ba4))
+* **deps:** update dependency org.danilopianini:rrmxmx-kt to v2.0.6 ([2d4f435](https://github.com/angelacorte/fieldVMC/commit/2d4f435e1b9571f6a8cbfe2930f24caedfbc1fc6))
+* **deps:** update dependency org.danilopianini:rrmxmx-kt to v2.0.7 ([9f57b07](https://github.com/angelacorte/fieldVMC/commit/9f57b079594ecd26763fd8b1310a12824c5b3a85))
+* **deps:** update dependency org.danilopianini:rrmxmx-kt to v2.0.8 ([3396145](https://github.com/angelacorte/fieldVMC/commit/33961451fda211f05fda13dcd29daf75a7f2f0a2))
+* **deps:** update dependency org.danilopianini:rrmxmx-kt to v2.1.0 ([863cd63](https://github.com/angelacorte/fieldVMC/commit/863cd63cf307ee0e3513dda1c7ef932b243ce444))
+* **deps:** update dependency pandas to v2.3.0 ([10f3335](https://github.com/angelacorte/fieldVMC/commit/10f33357c34907724034cee5207fa3e4c6767870))
+* **deps:** update dependency pandas to v2.3.1 ([ea1db60](https://github.com/angelacorte/fieldVMC/commit/ea1db6008138d6299db41a0c36b636676f8c8ffa))
+* **deps:** update dependency pandas to v2.3.2 ([79b0dbf](https://github.com/angelacorte/fieldVMC/commit/79b0dbf7d74e7a43048a13b4a7294ba3667d8743))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.134 ([10de24e](https://github.com/angelacorte/fieldVMC/commit/10de24eefb9bf861a2f29303a55cfa19e34f0a69))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.135 ([b82a4a4](https://github.com/angelacorte/fieldVMC/commit/b82a4a45ed9ca55c2c8cb40c433db2aeaf9d90db))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.136 ([f0fd0c0](https://github.com/angelacorte/fieldVMC/commit/f0fd0c022df9fcde0c70a864fd68d25f8376871d))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.137 ([f4a2e26](https://github.com/angelacorte/fieldVMC/commit/f4a2e265dd891d6e2f69cc9a93915b93dd7a3bae))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.138 ([6b6f2c2](https://github.com/angelacorte/fieldVMC/commit/6b6f2c275b55eecda8561c98cc0a64be5f2f19ea))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.139 ([71addfd](https://github.com/angelacorte/fieldVMC/commit/71addfde51a454d6eb99068dc08ad987106004e8))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.140 ([9540485](https://github.com/angelacorte/fieldVMC/commit/9540485ee9870090ab9b05d7aeb0b603254a62af))
+* **deps:** update dependency xarray to v2025.6.0 ([5ae8218](https://github.com/angelacorte/fieldVMC/commit/5ae82184a5f315f6fd299d738da87dd61191014a))
+* **deps:** update dependency xarray to v2025.6.1 ([56eb313](https://github.com/angelacorte/fieldVMC/commit/56eb313dc7eb4a222509e4ab3e65fd8a82658bd6))
+* **deps:** update dependency xarray to v2025.7.0 ([b6f54d3](https://github.com/angelacorte/fieldVMC/commit/b6f54d378c8ca17da8d402d657c703cdb72ef74f))
+* **deps:** update dependency xarray to v2025.7.1 ([4c579f7](https://github.com/angelacorte/fieldVMC/commit/4c579f75eb82a713185a49c6b8045acdd880bbe3))
+* **deps:** update dependency xarray to v2025.8.0 ([06b014c](https://github.com/angelacorte/fieldVMC/commit/06b014c31873f70b2223e3bae83698e25a39bb4c))
+* **deps:** update node.js to 22.17 ([4a4ab68](https://github.com/angelacorte/fieldVMC/commit/4a4ab688c399227359f215740c0617ebfdebad43))
+* **deps:** update node.js to 22.18 ([e0b569b](https://github.com/angelacorte/fieldVMC/commit/e0b569b74e174d940049526c622483a8162d753d))
+* **deps:** update plugin gitsemver to v5.1.4 ([583ead5](https://github.com/angelacorte/fieldVMC/commit/583ead5aa82479ba71214ac6bf0bf175ddf4b601))
+* **deps:** update plugin gitsemver to v5.1.5 ([818513d](https://github.com/angelacorte/fieldVMC/commit/818513d59416fb0b0cb7adafde4ec47e8b20ae1d))
+* **deps:** update plugin gitsemver to v5.1.6 ([2388a74](https://github.com/angelacorte/fieldVMC/commit/2388a746af7a15c0362ea25fb33bfc9e06049bac))
+* **deps:** update plugin gitsemver to v5.1.7 ([732ddd2](https://github.com/angelacorte/fieldVMC/commit/732ddd2a65bf06299af981255b7ac8f91fab1aa1))
+* **deps:** update plugin gitsemver to v5.1.8 ([d238ed3](https://github.com/angelacorte/fieldVMC/commit/d238ed33c6072aa5a33068ef52d2a09343eb3a2c))
+* **deps:** update plugin gitsemver to v6 ([4d99878](https://github.com/angelacorte/fieldVMC/commit/4d99878cdaac68d726b30824e394248139e1b5e2))
+* **deps:** update plugin gitsemver to v6.0.1 ([28f60af](https://github.com/angelacorte/fieldVMC/commit/28f60aff3abd25ed3435a0ca1ee1f353bdae0aca))
+* **deps:** update plugin gitsemver to v7 ([01d07fa](https://github.com/angelacorte/fieldVMC/commit/01d07fa3a78eebd91ef915b6a6cc324430d6ae8d))
+* **deps:** update plugin gitsemver to v7.0.2 ([1471504](https://github.com/angelacorte/fieldVMC/commit/1471504fa29c34078a64b2eb73bb982e977e0fab))
+* **deps:** update python docker tag to v3.13.4 ([0f6e294](https://github.com/angelacorte/fieldVMC/commit/0f6e294c2386c2a4d91ab715441c66354afb5253))
+* **deps:** update python docker tag to v3.13.5 ([ffb2c6d](https://github.com/angelacorte/fieldVMC/commit/ffb2c6d23c45f098c5295022043a0b841428dca7))
+* **deps:** update python docker tag to v3.13.6 ([aab24ee](https://github.com/angelacorte/fieldVMC/commit/aab24ee81fc0069ed3626dee39ba6ca11bf8ccce))
+* **deps:** update python docker tag to v3.13.7 ([e9bf4ce](https://github.com/angelacorte/fieldVMC/commit/e9bf4cea1019e9bfb8c66bfa510215a40c15c610))
+
+### Bug Fixes
+
+* batch variables ([1198cd0](https://github.com/angelacorte/fieldVMC/commit/1198cd01049e2383c9fbd937ea3fb93cdb93c4e1))
+* change termination time ([096998e](https://github.com/angelacorte/fieldVMC/commit/096998ee3ac094963cdeb33c37d6c149af75f23c))
+* made serializable some classes ([c58c640](https://github.com/angelacorte/fieldVMC/commit/c58c6402609cce3ac592cc7f9a5cd8879729ae3c))
+* refactoring bug ([0023246](https://github.com/angelacorte/fieldVMC/commit/00232460cf8fb4709a7d3aec220b21da024bf839))
+* typo ([33a06c2](https://github.com/angelacorte/fieldVMC/commit/33a06c2c6660f6dd6afabded231041de3bc6a8c1))
+* update parameters ([6823397](https://github.com/angelacorte/fieldVMC/commit/68233977e13a2ef69fd911f3acf3a0b5226fa206))
+* update plotter ([05efaf8](https://github.com/angelacorte/fieldVMC/commit/05efaf8db745c9724508ebb80848c6d6f051105a))
+
+### Build and continuous integration
+
+* **deps:** update actions/checkout action to v4.3.0 ([afeae1f](https://github.com/angelacorte/fieldVMC/commit/afeae1fc778663623732253911c613043cecb0a5))
+* **deps:** update actions/checkout action to v5 ([0be3ece](https://github.com/angelacorte/fieldVMC/commit/0be3eceb38f7a5fa989da9cc1f062ff871642445))
+* **deps:** update danysk/build-check-deploy-gradle-action action to v4 ([0b8e559](https://github.com/angelacorte/fieldVMC/commit/0b8e5595b9e2d7898520452b34b45d40c10d8655))
+* **deps:** update danysk/build-check-deploy-gradle-action action to v4.0.1 ([ffdaa13](https://github.com/angelacorte/fieldVMC/commit/ffdaa1396d2ebcf5802d56990ec7528f1b3dc83e))
+* **deps:** update danysk/build-check-deploy-gradle-action action to v4.0.2 ([d8a43e9](https://github.com/angelacorte/fieldVMC/commit/d8a43e9083ffc03b0e5db58eaebae0b3897f5e52))
+* **deps:** update danysk/build-check-deploy-gradle-action action to v4.0.3 ([1fa9cb8](https://github.com/angelacorte/fieldVMC/commit/1fa9cb81655054ec18b8f372426a3ddc81aea53a))
+* **deps:** update danysk/build-check-deploy-gradle-action action to v4.0.4 ([f28fce8](https://github.com/angelacorte/fieldVMC/commit/f28fce8296aa7855c578fb83d6300b6b3765696f))
+* **deps:** update danysk/build-check-deploy-gradle-action action to v4.0.5 ([cc7814f](https://github.com/angelacorte/fieldVMC/commit/cc7814f38f969dab7757354e0c505f7e35df5653))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.31.5 [skip ci] ([8e360e1](https://github.com/angelacorte/fieldVMC/commit/8e360e131cb86077c385942911304ba630ae292c))
+* rename effects ([5b5f001](https://github.com/angelacorte/fieldVMC/commit/5b5f0010c707dfbac48a1002e8b1004739d7c6cb))
+
 ## [1.31.5](https://github.com/angelacorte/fieldVMC/compare/1.31.4...1.31.5) (2025-06-05)
 
 ### Bug Fixes
