@@ -11,7 +11,7 @@ variables:
     100.0
   maxResource: &maxResource
     type: ArbitraryVariable
-    parameters: [ 100, [ 50, 100, 250, 500, 1000, 1500 ]]
+    parameters: [ 1000, [ 50, 100, 250, 500, 1000, 1500 ]]
     #    1000.0
   maxSuccess: &maxSuccess
     1000
