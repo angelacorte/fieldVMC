@@ -7,13 +7,15 @@ variables:
     100.0
   maxResource: &maxResource
     type: ArbitraryVariable
-    parameters: [ 1000, [ 50, 100, 250, 500, 1000, 1500 ]]
+    parameters: [ 30, [50, 100, 250, 500, 1000, 1500]]
+#    parameters: [ 30, [ 30, 60, 120, 240, 300 ]]
+#    parameters: [ 1000, [ 70, 110, 288, 600, 1000, 1353 ]]
 #    1000.0
   resourceLowerBound: &resourceLowerBound
     5.0
   maxChildren: &maxChildren
     type: ArbitraryVariable
-    parameters: [ 4, [ 2, 3, 4, 5 ]]
+    parameters: [ 5, [ 2, 3, 4, 5 ]]
 #    3
   minSpanWait: &minSpanWait
     40.0
@@ -50,10 +52,10 @@ seeds:
 
 layers:
   - type: BidimensionalGaussianLayer
-    parameters: [*layerX, *minY, *maxSuccess, *gaussianShape]
+    parameters: [*layerX, *minY, *maxResource, *gaussianShape]
     molecule: localResource
   - type: BidimensionalGaussianLayer
-    parameters: [*layerX, *maxY, *maxResource, *gaussianShape]
+    parameters: [*layerX, *maxY, *maxSuccess, *gaussianShape]
     molecule: successSource
 
 incarnation: collektive
@@ -83,7 +85,7 @@ deployments:
       - type: it.unibo.collektive.alchemist.device.sensors.impl.DeviceSpawner
         parameters: [ *cloningRange, *maxChildren, *minSpanWait ]
 
-terminate: { type: AfterTime, parameters: [50000] }
+terminate: { type: AfterTime, parameters: [500] }
 
 export:
   - type: CSVExporter
