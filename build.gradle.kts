@@ -210,7 +210,7 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                         autoStart: true,
                       }
                       
-                      terminate: { type: AfterTime, parameters: [600] }
+                      terminate: { type: AfterTime, parameters: [1000] }
                     """.trimIndent(),
                     )
                 } else {
