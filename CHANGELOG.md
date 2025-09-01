@@ -1,3 +1,13 @@
+## [1.34.1](https://github.com/angelacorte/fieldVMC/compare/1.34.0...1.34.1) (2025-09-01)
+
+### Bug Fixes
+
+* change children symbol ([31c19d6](https://github.com/angelacorte/fieldVMC/commit/31c19d6d447de0b03103762e70cb79394650e1fb))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.34.0 [skip ci] ([2ba3a91](https://github.com/angelacorte/fieldVMC/commit/2ba3a91e93470a820e5a66427f96cae5f5437567))
+
 ## [1.34.0](https://github.com/angelacorte/fieldVMC/compare/1.33.4...1.34.0) (2025-09-01)
 
 ### Features
