@@ -1,3 +1,17 @@
+## [1.33.1](https://github.com/angelacorte/fieldVMC/compare/1.33.0...1.33.1) (2025-09-01)
+
+### Dependency updates
+
+* **deps:** update node.js to 22.19 ([14334bf](https://github.com/angelacorte/fieldVMC/commit/14334bfcdf9cb7e6164fc11154125728f772f91c))
+
+### Bug Fixes
+
+* update plotter ([c646635](https://github.com/angelacorte/fieldVMC/commit/c646635f3731b6107be9e12abac922bad8961bd7))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.33.0 [skip ci] ([8cf9628](https://github.com/angelacorte/fieldVMC/commit/8cf9628d611478dea0589face1026ad85c157d0a))
+
 ## [1.33.0](https://github.com/angelacorte/fieldVMC/compare/1.32.0...1.33.0) (2025-08-29)
 
 ### Features
