@@ -412,7 +412,9 @@ if __name__ == '__main__':
             #     linestyle="--",
             #     color=colors[j+2],
             # )
-
+            upper_bound = mean_df[metric] + std_df[f'{metric}-std']
+            lower_bound = mean_df[metric] - std_df[f'{metric}-std']
+            plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
         ax1.set_xlim(0, 20000)
         if 'fixed-leader' in experiment:
             ax1.set_xlim(0, 40)
@@ -462,9 +464,9 @@ if __name__ == '__main__':
 
                     df_std = pd.DataFrame({
                         'time': time_series,
-                        'MessageSize[mean]-std': stdevs[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)),
-                        'MessageSize[Sum]-std': stdevs[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)),
-                        'nodes-std': stdevs[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)),
+                        'MessageSize[mean]-std': stdevs[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024,
+                        'MessageSize[Sum]-std': stdevs[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024 / 1024,
+                        'nodes-std': stdevs[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values,
                     })
 
                     data_dict[(f"res-{resources}", resources),(f"ch-{children}",children)] = (df_mean, df_std)
