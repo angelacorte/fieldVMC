@@ -247,9 +247,9 @@ if __name__ == '__main__':
     output_directory = f'charts/{current_experiment}_{current_datetime}'
     os.makedirs(output_directory, exist_ok=True)
     # How to name the summary of the processed data
-    pickleOutput = f'messages-self-construction-{current_experiment}'
+    pickleOutput = f'self-optimization-{current_experiment}'
     # Experiment prefixes: one per experiment (root of the file name)
-    experiments = [f'messages-self-construction-{current_experiment}'] #'messages-self-construction-fixed-leader',
+    experiments = [f'self-optimization-{current_experiment}'] #'messages-self-construction-fixed-leader',
     floatPrecision = '{: 0.3f}'
     # Number of time samples
     timeSamples = 200
@@ -464,6 +464,7 @@ if __name__ == '__main__':
                         'time': time_series,
                         'MessageSize[mean]-std': stdevs[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)),
                         'MessageSize[Sum]-std': stdevs[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)),
+                        'nodes-std': stdevs[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)),
                     })
 
                     data_dict[(f"res-{resources}", resources),(f"ch-{children}",children)] = (df_mean, df_std)

@@ -1,36 +1,28 @@
 variables:
   fileName: &fileName
-              "messages-self-construction-leader-election"
+    "self-optimization-fixed-leader"
   path: &path
-          "data/messages-self-construction-leader-election"
-  radius: &leaderRadius
+    "data/self-optimization-fixed-leader"
+  cloningRange: &cloningRange
+    formula: 5
+  gaussianShape: &gaussianShape
+    5
+  leaderRadius: &leaderRadius
     100.0
   maxResource: &maxResource
     type: ArbitraryVariable
-    parameters: [ 1000, [50, 100, 250, 500, 1000, 1500]]
-#    parameters: [ 30, [ 30, 60, 120, 240, 300 ]]
+    parameters: [ 1000, [ 50, 100, 250, 500, 1000, 1500 ]]
+    #    1000.0
+  maxSuccess: &maxSuccess
+    1000
   resourceLowerBound: &resourceLowerBound
     5.0
   maxChildren: &maxChildren
     type: ArbitraryVariable
-    parameters: [ 5, [ 2, 3, 4, 5 ]]
-  minSpanWait: &minSpanWait
-    40.0
-  layerX: &layerX
-    0
-  minY: &minY
-    0
-  maxY: &maxY
-    20
-  maxSuccess: &maxSuccess
-    1000
-#    formula: *maxResource
-  gaussianShape: &gaussianShape
-    5
+    parameters: [ 3, [ 2, 3, 4, 5 ] ]
+  #    3
   range: &range
     formula: cloningRange * 1.01
-  cloningRange: &cloningRange
-    formula: 5
   seed: &seed
     min: 0
     max:
@@ -49,10 +41,7 @@ seeds:
 
 layers:
   - type: BidimensionalGaussianLayer
-    parameters: [*layerX, *minY, *maxResource, *gaussianShape]
-    molecule: localResource
-  - type: BidimensionalGaussianLayer
-    parameters: [*layerX, *maxY, *maxSuccess, *gaussianShape]
+    parameters: [0, 20, *maxSuccess, *gaussianShape]
     molecule: successSource
 
 incarnation: collektive
@@ -62,13 +51,18 @@ _pool: &program
     type: Event
     actions:
       - type: RunCollektiveProgram
-        parameters: [it.unibo.collektive.vmc.VMCSpawningKt.withSpawning]
+        parameters: [it.unibo.collektive.vmc.FieldVMCFixedLeaderKt.fixedRootStability]
+
+terminate: { type: AfterTime, parameters: [200] }
 
 deployments:
   - type: Point
-    parameters: [*layerX, *minY]
+    parameters: [0, 0]
     programs:
       - *program
+    contents:
+      - molecule: leader
+        concentration: true
     properties:
       - type: it.unibo.collektive.alchemist.device.sensors.impl.LayerProperty
       - type: it.unibo.collektive.alchemist.device.sensors.impl.RandomNodeProperty
@@ -78,13 +72,9 @@ deployments:
       - type: it.unibo.collektive.alchemist.device.sensors.impl.LeaderSensorProperty
         parameters: [ *leaderRadius ]
       - type: it.unibo.collektive.alchemist.device.sensors.impl.ResourceSensorProperty
-        parameters: [ *resourceLowerBound, *maxResource ]
+        parameters: [*resourceLowerBound, *maxResource]
       - type: it.unibo.collektive.alchemist.device.sensors.impl.DeviceSpawner
-        parameters: [ *cloningRange, *maxChildren, *minSpanWait ]
-
-terminate:
-  - type: AfterTime
-    parameters: [20000]
+        parameters: [ *cloningRange, *maxChildren ]
 
 export:
   - type: CSVExporter
