@@ -247,9 +247,9 @@ if __name__ == '__main__':
     output_directory = f'charts/{current_experiment}_{current_datetime}'
     os.makedirs(output_directory, exist_ok=True)
     # How to name the summary of the processed data
-    pickleOutput = f'self-optimization-{current_experiment}'
+    pickleOutput = f'messages-self-construction-{current_experiment}'
     # Experiment prefixes: one per experiment (root of the file name)
-    experiments = [f'self-optimization-{current_experiment}'] #'messages-self-construction-fixed-leader',
+    experiments = [f'messages-self-construction-{current_experiment}'] #'messages-self-construction-fixed-leader',
     floatPrecision = '{: 0.3f}'
     # Number of time samples
     timeSamples = 200
@@ -433,7 +433,7 @@ if __name__ == '__main__':
             ax1.legend(handles, labels, title=r'$R^t_r$', loc=4)
             # ax1.legend(handles, labels, title='max resources (solid=KB, dashed=nodes)', loc='best')
 
-        plt.title(f'{beautify_experiment_name(experiment)} $\kappa$ = {children}')
+        plt.title(f'{beautify_experiment_name(experiment)} $\chi$ = {children}')
         plt.tight_layout()
         filename = beautify_experiment(experiment, metric)
         plt.savefig(f'{output_directory}/{filename}-dualaxis_children{children}.pdf', dpi=300)
