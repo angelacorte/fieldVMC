@@ -239,8 +239,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', type=str, default="leader-election", help='Type of experiment to plot (leader-election or fixed-leader)')
     args = parser.parse_args()
-    print(args.experiment)
-
     current_experiment = args.experiment
 
     directory = 'data'
@@ -363,14 +361,27 @@ if __name__ == '__main__':
         current_experiment_means = means[experiment]
         current_experiment_errors = stdevs[experiment]
 
+    def beautify_metric_name(name):
+        if name == 'MessageSize[mean]':
+            return 'Average Message Size'
+        elif name == 'MessageSize[Sum]':
+            return 'Total Message Size'
+        elif name == 'nodes':
+            return 'Number of Nodes'
+        else:
+            raise Exception(f'Unknown metric name {name}.')
 
-    def beautify_experiment_name(name):
+    def beautify_experiment_name(name, metric):
+        filename = ''
         if name == 'messages-self-construction-leader-election':
-            return 'Leader Election'
-        if name == 'messages-self-construction-fixed-leader':
-            return 'Fixed Leader'
+            filename = 'Leader Election'
+        elif name == 'messages-self-construction-fixed-leader':
+            filename = 'Fixed Leader'
         else:
             raise Exception(f'Unknown experiment name {name}.')
+
+        filename += f' ({beautify_metric_name(metric)})'
+        return filename
 
     def plot_selfs_dual_axis(data, experiment, metric):
         plt.rcParams.update({'font.size': 15})
@@ -401,21 +412,26 @@ if __name__ == '__main__':
             )
 
         ax1.set_xlim(0, 50000)
-        if experiment == 'Fixed Leader':
-            ax1.set_xlim(0, 100)
+        if 'Fixed Leader' in experiment:
+            ax1.set_xlim(0, 60)
 
         ax1.set_xlabel('Simulated seconds')
-        ax1.set_ylabel('Message Size (KB)')
+        ylabel = beautify_metric_name(metric)
+        if metric == 'MessageSize[Sum]':
+            ylabel += ' (MB)'
+        elif metric == 'MessageSize[mean]':
+            ylabel += ' (KB)'
+        ax1.set_ylabel(f'{ylabel}')
         ax2.set_ylabel('Number of nodes')
 
         # Legenda unica: solo maxResources; stile spiegato nel titolo
         handles, labels = ax1.get_legend_handles_labels()
         if handles:
-            ax1.legend(handles, labels, title='env resources (solid=KB, dashed=nodes)', loc='best')
+            ax1.legend(handles, labels, title='max resources (solid=KB, dashed=nodes)', loc='best')
 
         plt.title(f'{experiment} Spawnable Children = {children}')
         plt.tight_layout()
-        plt.savefig(f'{output_directory}/{experiment}-dualaxis_{metric}-children{children}.pdf', dpi=300)
+        plt.savefig(f'{output_directory}/{experiment}-dualaxis_children{children}.pdf', dpi=300)
         plt.close()
 
     def plot_selfs(data, experiment, metric):
@@ -430,7 +446,7 @@ if __name__ == '__main__':
                 data=mean_df,
                 x='time',
                 y=metric,
-                label=f'env resources = {exp[1]}$',
+                label=f'max resources = {exp[1]}',
                 color=colors[j+2],
             )
             # upper_bound = mean_df[metric] + std_df[f'{metric}-std']
@@ -438,7 +454,8 @@ if __name__ == '__main__':
             # plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
             plt.title(f'{experiment} Spawnable Children = {children}')
         plt.xlim(0, 50000)
-        if experiment == 'Fixed Leader':
+
+        if 'Fixed Leader' in experiment:
             plt.xlim(0, 100)
         plt.xlabel('Simulated seconds')
         plt.ylabel(f'{metric} KB')
@@ -461,7 +478,7 @@ if __name__ == '__main__':
                 data_dict = {}
                 for resources in maxResource:
                     mean_mean = means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024
-                    mean_sum = means[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024
+                    mean_sum = means[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024 / 1024
                     nodes_series = means[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values
                     time_series = means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children))['time'].values
 
@@ -479,7 +496,7 @@ if __name__ == '__main__':
                     })
 
                     data_dict[(f"res-{resources}", resources),(f"ch-{children}",children)] = (df_mean, df_std)
-                exp_name = beautify_experiment_name(experiment)
+                exp_name = beautify_experiment_name(experiment, metric)
                 if metric in ['MessageSize[mean]', 'MessageSize[Sum]']:
                     plot_selfs_dual_axis(data_dict, experiment=exp_name, metric=metric)
                 else:
