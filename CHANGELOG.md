@@ -1,3 +1,17 @@
+## [1.34.0](https://github.com/angelacorte/fieldVMC/compare/1.33.4...1.34.0) (2025-09-01)
+
+### Features
+
+* add stdev in plots ([9af3aec](https://github.com/angelacorte/fieldVMC/commit/9af3aec3a0e6b1295265f23af6a4fe045940ec78))
+
+### Bug Fixes
+
+* refactoring error when creating gradle tasks ([e80acb0](https://github.com/angelacorte/fieldVMC/commit/e80acb01fae98de5f45ecb058e11bfca5559ed0a))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.33.4 [skip ci] ([331bc06](https://github.com/angelacorte/fieldVMC/commit/331bc0632fc5dbcc67fbaf58479253cf77c8eae4))
+
 ## [1.33.4](https://github.com/angelacorte/fieldVMC/compare/1.33.3...1.33.4) (2025-09-01)
 
 ### Bug Fixes
