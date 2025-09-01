@@ -1,3 +1,15 @@
+## [1.33.2](https://github.com/angelacorte/fieldVMC/compare/1.33.1...1.33.2) (2025-09-01)
+
+### Bug Fixes
+
+* change lables ([589ff3a](https://github.com/angelacorte/fieldVMC/commit/589ff3a51bda4afbaa2ab8ed38b96f9e50aa8e65))
+* minor in plotter ([71cea37](https://github.com/angelacorte/fieldVMC/commit/71cea3787d7761f7e734cb96ef9e4c9a3669d83b))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.33.1 [skip ci] ([a6c84a7](https://github.com/angelacorte/fieldVMC/commit/a6c84a7bb39430e56baed0fafe0df1916c0040ad))
+* update gitignore ([8ac60aa](https://github.com/angelacorte/fieldVMC/commit/8ac60aafa3d9c270f5449043bf6947592078909d))
+
 ## [1.33.1](https://github.com/angelacorte/fieldVMC/compare/1.33.0...1.33.1) (2025-09-01)
 
 ### Dependency updates
