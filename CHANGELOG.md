@@ -1,3 +1,13 @@
+## [1.33.3](https://github.com/angelacorte/fieldVMC/compare/1.33.2...1.33.3) (2025-09-01)
+
+### Bug Fixes
+
+* put source node at the center of resource layer ([83fc886](https://github.com/angelacorte/fieldVMC/commit/83fc886db0739cbe605d4cccf67cdc4d060297fd))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.33.2 [skip ci] ([a579e72](https://github.com/angelacorte/fieldVMC/commit/a579e728e8453439dbb831a1c99998399a2c6581))
+
 ## [1.33.2](https://github.com/angelacorte/fieldVMC/compare/1.33.1...1.33.2) (2025-09-01)
 
 ### Bug Fixes
