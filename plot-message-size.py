@@ -371,17 +371,17 @@ if __name__ == '__main__':
         else:
             raise Exception(f'Unknown metric name {name}.')
 
-    def beautify_experiment_name(name, metric):
-        filename = ''
+    def beautify_experiment_name(name):
         if name == 'messages-self-construction-leader-election':
-            filename = 'Leader Election'
+            return 'Leader Election'
         elif name == 'messages-self-construction-fixed-leader':
-            filename = 'Fixed Leader'
+            return 'Fixed Leader'
         else:
             raise Exception(f'Unknown experiment name {name}.')
 
-        filename += f' ({beautify_metric_name(metric)})'
-        return filename
+    def beautify_experiment(experiment, metric):
+        return beautify_experiment_name(experiment) + f' ({beautify_metric_name(metric)})'
+
 
     def plot_selfs_dual_axis(data, experiment, metric):
         plt.rcParams.update({'font.size': 15})
@@ -389,7 +389,7 @@ if __name__ == '__main__':
         colors = sns.color_palette("viridis", n_colors=len(data) + 2)
 
         fig, ax1 = plt.subplots(figsize=(9, 5))
-        ax2 = ax1.twinx()  # secondo asse Y
+        # ax2 = ax1.twinx()  # secondo asse Y
         children = list(data.keys())[0][1][1]
 
         for j, (((_, resources), (_, children)), (mean_df, std_df)) in enumerate(data.items()):
@@ -401,74 +401,76 @@ if __name__ == '__main__':
                 ax=ax1,
                 color=colors[j+2],
             )
-            sns.lineplot(
-                data=mean_df,
-                x='time',
-                y='nodes',
-                label='_nolegend_',
-                ax=ax2,
-                linestyle="--",
-                color=colors[j+2],
-            )
+            # sns.lineplot(
+            #     data=mean_df,
+            #     x='time',
+            #     y='nodes',
+            #     label='_nolegend_',
+            #     ax=ax2,
+            #     linestyle="--",
+            #     color=colors[j+2],
+            # )
 
-        ax1.set_xlim(0, 50000)
-        if 'Fixed Leader' in experiment:
+        ax1.set_xlim(0, 20000)
+        if 'fixed-leader' in experiment:
             ax1.set_xlim(0, 60)
 
         ax1.set_xlabel('Simulated seconds')
         ylabel = beautify_metric_name(metric)
         if metric == 'MessageSize[Sum]':
-            ylabel += ' (MB)'
+            ylabel += ' (MB/s)'
         elif metric == 'MessageSize[mean]':
-            ylabel += ' (KB)'
+            ylabel += ' (KB/s)'
         ax1.set_ylabel(f'{ylabel}')
-        ax2.set_ylabel('Number of nodes')
+        # ax2.set_ylabel('Number of nodes')
 
         # Legenda unica: solo maxResources; stile spiegato nel titolo
         handles, labels = ax1.get_legend_handles_labels()
         if handles:
-            ax1.legend(handles, labels, title='max resources (solid=KB, dashed=nodes)', loc='best')
+            ax1.legend(handles, labels, title=r'$R^t_r$', loc=4)
+            # ax1.legend(handles, labels, title='max resources (solid=KB, dashed=nodes)', loc='best')
 
-        plt.title(f'{experiment} Spawnable Children = {children}')
+        plt.title(f'{beautify_experiment_name(experiment)} $\kappa$ = {children}')
         plt.tight_layout()
-        plt.savefig(f'{output_directory}/{experiment}-dualaxis_children{children}.pdf', dpi=300)
+        filename = beautify_experiment(experiment, metric)
+        plt.savefig(f'{output_directory}/{filename}-dualaxis_children{children}.pdf', dpi=300)
         plt.close()
 
-    def plot_selfs(data, experiment, metric):
-        i = len(data)+2
-        plt.rcParams.update({'font.size': 15})
-        plt.rcParams.update({'legend.loc': 0})
-        colors = sns.color_palette("viridis", n_colors=i)
-        plt.figure(figsize=(9, 5))
-        children = list(data.keys())[0][1][1]
-        for j, ((exp, resources), (mean_df, std_df)) in enumerate(data.items()):
-            sns.lineplot(
-                data=mean_df,
-                x='time',
-                y=metric,
-                label=f'max resources = {exp[1]}',
-                color=colors[j+2],
-            )
-            # upper_bound = mean_df[metric] + std_df[f'{metric}-std']
-            # lower_bound = mean_df[metric] - std_df[f'{metric}-std']
-            # plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
-            plt.title(f'{experiment} Spawnable Children = {children}')
-        plt.xlim(0, 50000)
-
-        if 'Fixed Leader' in experiment:
-            plt.xlim(0, 100)
-        plt.xlabel('Simulated seconds')
-        plt.ylabel(f'{metric} KB')
-        if metric == 'nodes':
-            plt.ylabel('Number of nodes')
-        plt.legend()
-        plt.tight_layout()
-        plt.savefig(f'{output_directory}/{experiment}-{metric}-children{children}.pdf', dpi=300)
-        plt.close()
+    # def plot_selfs(data, experiment, metric):
+    #     i = len(data)+2
+    #     plt.rcParams.update({'font.size': 15})
+    #     plt.rcParams.update({'legend.loc': 0})
+    #     colors = sns.color_palette("viridis", n_colors=i)
+    #     plt.figure(figsize=(8, 4))
+    #     children = list(data.keys())[0][1][1]
+    #     for j, ((exp, resources), (mean_df, std_df)) in enumerate(data.items()):
+    #         sns.lineplot(
+    #             data=mean_df,
+    #             x='time',
+    #             y=metric,
+    #             label=f'max resources = {exp[1]}',
+    #             color=colors[j+2],
+    #         )
+    #         # upper_bound = mean_df[metric] + std_df[f'{metric}-std']
+    #         # lower_bound = mean_df[metric] - std_df[f'{metric}-std']
+    #         # plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
+    #         plt.title(f'{experiment} Spawnable Children = {children}')
+    #     plt.xlim(0, 50000)
+    #
+    #     if 'Fixed Leader' in experiment:
+    #         plt.xlim(0, 100)
+    #     plt.xlabel('Simulated seconds')
+    #     plt.ylabel(f'{metric} KB')
+    #     if metric == 'nodes':
+    #         plt.ylabel('Number of nodes')
+    #     plt.legend()
+    #     plt.tight_layout()
+    #     plt.savefig(f'{output_directory}/{experiment}-{metric}-children{children}.pdf', dpi=300)
+    #     plt.close()
 
     data_dict = {}
-    # maxResource = [ 30, 60, 120, 240, 300 ]
-    maxResource = [50, 100, 250, 500, 1000, 1500]
+    # maxResource = [50, 100, 250, 500, 1000, 1500]
+    maxResource = [100, 250, 500, 1000]
     maxChildren = [2, 3, 4, 5]
     metric_to_plot = ['MessageSize[mean]', 'nodes', 'MessageSize[Sum]']
 
@@ -496,8 +498,8 @@ if __name__ == '__main__':
                     })
 
                     data_dict[(f"res-{resources}", resources),(f"ch-{children}",children)] = (df_mean, df_std)
-                exp_name = beautify_experiment_name(experiment, metric)
-                if metric in ['MessageSize[mean]', 'MessageSize[Sum]']:
-                    plot_selfs_dual_axis(data_dict, experiment=exp_name, metric=metric)
-                else:
-                    plot_selfs(data_dict, experiment=exp_name, metric=metric)
+                # exp_name = beautify_experiment_name(experiment)
+                plot_selfs_dual_axis(data_dict, experiment=experiment, metric=metric)
+                # if metric in ['MessageSize[mean]', 'MessageSize[Sum]']:
+                #     plot_selfs_dual_axis(data_dict, experiment=exp_name, metric=metric)
+                # else:
