@@ -1,3 +1,17 @@
+## [1.33.4](https://github.com/angelacorte/fieldVMC/compare/1.33.3...1.33.4) (2025-09-01)
+
+### Bug Fixes
+
+* update gradle command and docker service with new experiments name ([14311e4](https://github.com/angelacorte/fieldVMC/commit/14311e44e3f3192f816b1640f03163e37850724e))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.33.3 [skip ci] ([c2560a4](https://github.com/angelacorte/fieldVMC/commit/c2560a41bd074cf3c796d2763a7f2da694769597))
+
+### Refactoring
+
+* change experiments name ([b9f51b4](https://github.com/angelacorte/fieldVMC/commit/b9f51b41d07a9f49567bfc066755d821482a3479))
+
 ## [1.33.3](https://github.com/angelacorte/fieldVMC/compare/1.33.2...1.33.3) (2025-09-01)
 
 ### Bug Fixes
