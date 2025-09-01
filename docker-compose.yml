@@ -87,7 +87,7 @@ services:
       - MAX_SEED=500
       - GRADLE_TASK=runSelfOptimizationBatch
 
-  message-self-construction-leader-election:
+  self-optimization-leader-election:
     image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
     build:
       context: .
@@ -96,9 +96,9 @@ services:
       - angela.cortecchia-volume:/experiment/data
     environment:
       - MAX_SEED=100
-      - GRADLE_TASK=runMessageSelfConstructionLeaderElectionBatch
+      - GRADLE_TASK=runSelfOptimizationLeaderElectionBatch
 
-  message-self-construction-fixed-leader:
+  self-optimization-fixed-leader:
     image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
     build:
       context: .
@@ -107,7 +107,7 @@ services:
       - angela.cortecchia-volume:/experiment/data
     environment:
       - MAX_SEED=100
-      - GRADLE_TASK=runMessageSelfConstructionFixedLeaderBatch
+      - GRADLE_TASK=runSelfOptimizationFixedLeaderBatch
 
 volumes:
   angela.cortecchia-volume:
