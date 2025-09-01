@@ -460,21 +460,22 @@ if __name__ == '__main__':
             for children in maxChildren:
                 data_dict = {}
                 for resources in maxResource:
-                    metric_series_mean = means[experiment][metric].sel(dict(maxResource=resources, maxChildren=children))
-                    metric_series_std = stdevs[experiment][metric].sel(dict(maxResource=resources, maxChildren=children))
-                    time_series = metric_series_mean['time'].values
-                    if metric == 'MessageSize[mean]' or metric == 'MessageSize[Sum]':
-                        metric_series_mean = metric_series_mean.values / 1024 # convert to KB
+                    mean_mean = means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024
+                    mean_sum = means[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024
                     nodes_series = means[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values
+                    time_series = means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children))['time'].values
 
                     df_mean = pd.DataFrame({
                         'time': time_series,
-                        metric: metric_series_mean,
+                        'MessageSize[mean]': mean_mean,
+                        'MessageSize[Sum]': mean_sum,
                         'nodes': nodes_series,
                     })
+
                     df_std = pd.DataFrame({
                         'time': time_series,
-                        f'{metric}-std': metric_series_std,
+                        'MessageSize[mean]-std': stdevs[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)),
+                        'MessageSize[Sum]-std': stdevs[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)),
                     })
 
                     data_dict[(f"res-{resources}", resources),(f"ch-{children}",children)] = (df_mean, df_std)
