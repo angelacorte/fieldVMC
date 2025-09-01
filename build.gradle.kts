@@ -199,7 +199,7 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                     }
                     """.trimIndent(),
                     )
-                } else if(capitalizedName.startsWith("Messages")) {
+                } else if(capitalizedName.contains("Leader")) {
                     args(
                         "--override",
                         """
@@ -210,7 +210,7 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                         autoStart: true,
                       }
                       
-                      terminate: { type: AfterTime, parameters: [1000] }
+                      terminate: { type: AfterTime, parameters: [10000] }
                     """.trimIndent(),
                     )
                 } else {
