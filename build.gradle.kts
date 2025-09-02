@@ -128,12 +128,6 @@ File(rootProject.rootDir.path + "/src/main/yaml")
                     "launcher: { parameters: { batch: [], autoStart: false } }",
                     "--override",
                     """
-                variables:
-                  seed: &seed
-                    min: 0
-                    max: 10
-                    step: 1
-                    default: 0
                 """.trimIndent(),
                     "--verbosity",
                     "error",
