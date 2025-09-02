@@ -247,15 +247,15 @@ if __name__ == '__main__':
     output_directory = f'charts/{current_experiment}_{current_datetime}'
     os.makedirs(output_directory, exist_ok=True)
     # How to name the summary of the processed data
-    pickleOutput = f'messages-self-construction-{current_experiment}'
+    pickleOutput = f'self-optimization-{current_experiment}'
     # Experiment prefixes: one per experiment (root of the file name)
-    experiments = [f'messages-self-construction-{current_experiment}'] #'messages-self-construction-fixed-leader',
+    experiments = [f'self-optimization-{current_experiment}'] #'messages-self-construction-fixed-leader',
     floatPrecision = '{: 0.3f}'
     # Number of time samples
     timeSamples = 200
     # time management
     minTime = 0
-    maxTime = 50000
+    maxTime = 20000
     if current_experiment == 'fixed-leader':
         maxTime = 200
     timeColumnName = 'time'
@@ -374,9 +374,9 @@ if __name__ == '__main__':
             raise Exception(f'Unknown metric name {name}.')
 
     def beautify_experiment_name(name):
-        if name == 'messages-self-construction-leader-election':
+        if 'leader-election' in name:
             return 'Leader Election'
-        elif name == 'messages-self-construction-fixed-leader':
+        elif 'fixed-leader' in name:
             return 'Fixed Leader'
         else:
             raise Exception(f'Unknown experiment name {name}.')
@@ -403,6 +403,8 @@ if __name__ == '__main__':
                 ax=ax1,
                 color=colors[j+2],
             )
+            #ax1.set_yscale('symlog', linthresh=10)
+            #ax1.set_ylim(0, 2.5)
             # sns.lineplot(
             #     data=mean_df,
             #     x='time',
@@ -450,9 +452,9 @@ if __name__ == '__main__':
             for children in maxChildren:
                 data_dict = {}
                 for resources in maxResource:
-                    mean_mean = means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024
-                    mean_sum = means[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024 / 1024
-                    nodes_series = means[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values
+                    mean_mean = np.where(np.isnan(means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values), 0.0, means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values) / 1024
+                    mean_sum = np.where(np.isnan(means[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values), 0.0, means[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values) / 1024 / 1024
+                    nodes_series = np.where(np.isnan(means[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values), 0.0, means[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values)
                     time_series = means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children))['time'].values
 
                     df_mean = pd.DataFrame({
