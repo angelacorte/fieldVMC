@@ -1,3 +1,13 @@
+## [1.34.3](https://github.com/angelacorte/fieldVMC/compare/1.34.2...1.34.3) (2025-09-02)
+
+### Bug Fixes
+
+* shorten simulation time ([3d032a3](https://github.com/angelacorte/fieldVMC/commit/3d032a3385583470466a22fe3b26c30538d40901))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.34.2 [skip ci] ([b59634c](https://github.com/angelacorte/fieldVMC/commit/b59634cb6296487cb1180e53c88677ea204d52f9))
+
 ## [1.34.2](https://github.com/angelacorte/fieldVMC/compare/1.34.1...1.34.2) (2025-09-02)
 
 ### Dependency updates
