@@ -37,7 +37,23 @@ variables:
       formula: System.getenv("MAX_SEED").toDouble()
       language: kotlin
     step: 1
-    default: 0
+    default: 42
+  outerStartX: &outerStartX
+                 -30
+  outerStartY: &outerStartY
+                 -35
+  outerWidth: &outerWidth
+                80
+  outerHeight: &outerHeight
+                 90
+  innerStartX: &innerStartX
+                 -10
+  innerStartY: &innerStartY
+                 -15
+  innerWidth: &innerWidth
+                40
+  innerHeight: &innerHeight
+                 50
 
 network-model:
   type: ConnectWithinDistance
@@ -65,8 +81,8 @@ _pool: &program
         parameters: [it.unibo.collektive.vmc.VMCSpawningKt.withSpawning]
 
 deployments:
-  - type: Point
-    parameters: [*layerX, *minY]
+  - type: ConcentricRectangles
+    parameters: [1, *outerStartX, *outerStartY, *outerWidth, *outerHeight, *innerStartX, *innerStartY, *innerWidth, *innerHeight]
     programs:
       - *program
     properties:
@@ -78,7 +94,7 @@ deployments:
       - type: it.unibo.collektive.alchemist.device.sensors.impl.LeaderSensorProperty
         parameters: [ *leaderRadius ]
       - type: it.unibo.collektive.alchemist.device.sensors.impl.ResourceSensorProperty
-        parameters: [ *resourceLowerBound, *maxResource ]
+        parameters: [*resourceLowerBound, *maxResource]
       - type: it.unibo.collektive.alchemist.device.sensors.impl.DeviceSpawner
         parameters: [ *cloningRange, *maxChildren, *minSpanWait ]
 
