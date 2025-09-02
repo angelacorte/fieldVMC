@@ -1,3 +1,14 @@
+## [1.34.4](https://github.com/angelacorte/fieldVMC/compare/1.34.3...1.34.4) (2025-09-02)
+
+### Bug Fixes
+
+* improve plots ([1eed8e5](https://github.com/angelacorte/fieldVMC/commit/1eed8e5ef3b7e0f1b819025430e389e7cf6f0110))
+* improve plots ([6431664](https://github.com/angelacorte/fieldVMC/commit/64316645c6405a19f308a1488fbc506a98bbaa38))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.34.3 [skip ci] ([5ca16d7](https://github.com/angelacorte/fieldVMC/commit/5ca16d7380f3d2355a963090a3f09bf22906f6a4))
+
 ## [1.34.3](https://github.com/angelacorte/fieldVMC/compare/1.34.2...1.34.3) (2025-09-02)
 
 ### Bug Fixes
