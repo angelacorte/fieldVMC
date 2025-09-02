@@ -93,22 +93,22 @@ class CollektiveDevice<P>(
                         @Suppress("UNCHECKED_CAST")
                         node.properties.firstOrNull { it is CollektiveDevice<*> } as? CollektiveDevice<P>
                     }
-                var acc = 0.0
+                var acc = 0
                 neighborhood.forEach { neighbor ->
                     val messageValues = message.messagesFor(neighbor.id)
                     val buff = ByteArrayOutputStream()
-                    val out = Output(buff)
-                    messageValues.forEach { (_, value) ->
-                        kryo.writeClassAndObject(out, value)
-                        acc += buff.size() + 5.0
-                        out.flush()
+                    Output(buff).use {
+                        messageValues.forEach { (_, value) ->
+                            kryo.writeClassAndObject(it, value)
+                        }
                     }
-                    node.setConcentration(SimpleMolecule("MessageSize"), acc)
+                    acc += buff.size() + 5 * messageValues.size
                     neighbor.receiveMessage(
                         currentTime,
                         InboundMessage(message.senderId, messageValues),
                     )
                 }
+                node.setConcentration(SimpleMolecule("MessageSize"), acc)
             }
         }
     }
