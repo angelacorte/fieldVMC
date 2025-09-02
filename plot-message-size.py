@@ -15,6 +15,8 @@ import matplotlib
 import re
 import os
 import argparse
+import matplotlib.ticker as ticker
+from math import log10
 
 def distance(val, ref):
     return abs(ref - val)
@@ -244,7 +246,7 @@ if __name__ == '__main__':
     directory = 'data'
     # Where to save charts
     current_datetime = pd.Timestamp.now().strftime('%Y-%m-%d_%H-%M-%S')
-    output_directory = f'charts/{current_experiment}_{current_datetime}'
+    output_directory = f'charts/{current_experiment}' #_{current_datetime}
     os.makedirs(output_directory, exist_ok=True)
     # How to name the summary of the processed data
     pickleOutput = f'self-optimization-{current_experiment}'
@@ -255,7 +257,7 @@ if __name__ == '__main__':
     timeSamples = 200
     # time management
     minTime = 0
-    maxTime = 20000
+    maxTime = 10000
     if current_experiment == 'fixed-leader':
         maxTime = 200
     timeColumnName = 'time'
@@ -403,7 +405,6 @@ if __name__ == '__main__':
                 ax=ax1,
                 color=colors[j+2],
             )
-            #ax1.set_yscale('symlog', linthresh=10)
             #ax1.set_ylim(0, 2.5)
             # sns.lineplot(
             #     data=mean_df,
@@ -417,16 +418,27 @@ if __name__ == '__main__':
             upper_bound = mean_df[metric] + std_df[f'{metric}-std']
             lower_bound = mean_df[metric] - std_df[f'{metric}-std']
             plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
-        ax1.set_xlim(0, 20000)
+        ax1.set_xlim(0, 10000)
+        ax1.set_ylim(0, None)
+        ylabel = beautify_metric_name(metric)
+        if 'Sum' in metric:
+            ylabel += ' (KB/s)'
+            ax1.set_ylim(0.5,350)
+            ax1.set_yscale('symlog', linthresh=0.5)
+        if 'Mean' in metric:
+            ylabel += ' (B/s)'
+            ylim = (200, 5000)
+            ax1.set_yscale('log')
+            ticks = np.append(np.linspace(200, 900, num=8), np.linspace(1000, 5000, num=5))
+            ax1.set_yticks(
+                ticks = ticks,
+                labels = ticks,
+            )
+            ax1.set_ylim(ylim)
         if 'fixed-leader' in experiment:
             ax1.set_xlim(0, 40)
-
         ax1.set_xlabel('Simulated seconds')
-        ylabel = beautify_metric_name(metric)
-        if metric == 'MessageSize[Sum]': #data rate
-            ylabel += ' (MB/s)'
-        elif metric == 'MessageSize[mean]':
-            ylabel += ' (KB/s)'
+        
         ax1.set_ylabel(f'{ylabel}')
         # ax2.set_ylabel('Number of nodes')
 
@@ -452,8 +464,8 @@ if __name__ == '__main__':
             for children in maxChildren:
                 data_dict = {}
                 for resources in maxResource:
-                    mean_mean = np.where(np.isnan(means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values), 0.0, means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values) / 1024
-                    mean_sum = np.where(np.isnan(means[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values), 0.0, means[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values) / 1024 / 1024
+                    mean_mean = np.where(np.isnan(means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values), 0.0, means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values) # / 1024
+                    mean_sum = np.where(np.isnan(means[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values), 0.0, means[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values) / 1024
                     nodes_series = np.where(np.isnan(means[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values), 0.0, means[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values)
                     time_series = means[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children))['time'].values
 
@@ -466,10 +478,44 @@ if __name__ == '__main__':
 
                     df_std = pd.DataFrame({
                         'time': time_series,
-                        'MessageSize[mean]-std': stdevs[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024,
-                        'MessageSize[Sum]-std': stdevs[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024 / 1024,
+                        'MessageSize[mean]-std': stdevs[experiment]['MessageSize[mean]'].sel(dict(maxResource=resources, maxChildren=children)).values, # / 1024,
+                        'MessageSize[Sum]-std': stdevs[experiment]['MessageSize[Sum]'].sel(dict(maxResource=resources, maxChildren=children)).values / 1024,
                         'nodes-std': stdevs[experiment]['nodes'].sel(dict(maxResource=resources, maxChildren=children)).values,
                     })
 
                     data_dict[(f"res-{resources}", resources),(f"ch-{children}",children)] = (df_mean, df_std)
                 plot_selfs_dual_axis(data_dict, experiment=experiment, metric=metric)
+    # find max value of message size mean and sum across all experiments for setting y axis limit
+    max_message_size_mean = 0
+    max_message_size_sum = 0
+    for experiment in experiments:
+        if 'MessageSize[mean]' in means[experiment]:
+            max_message_size_mean = max(max_message_size_mean, np.nanmax(means[experiment]['MessageSize[mean]'].values) / 1024)
+        if 'MessageSize[Sum]' in means[experiment]:
+            max_message_size_sum = max(max_message_size_sum, np.nanmax(means[experiment]['MessageSize[Sum]'].values) / 1024)
+    print(f'Maximum average message size across all experiments: {max_message_size_mean} KB/s')
+    print(f'Maximum total message size across all experiments: {max_message_size_sum} KB/s')
+    #find also the minimum non-zero value
+    min_nonzero_mean = float('inf')
+    min_nonzero_sum = float('inf')
+    for experiment in experiments:
+        if 'MessageSize[mean]' in means[experiment]:
+            nonzero_values = means[experiment]['MessageSize[mean]'].values[means[experiment]['MessageSize[mean]'].values > 0] / 1024
+            if len(nonzero_values) > 0:
+                min_nonzero_mean = min(min_nonzero_mean, np.nanmin(nonzero_values))
+        if 'MessageSize[Sum]' in means[experiment]:
+            nonzero_values = means[experiment]['MessageSize[Sum]'].values[means[experiment]['MessageSize[Sum]'].values > 0] / 1024
+            if len(nonzero_values) > 0:
+                min_nonzero_sum = min(min_nonzero_sum, np.nanmin(nonzero_values))
+    if min_nonzero_mean != float('inf'):
+        print(f'Minimum non-zero average message size across all experiments: {min_nonzero_mean} KB/s')
+    if min_nonzero_sum != float('inf'):
+        print(f'Minimum non-zero total message size across all experiments: {min_nonzero_sum} KB/s')
+
+
+    #convert it in logscale
+    if max_message_size_mean > 0:
+        print(f'Log scale: {np.log10(max_message_size_mean)}')
+    if max_message_size_sum > 0:
+        print(f'Log scale: {np.log10(max_message_size_sum)}')
+
