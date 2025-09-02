@@ -1,3 +1,20 @@
+## [1.34.2](https://github.com/angelacorte/fieldVMC/compare/1.34.1...1.34.2) (2025-09-02)
+
+### Dependency updates
+
+* **deps:** update dependency matplotlib to v3.10.6 ([2088024](https://github.com/angelacorte/fieldVMC/commit/20880242d0a98eb8d4d487c5a7a283c286f69632))
+
+### Bug Fixes
+
+* change simulation setup ([beebef6](https://github.com/angelacorte/fieldVMC/commit/beebef6c5fae0d8ff419d03e3aa3b11d7183152f))
+* experiment name in plotter ([5ea016e](https://github.com/angelacorte/fieldVMC/commit/5ea016e1caaefddd5e0afce8f17197436d72d4d0))
+* message size evaluation ([65370c2](https://github.com/angelacorte/fieldVMC/commit/65370c29308f9fee34e5f220ef71857647569320))
+* remove useless seed override in graphic mode ([3e4e514](https://github.com/angelacorte/fieldVMC/commit/3e4e51435d871b0441ddbe8dfb52bb9987534e9a))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.34.1 [skip ci] ([77b9ed3](https://github.com/angelacorte/fieldVMC/commit/77b9ed37778c2f66916a7963570f2a2b2e48cb79))
+
 ## [1.34.1](https://github.com/angelacorte/fieldVMC/compare/1.34.0...1.34.1) (2025-09-01)
 
 ### Bug Fixes
