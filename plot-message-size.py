@@ -425,6 +425,12 @@ if __name__ == '__main__':
             ylabel += ' (KB/s)'
             ax1.set_ylim(0.5,350)
             ax1.set_yscale('symlog', linthresh=0.5)
+
+
+# if 'mean' in metric:
+#     ylim = (200, 5000)
+#     ax1.set_yscale('symlog', linthresh=0.2)
+#     ax1.set_yticks(np.append(np.linspace(0, 0.9, num=10), np.linspace(1, 5, num=5)))
         if 'Mean' in metric:
             ylabel += ' (B/s)'
             ylim = (200, 5000)
