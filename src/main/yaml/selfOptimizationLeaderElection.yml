@@ -39,21 +39,21 @@ variables:
     step: 1
     default: 42
   outerStartX: &outerStartX
-                 -30
+   -30
   outerStartY: &outerStartY
-                 -35
+   -35
   outerWidth: &outerWidth
-                80
+    80
   outerHeight: &outerHeight
-                 90
+    90
   innerStartX: &innerStartX
-                 -10
+    -10
   innerStartY: &innerStartY
-                 -15
+    -15
   innerWidth: &innerWidth
-                40
+    40
   innerHeight: &innerHeight
-                 50
+    50
 
 network-model:
   type: ConnectWithinDistance
@@ -100,7 +100,7 @@ deployments:
 
 terminate:
   - type: AfterTime
-    parameters: [20000]
+    parameters: [10000]
 
 export:
   - type: CSVExporter
