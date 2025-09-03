@@ -77,14 +77,16 @@ To this end, we designed a set of five experiments:
 
 ### Requirements
 
-In order to successfully download and execute the graphical experiments are needed: 
+In order to successfully download and execute the graphical experiments are needed:
 - Internet connection;
 - [Git](https://git-scm.com);
 - Linux, macOS and Windows systems capable of running [Java](https://www.oracle.com/java/technologies/javase/jdk19-archive-downloads.html) 17 (or higher);
-- 1GB free space on disk;
+- 4GB free space on disk (the system will automatically download its dependencies through Gradle) (**NOTE** that if you want to download or generate data, you will need an additional free space);
 - GPU with minimal OpenGL capabilities (OpenGL 2.0);
-- 4GB RAM.
+- 4GB RAM (to generate the charts, we used a PC with 32GB RAM, with lower amounts the process could take a very long time or crash).
 
+The project uses [Gradle](https://gradle.org) as a build tool,
+and all the project dependencies are listed in the `gradle\libs.versions.toml` file.
 ### Limitations
 
 - The experiments run in "batch mode" generate a lot of data, 
@@ -205,15 +207,15 @@ The Version of Gradle used in this experiment can be found in the gradle-wrapper
    Or execute ```./gradlew tasks``` to view the list of available tasks.
 
 The corresponding YAML simulation files to the experiments cited above are the following:
-- _legacySelfConstruction_: self-construction from a single node (growth from seed) ```./gradlew runLegacySelfConstructionGraphic```,
-- _selfDivision_: self-division after disruption (network segmentation) with no regeneration (cutting) ```./gradlew runselfDivisionGraphic```, 
-- _selfIntegration_: self-integration of multiple FieldVMC systems (grafting) ```./gradlew runSelfIntegrationGraphic```,
-- _selfSegmentation_: self-segmentation of a larger structure (budding) ```./gradlew runSelfSegmentationGraphic```, and
-- _selfOptimization_: self-optimization of multiple large structures into a more efficient one (abscission and regrowth) ```./gradlew runSelfOptimizationGraphic```;
-- _selfConstructionClassicVMC_: implementation of the classic VMC model, starting from a single node, with spawning of new nodes but no destruction of them ```./gradlew runSelfConstructionClassicVMCGraphic```;
-- _selfHealingClassicVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```./gradlew runSelfHealingClassicVMCGraphic```;
-- _selfConstructionFieldVMC_: implementation of our FieldVMC model, with optimized parameters to be as close as possible to the classic VMC model ```./gradlew runSelfConstructionFieldVMCGraphic```;
-- _selfHealingFieldVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```./gradlew runSelfHealingFieldVMCGraphic```.
+- _legacySelfConstruction_: self-construction from a single node (growth from seed) ```MAX_SEED=0 ./gradlew runLegacySelfConstructionGraphic```,
+- _selfDivision_: self-division after disruption (network segmentation) with no regeneration (cutting) ```MAX_SEED=0 ./gradlew runselfDivisionGraphic```, 
+- _selfIntegration_: self-integration of multiple FieldVMC systems (grafting) ```MAX_SEED=0 ./gradlew runSelfIntegrationGraphic```,
+- _selfSegmentation_: self-segmentation of a larger structure (budding) ```MAX_SEED=0 ./gradlew runSelfSegmentationGraphic```, and
+- _selfOptimization_: self-optimization of multiple large structures into a more efficient one (abscission and regrowth) ```MAX_SEED=0 ./gradlew runSelfOptimizationGraphic```;
+- _selfConstructionClassicVMC_: implementation of the classic VMC model, starting from a single node, with spawning of new nodes but no destruction of them ```MAX_SEED=0 ./gradlew runSelfConstructionClassicVMCGraphic```;
+- _selfHealingClassicVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```MAX_SEED=0 ./gradlew runSelfHealingClassicVMCGraphic```;
+- _selfConstructionFieldVMC_: implementation of our FieldVMC model, with optimized parameters to be as close as possible to the classic VMC model ```MAX_SEED=0 ./gradlew runSelfConstructionFieldVMCGraphic```;
+- _selfHealingFieldVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```MAX_SEED=0 ./gradlew runSelfHealingFieldVMCGraphic```.
 
 **NOTE:**
 The tasks above *in graphic mode* will run the experiments with the default parameters.
@@ -280,3 +282,64 @@ in which the leader is fixed (there is no leader election) and all nodes are abl
 |  _Self-construction Field VMC_  |  `selfConstructionFieldVMC.yaml`  |     Yes      |       No        |         No         |        No        |
 |    _Self-healing Field VMC_     |    `selfHealingFieldVMC.yaml`     |     Yes      |       No        |        Yes         |        No        |
 | _Self-construction Field VMC Optimizer_ | `selfConstructionFieldVMCOptimizer.yaml` | Yes | No | No | No |
+
+
+### Reproduce the experiment results
+
+**WARNING**: re-running the whole experiment may take a very long time on a normal computer.
+
+To collect the data for the analysis and the charts,
+the experiments have been run in "batch mode,"
+which means that the experiments are run without the graphical interface,
+and with different combinations of parameters.
+
+Since to run the experiments in batch mode in a normal computer may take a very long time (e.g., days),
+we launched the experiments on a cluster to shorten the time needed to collect the data.
+For the sake of simplicity,
+we provide the data collected in the experiments at [this link](https://figshare.com/articles/dataset/Data_for_A_Field-based_Approach_for_Runtime_Replanning_in_Swarm_Robotics_Missions_--_ACSOS_2025/29447825/2?file=55904084).
+
+#### Reproduce the experiments with containers (recommended)
+
+1. Install [Docker](https://www.docker.com/products/docker-desktop) and [docker-compose](https://docs.docker.com/compose/install/);
+2. Run `docker-compose up` in the root folder of the repository:
+   this will build the Docker images and run the containers needed to run the experiments.
+3. From the `docker-compose.yml` file, you can see that eight separate containers will be created, one for each experiment, and the data will be collected in the `data` folder.
+   Note that the `volumes` field has to be updated to match your local environment.
+
+#### Reproduce natively
+
+1. Install a Gradle-compatible version of Java.
+   Use the [Gradle/Java compatibility matrix](https://docs.gradle.org/current/userguide/compatibility.html)
+   to learn which is the compatible version range.
+   The Version of Gradle used in this experiment can be found in the `gradle-wrapper.properties` file
+   located in the `gradle/wrapper` folder.
+2. Install the version of Python indicated in `.python-version` (or use `pyenv`).
+3. Launch either:
+    - `./gradlew runAllBatch` on Linux, MacOS, or Windows if a bash-compatible shell is available;
+    - `gradlew.bat runAllBatch` on Windows cmd or Powershell;
+      **Note** that you will need to set the `MAX_SEED` environment variable to a specific value to run the experiment (e.g., in our experiments, we set it to `31`).
+      and the `LEADER_BASED` environment variable to `true` or `false` to choose the type of replanning (leader-based or gossip-based).
+4. Once the experiment is finished, the results will be available in the `data` folder.
+
+
+#### Generate the charts
+1. Make sure you have Python 3.10 or higher installed.
+2. The `data` folder structure should be the following:
+    ```txt
+    experiments-2025-acsos-robots/
+    ├── data/
+    │   ├── self-optimization/
+    │   ├── self-integration/
+    │   └── ...
+    ```
+3. Install the required Python packages by running:
+    ```bash
+    pip install --upgrade pip
+    pip install -r requirements.txt
+    ```
+4. Run the script to process the data and generate the charts (this process may take some time):
+    ```bash
+    python charts-generator.py
+    ```
+5. The charts will be generated in the `charts` folder.
+6. If you want to regenerate the charts, you can run the script again.
