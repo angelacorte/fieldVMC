@@ -1,3 +1,13 @@
+## [1.34.6](https://github.com/angelacorte/fieldVMC/compare/1.34.5...1.34.6) (2025-09-03)
+
+### Bug Fixes
+
+* update y scale in charts ([404401d](https://github.com/angelacorte/fieldVMC/commit/404401d4d27213771dcb78090ca4b845fd24aa96))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.34.5 [skip ci] ([1a7aa6c](https://github.com/angelacorte/fieldVMC/commit/1a7aa6c4698ad54f07d77768b9deb313542cf556))
+
 ## [1.34.5](https://github.com/angelacorte/fieldVMC/compare/1.34.4...1.34.5) (2025-09-03)
 
 ### Dependency updates
