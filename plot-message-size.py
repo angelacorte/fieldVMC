@@ -377,7 +377,7 @@ if __name__ == '__main__':
 
     def beautify_experiment_name(name):
         if 'leader-election' in name:
-            return 'Leader Election'
+            return 'Self-Optimisation'
         elif 'fixed-leader' in name:
             return 'Fixed Leader'
         else:
@@ -393,7 +393,6 @@ if __name__ == '__main__':
         colors = sns.color_palette("viridis", n_colors=len(data) + 2)
 
         fig, ax1 = plt.subplots(figsize=(9, 5))
-        # ax2 = ax1.twinx()  # second y axis
         children = list(data.keys())[0][1][1]
 
         for j, (((_, resources), (_, children)), (mean_df, std_df)) in enumerate(data.items()):
@@ -405,16 +404,6 @@ if __name__ == '__main__':
                 ax=ax1,
                 color=colors[j+2],
             )
-            #ax1.set_ylim(0, 2.5)
-            # sns.lineplot(
-            #     data=mean_df,
-            #     x='time',
-            #     y='nodes',
-            #     label='_nolegend_',
-            #     ax=ax2,
-            #     linestyle="--",
-            #     color=colors[j+2],
-            # )
             upper_bound = mean_df[metric] + std_df[f'{metric}-std']
             lower_bound = mean_df[metric] - std_df[f'{metric}-std']
             plt.fill_between(mean_df['time'], lower_bound, upper_bound, color=colors[j+2], alpha=0.2)
@@ -425,35 +414,26 @@ if __name__ == '__main__':
             ylabel += ' (KB/s)'
             ax1.set_ylim(0.5,350)
             ax1.set_yscale('symlog', linthresh=0.5)
-
-
-# if 'mean' in metric:
-#     ylim = (200, 5000)
-#     ax1.set_yscale('symlog', linthresh=0.2)
-#     ax1.set_yticks(np.append(np.linspace(0, 0.9, num=10), np.linspace(1, 5, num=5)))
-        if 'Mean' in metric:
+        if 'mean' in metric:
             ylabel += ' (B/s)'
             ylim = (200, 5000)
             ax1.set_yscale('log')
             ticks = np.append(np.linspace(200, 900, num=8), np.linspace(1000, 5000, num=5))
-            ax1.set_yticks(
-                ticks = ticks,
-                labels = ticks,
-            )
+            ax1.set_yticks(ticks)
+            ax1.set_yticklabels([str(int(t)) if i % 2 == 0 else '' for i, t in enumerate(ticks)])
             ax1.set_ylim(ylim)
         if 'fixed-leader' in experiment:
             ax1.set_xlim(0, 40)
         ax1.set_xlabel('Simulated seconds')
         
         ax1.set_ylabel(f'{ylabel}')
-        # ax2.set_ylabel('Number of nodes')
 
         handles, labels = ax1.get_legend_handles_labels()
         if handles:
-            ax1.legend(handles, labels, title=r'$R^t_r$', loc=4)
+            ax1.legend(handles, labels, title=r'$\max(R)$', loc=4)
             # ax1.legend(handles, labels, title='max resources (solid=KB, dashed=nodes)', loc='best')
 
-        plt.title(f'{beautify_experiment_name(experiment)} $\chi$ = {children}')
+        plt.title(f'{beautify_experiment_name(experiment)} $(N_0=1, \chi$ = {children})')
         plt.tight_layout()
         filename = beautify_experiment(experiment, metric)
         plt.savefig(f'{output_directory}/{filename}-dualaxis_children{children}.pdf', dpi=300)
