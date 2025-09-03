@@ -365,7 +365,7 @@ if __name__ == '__main__':
 
     def beautify_metric_name(name):
         if name == 'MessageSize[mean]':
-            return 'Average Data Rate'
+            return 'Mean Data Rate'
             return 'Average Message Size'
         elif name == 'MessageSize[Sum]':
             return 'Overall Data Rate'
@@ -412,15 +412,18 @@ if __name__ == '__main__':
         ylabel = beautify_metric_name(metric)
         if 'Sum' in metric:
             ylabel += ' (KB/s)'
-            ax1.set_ylim(0.5,350)
-            ax1.set_yscale('symlog', linthresh=0.5)
+            ax1.set_yscale('log')
+            ticks = np.append(np.append(np.linspace(1, 9, num=9), np.linspace(10, 90, num=9)), np.linspace(100, 900, num=9))
+            ax1.set_ylim(1,900)
+            ax1.set_yticks(ticks)
+            #ax1.set_yticklabels([str(int(t)) if i % 2 == 0 else '' for i, t in enumerate(ticks)])
         if 'mean' in metric:
             ylabel += ' (B/s)'
-            ylim = (200, 5000)
+            ylim = (600, 13000)
             ax1.set_yscale('log')
-            ticks = np.append(np.linspace(200, 900, num=8), np.linspace(1000, 5000, num=5))
+            ticks = np.append(np.linspace(600, 900, num=4), np.linspace(1000, 10000, num=10))
             ax1.set_yticks(ticks)
-            ax1.set_yticklabels([str(int(t)) if i % 2 == 0 else '' for i, t in enumerate(ticks)])
+            # ax1.set_yticklabels([str(int(t)) if i % 2 == 0 else '' for i, t in enumerate(ticks)])
             ax1.set_ylim(ylim)
         if 'fixed-leader' in experiment:
             ax1.set_xlim(0, 40)
@@ -476,17 +479,17 @@ if __name__ == '__main__':
     max_message_size_sum = 0
     for experiment in experiments:
         if 'MessageSize[mean]' in means[experiment]:
-            max_message_size_mean = max(max_message_size_mean, np.nanmax(means[experiment]['MessageSize[mean]'].values) / 1024)
+            max_message_size_mean = max(max_message_size_mean, np.nanmax(means[experiment]['MessageSize[mean]'].values))
         if 'MessageSize[Sum]' in means[experiment]:
             max_message_size_sum = max(max_message_size_sum, np.nanmax(means[experiment]['MessageSize[Sum]'].values) / 1024)
-    print(f'Maximum average message size across all experiments: {max_message_size_mean} KB/s')
+    print(f'Maximum average message size across all experiments: {max_message_size_mean} B/s')
     print(f'Maximum total message size across all experiments: {max_message_size_sum} KB/s')
     #find also the minimum non-zero value
     min_nonzero_mean = float('inf')
     min_nonzero_sum = float('inf')
     for experiment in experiments:
         if 'MessageSize[mean]' in means[experiment]:
-            nonzero_values = means[experiment]['MessageSize[mean]'].values[means[experiment]['MessageSize[mean]'].values > 0] / 1024
+            nonzero_values = means[experiment]['MessageSize[mean]'].values[means[experiment]['MessageSize[mean]'].values > 0]
             if len(nonzero_values) > 0:
                 min_nonzero_mean = min(min_nonzero_mean, np.nanmin(nonzero_values))
         if 'MessageSize[Sum]' in means[experiment]:
@@ -494,7 +497,7 @@ if __name__ == '__main__':
             if len(nonzero_values) > 0:
                 min_nonzero_sum = min(min_nonzero_sum, np.nanmin(nonzero_values))
     if min_nonzero_mean != float('inf'):
-        print(f'Minimum non-zero average message size across all experiments: {min_nonzero_mean} KB/s')
+        print(f'Minimum non-zero average message size across all experiments: {min_nonzero_mean} B/s')
     if min_nonzero_sum != float('inf'):
         print(f'Minimum non-zero total message size across all experiments: {min_nonzero_sum} KB/s')
 
