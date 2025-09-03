@@ -102,7 +102,7 @@ class CollektiveDevice<P>(
                             kryo.writeClassAndObject(it, value)
                         }
                     }
-                    acc += buff.size() + 5 * messageValues.size
+                    acc += buff.size() + 32 * messageValues.size
                     neighbor.receiveMessage(
                         currentTime,
                         InboundMessage(message.senderId, messageValues),
