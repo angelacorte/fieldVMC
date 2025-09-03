@@ -1,3 +1,18 @@
+## [1.34.5](https://github.com/angelacorte/fieldVMC/compare/1.34.4...1.34.5) (2025-09-03)
+
+### Dependency updates
+
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.141 ([9643bfa](https://github.com/angelacorte/fieldVMC/commit/9643bfa0107450c46c93251ab944b2997d3c9f04))
+
+### Bug Fixes
+
+* update path size for evaluation ([2cf6f1a](https://github.com/angelacorte/fieldVMC/commit/2cf6f1a395c4c30a522d2576d438a2102c83330e))
+* update plotter ([3e624b4](https://github.com/angelacorte/fieldVMC/commit/3e624b46e2c89d183c66ce7dfe1d5ab2d4c208b6))
+
+### General maintenance
+
+* **release:** update gradle.properties .env versions to 1.34.4 [skip ci] ([a236b36](https://github.com/angelacorte/fieldVMC/commit/a236b36a00d1b5f56d80a2edc6b0309e9fdbcb92))
+
 ## [1.34.4](https://github.com/angelacorte/fieldVMC/compare/1.34.3...1.34.4) (2025-09-02)
 
 ### Bug Fixes
