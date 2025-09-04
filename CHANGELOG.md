@@ -1,3 +1,19 @@
+## [1.34.7](https://github.com/angelacorte/fieldVMC/compare/1.34.6...1.34.7) (2025-09-04)
+
+### Bug Fixes
+
+* remove useless docker service ([e1bc04b](https://github.com/angelacorte/fieldVMC/commit/e1bc04b54ec19913d6e8a8cb0be8634273eea2ae))
+
+### Build and continuous integration
+
+* **deps:** update actions/setup-node action to v5 ([4f76d45](https://github.com/angelacorte/fieldVMC/commit/4f76d45d64dfaf9448187e62081475f1405aeaa4))
+
+### General maintenance
+
+* first additions for readme ([2441a16](https://github.com/angelacorte/fieldVMC/commit/2441a16bd8266ecf5e37d5e5deb13474ea60b965))
+* improve README ([436f46c](https://github.com/angelacorte/fieldVMC/commit/436f46c5f9287bf24f6bc8db975a6a2252cf2a47))
+* **release:** update gradle.properties .env versions to 1.34.6 [skip ci] ([916d7fd](https://github.com/angelacorte/fieldVMC/commit/916d7fd30228d336a2877ce1757200aca308398f))
+
 ## [1.34.6](https://github.com/angelacorte/fieldVMC/compare/1.34.5...1.34.6) (2025-09-03)
 
 ### Bug Fixes
