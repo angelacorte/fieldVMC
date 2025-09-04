@@ -17,17 +17,21 @@ Anonymized for double-blind review
 - [About](#about)
     * [Experiments](#experiments)
 - [Getting Started](#getting-started)
-  - [Requirements](#requirements)
-  - [Limitations](#limitations)
-  - [Understanding the experiments](#understanding-the-experiments)
-  - [Walk-through the experiments](#walk-through-the-experiments)
-  - [Reproduce the entire experiment](#reproduce-the-entire-experiment)
-    * [Simulation Graphical Interface](#simulation-graphical-interface)
-    * [Extremely quick-start of a basic experiment -- `(ba|z|fi)?sh` users only](#extremely-quick-start-of-a-basic-experiment----bazfish-users-only)
-    * [Reproduce the experiments through Gradle](#reproduce-the-experiments-through-gradle)
-    * [Changing experiment's parameters](#changing-experiments-parameters)
-    * [Simulation entrypoint](#simulation-entrypoint)
-    * [Experiments features recap](#experiments-features-recap)
+    - [Requirements](#requirements)
+    - [Limitations](#limitations)
+    - [Understanding the experiments](#understanding-the-experiments)
+    - [Walk-through the experiments](#walk-through-the-experiments)
+    - [Reproduce the entire experiment](#reproduce-the-entire-experiment)
+        * [Simulation Graphical Interface](#simulation-graphical-interface)
+        * [Extremely quick-start of a basic experiment -- `(ba|z|fi)?sh` users only](#extremely-quick-start-of-a-basic-experiment----bazfish-users-only)
+        * [Reproduce the experiments through Gradle](#reproduce-the-experiments-through-gradle)
+        * [Changing experiment's parameters](#changing-experiments-parameters)
+        * [Project structure](#project-structure)
+        * [Simulation entrypoint](#simulation-entrypoint)
+    - [Reproduce the experiment results](#reproduce-the-experiment-results)
+        * [Reproduce the experiments with containers (recommended)](#reproduce-the-experiments-with-containers-recommended)
+        * [Reproduce natively](#reproduce-natively)
+        * [Generate the charts](#generate-the-charts)
     
 
 ## About
@@ -87,11 +91,12 @@ In order to successfully download and execute the graphical experiments are need
 
 The project uses [Gradle](https://gradle.org) as a build tool,
 and all the project dependencies are listed in the `gradle\libs.versions.toml` file.
+
 ### Limitations
 
 - The experiments run in "batch mode" generate a lot of data, 
-  and the simulation may take a long time to finish (up to several hours) even with high performance computers. 
-    We suggest to run the experiments in "graphic mode" to have a better understanding of the simulation;
+  and the simulation may take a long time to finish (up to several hours) even with high-performance computers. 
+    We suggest running the experiments in "graphic mode" to have a better understanding of the simulation;
 - On different monitor types with different resolutions, the graphical interface could appear a bit different;
 - For GUI interpretation, please refer to the [Simulation Graphical Interface](#simulation-graphical-interface) section.
 
@@ -206,6 +211,16 @@ The Version of Gradle used in this experiment can be found in the gradle-wrapper
 6. Substitute `<ExperimentName>` with the name of the experiment (in PascalCase) specified in the YAML simulation file.
    Or execute ```./gradlew tasks``` to view the list of available tasks.
 
+**Note** that before each experiment command, it must be set the `MAX_SEED` environment variable to a specific value to run the experiment,
+since that parameter is relevant only for batch experiments,
+it is suggested to set it to `0` for the graphical experiments.
+Depending on the platform, there may be different ways to set the environment variable:
+- If you're using Bash compatible (Linux, Mac OS X, Git Bash, Cygwin): ```MAX_SEED=0 ./gradlew run<ExperimentName>Graphic```
+- If you're using Command Prompt (cmd.exe): ```set MAX_SEED=0 && gradlew.bat run<ExperimentName>Graphic```
+- If you're using PowerShell: ```$env:MAX_SEED = 0; .\gradlew.bat run<ExperimentName>Graphic``` \
+  For the sake of simplicity, we will show **Bash** compatible commands below.
+  Moreover, due to Alchemist's limitations, the graphical interface will not appear if run on a docker container.
+
 The corresponding YAML simulation files to the experiments cited above are the following:
 - _legacySelfConstruction_: self-construction from a single node (growth from seed) ```MAX_SEED=0 ./gradlew runLegacySelfConstructionGraphic```,
 - _selfDivision_: self-division after disruption (network segmentation) with no regeneration (cutting) ```MAX_SEED=0 ./gradlew runselfDivisionGraphic```, 
@@ -215,7 +230,8 @@ The corresponding YAML simulation files to the experiments cited above are the f
 - _selfConstructionClassicVMC_: implementation of the classic VMC model, starting from a single node, with spawning of new nodes but no destruction of them ```MAX_SEED=0 ./gradlew runSelfConstructionClassicVMCGraphic```;
 - _selfHealingClassicVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```MAX_SEED=0 ./gradlew runSelfHealingClassicVMCGraphic```;
 - _selfConstructionFieldVMC_: implementation of our FieldVMC model, with optimized parameters to be as close as possible to the classic VMC model ```MAX_SEED=0 ./gradlew runSelfConstructionFieldVMCGraphic```;
-- _selfHealingFieldVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```MAX_SEED=0 ./gradlew runSelfHealingFieldVMCGraphic```.
+- _selfHealingFieldVMC_: same of the previous one, but with the cutting of a part of the structure after 500 simulated seconds ```MAX_SEED=0 ./gradlew runSelfHealingFieldVMCGraphic```;
+- _selfOptimizationLeaderElection_: experiment used to retrieve data for the data rate analysis ```MAX_SEED=0 ./gradlew runSelfOptimizationLeaderElectionGraphic```.
 
 **NOTE:**
 The tasks above *in graphic mode* will run the experiments with the default parameters.
@@ -246,6 +262,32 @@ The parameters provided in the YAML files are the ones used for the evaluation a
 For further information about the YAML structure, 
 please refer to the [Alchemist documentation](https://alchemistsimulator.github.io/reference/yaml/index.html).
 
+#### Project structure
+
+The project is structured in the following way:
+```txt
+fieldVMC/
+├── docker/                 # Dockerfiles to build containers
+├── effects/                # Json specification for Alchemist's GUI visualization
+├── gradle/                 # Gradle wrapper files
+├── images/                 # Images used in the README
+├── src/main
+│   ├── kotlin/it.unibo/    # Kotlin source code for the experiments
+│   │   ├── alchemist       # Alchemist's model and global reactions
+│   │   │   ├── actions     # Main implementation of the classic VMC's logic 
+│   │   │   ├── boundary    # Alchemist utilities for data extraction, simulation launcher, and graphic interface effects 
+│   │   │   ├── collektive.device  # Collektive device integration for Alchemist
+│   │   │   ├── model          # Alchemist's model for the experiments such as simulation terminators and deployments 
+│   │   │   ├── util           # implementation of the Alchemist-related utilities
+│   │   ├── collektive  # The main Collektive logic for the experiments
+│   │   │   ├── coordination   # Main aggregate functions for leader election and resource spreading
+│   │   │   ├── lib            # Aggregate function for success, resource, and leader management  
+│   │   │   ├── utils          # Spawning logic
+│   │   │   ├── vmc            # Programs entrypoints 
+│   │   ├── common       # Common utilities such as the logic for the spawning angle, termination metrics etc.
+│   └── yaml        # YAML files for the experiments specification
+```
+
 #### Simulation entrypoint
 The simulations in which nodes are able to spawn new nodes and destroy them are the _legacySelfConstruction_ and _selfOptimization_ experiments.
 Their entrypoint can be found at `src/main/kotlin/it/unibo/collektive/vmc/VMCSpawning.kt`. 
@@ -272,16 +314,17 @@ in which the leader is fixed (there is no leader election) and all nodes are abl
 ### Experiments features recap
 |         **Experiment**          |           **YAML file**           | **Spawning** | **Destruction** | **Forced cutting** | **Forced union** | 
 |:-------------------------------:|:---------------------------------:|:------------:|:---------------:|:------------------:|:----------------:| 
-|   _legacy Self-construction_    |   `legacySelfConstruction.yaml`   |     Yes      | Yes |         No         |        No        |
-|         _Self-division_         |        `selfDivision.yaml`        |      No      | No |        Yes         |        No        |
-|       _Self-integration_        |      `selfIntegration.yaml`       |      No      | No |         No         |       Yes        |
+|   _legacy Self-construction_    |   `legacySelfConstruction.yaml`   |     Yes      |       Yes       |         No         |        No        |
+|         _Self-division_         |        `selfDivision.yaml`        |      No      |       No        |        Yes         |        No        |
+|       _Self-integration_        |      `selfIntegration.yaml`       |      No      |       No        |         No         |       Yes        |
 |       _Self-segmentation_       |      `selfSegmentation.yaml`      |      No      |       No        |         No         |       Yes        |
 |       _Self-optimization_       |      `selfOptimization.yaml`      |     Yes      |       Yes       |         No         |        No        |
 | _Self-construction Classic VMC_ | `selfConstructionClassicVMC.yaml` |     Yes      |       No        |         No         |        No        |
 |   _Self-healing Classic VMC_    |   `selfHealingClassicVMC.yaml`    |     Yes      |       No        |        Yes         |        No        |
 |  _Self-construction Field VMC_  |  `selfConstructionFieldVMC.yaml`  |     Yes      |       No        |         No         |        No        |
 |    _Self-healing Field VMC_     |    `selfHealingFieldVMC.yaml`     |     Yes      |       No        |        Yes         |        No        |
-| _Self-construction Field VMC Optimizer_ | `selfConstructionFieldVMCOptimizer.yaml` | Yes | No | No | No |
+| _Self-construction Field VMC Optimizer_ | `selfConstructionFieldVMCOptimizer.yaml` | Yes |       No        | No | No |
+| _Self-optimization Leader Election_ | `selfOptimizationLeaderElection.yaml` | Yes |       Yes       | No | No |
 
 
 ### Reproduce the experiment results
@@ -295,15 +338,16 @@ and with different combinations of parameters.
 
 Since to run the experiments in batch mode in a normal computer may take a very long time (e.g., days),
 we launched the experiments on a cluster to shorten the time needed to collect the data.
-For the sake of simplicity,
-we provide the data collected in the experiments at [this link](https://figshare.com/articles/dataset/Data_for_A_Field-based_Approach_for_Runtime_Replanning_in_Swarm_Robotics_Missions_--_ACSOS_2025/29447825/2?file=55904084).
 
 #### Reproduce the experiments with containers (recommended)
+
+**Note:** This is suggested just for data analysis purposes, since the graphical interface will not appear if run on a docker container.
+The docker containers will run the experiments in batch mode to collect the data, thus it is co
 
 1. Install [Docker](https://www.docker.com/products/docker-desktop) and [docker-compose](https://docs.docker.com/compose/install/);
 2. Run `docker-compose up` in the root folder of the repository:
    this will build the Docker images and run the containers needed to run the experiments.
-3. From the `docker-compose.yml` file, you can see that eight separate containers will be created, one for each experiment, and the data will be collected in the `data` folder.
+3. From the `docker-compose.yml` file, you can see that nine separate containers will be created, one for each experiment, and the data will be collected in the `data` folder.
    Note that the `volumes` field has to be updated to match your local environment.
 
 #### Reproduce natively
@@ -317,10 +361,9 @@ we provide the data collected in the experiments at [this link](https://figshare
 3. Launch either:
     - `./gradlew runAllBatch` on Linux, MacOS, or Windows if a bash-compatible shell is available;
     - `gradlew.bat runAllBatch` on Windows cmd or Powershell;
-      **Note** that you will need to set the `MAX_SEED` environment variable to a specific value to run the experiment (e.g., in our experiments, we set it to `31`).
-      and the `LEADER_BASED` environment variable to `true` or `false` to choose the type of replanning (leader-based or gossip-based).
 4. Once the experiment is finished, the results will be available in the `data` folder.
 
+**Note** that you will need to set the `MAX_SEED` environment variable to a specific value to run the experiment (e.g., in our experiments, we set it to `500`).
 
 #### Generate the charts
 1. Make sure you have Python 3.10 or higher installed.
