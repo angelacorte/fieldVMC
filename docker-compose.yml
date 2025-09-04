@@ -98,17 +98,6 @@ services:
       - MAX_SEED=100
       - GRADLE_TASK=runSelfOptimizationLeaderElectionBatch
 
-  self-optimization-fixed-leader:
-    image: angelacortecchia/field-vmc-simulation:${VERSION:-latest}
-    build:
-      context: .
-      dockerfile: docker/simulationLauncher/Dockerfile
-    volumes:
-      - angela.cortecchia-volume:/experiment/data
-    environment:
-      - MAX_SEED=100
-      - GRADLE_TASK=runSelfOptimizationFixedLeaderBatch
-
 volumes:
   angela.cortecchia-volume:
     external: true
