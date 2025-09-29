@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21
+FROM eclipse-temurin:25
 RUN mkdir -p /experiment
 WORKDIR /experiment
 ENV GRADLE_TASK=runClassicVMCBatch
