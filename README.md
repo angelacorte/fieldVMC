@@ -5,6 +5,7 @@
 | **Angela Cortecchia** (*) | **Danilo Pianini** (*) | **Giovanni Ciatto** (*) | **Roberto Casadei** (*) |
 |:-------------------------:|:----------------------:|:-----------------------:|:-----------------------:|
 | angela.cortecchia@unibo.it | danilo.pianini@unibo.it | giovanni.ciatto@unibo.it | roby.casadei@unibo.it   |
+
 (*)
 *Department of Computer Science and Engineering \
     Alma Mater Studiorum --- Università di Bologna - Cesena, Italy*
