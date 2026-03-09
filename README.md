@@ -2,16 +2,12 @@
 
 ### Authors 
 
-Anonymized for double-blind review
-
-[//]: # (| **Angela Cortecchia** &#40;*&#41; | **Danilo Pianini** &#40;*&#41; | **Giovanni Ciatto** &#40;*&#41; | **Roberto Casadei** &#40;*&#41; |)
-[//]: # (|:-------------------------:|:----------------------:|:-----------------------:|:-----------------------:|)
-[//]: # (| angela.cortecchia@unibo.it | danilo.pianini@unibo.it | giovanni.ciatto@unibo.it | roby.casadei@unibo.it   |)
-
-[//]: # (&#40;*&#41;)
-
-[//]: # (*Department of Computer Science and Engineering \)
-[//]: # (    Alma Mater Studiorum --- Università di Bologna - Cesena, Italy*)
+| **Angela Cortecchia** (*) | **Danilo Pianini** (*) | **Giovanni Ciatto** (*) | **Roberto Casadei** (*) |
+|:-------------------------:|:----------------------:|:-----------------------:|:-----------------------:|
+| angela.cortecchia@unibo.it | danilo.pianini@unibo.it | giovanni.ciatto@unibo.it | roby.casadei@unibo.it   |
+(*)
+*Department of Computer Science and Engineering \
+    Alma Mater Studiorum --- Università di Bologna - Cesena, Italy*
 
 ### Table of Contents
 - [About](#about)
